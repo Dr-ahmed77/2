@@ -1361,8 +1361,9 @@ window.toggleMic=async()=>{
 
 function startRoomsListener(){
   if(roomsListener)roomsListener();
-  roomsListener=onSnapshot(query(collection(db,'rooms'),where('active','==',true),orderBy('createdAt','desc'),limit(20)),snap=>{
+  roomsListener=onSnapshot(query(collection(db,'rooms'),where('active','==',true),limit(20)),snap=>{
     const rooms=snap.docs.map(d=>({id:d.id,...d.data()}));
+    rooms.sort((a,b)=>b.createdAt?.localeCompare(a.createdAt||'')||0);
     renderRoomsGrid(rooms);
   });
 }
