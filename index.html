@@ -356,12 +356,51 @@ a{color:inherit;text-decoration:none}button{font-family:var(--fb);cursor:pointer
 .btn-ghost:hover{color:var(--text);border-color:var(--border2);background:var(--surface2)}
 .empty-state{text-align:center;padding:4rem 2rem;color:var(--muted)}
 .empty-state .empty-icon{font-size:3rem;margin-bottom:1rem}
-.footer{margin-top:auto;padding:1.5rem 0;border-top:1px solid var(--border);text-align:center}
-.footer p{font-size:.72rem;color:var(--muted)}.footer .x{color:var(--accent)}
 #toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:var(--surface2);border:1px solid rgba(0,229,255,.25);color:var(--text);padding:10px 18px;border-radius:var(--rs);font-size:.8rem;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:280px}
 #toast.show{transform:translateY(0);opacity:1}
 .xp-popup{position:fixed;top:80px;right:2rem;z-index:9998;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);color:var(--gold);padding:10px 18px;border-radius:var(--rs);font-family:var(--ff);font-size:.9rem;font-weight:700;box-shadow:var(--shadow-lg);transform:translateY(-20px);opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
 .xp-popup.show{transform:translateY(0);opacity:1}
+
+/* AVIS SYSTEM */
+.avis-section{padding:2.5rem 0;border-top:1px solid var(--border)}
+.avis-add-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem 1.4rem;margin-bottom:1.5rem}
+.avis-add-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.8rem}
+.avis-add-row{display:flex;gap:.7rem;align-items:flex-start}
+.avis-textarea{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--rs);padding:10px 14px;color:var(--text);font-family:var(--fb);font-size:.85rem;outline:none;resize:none;height:70px;transition:border-color var(--t)}
+.avis-textarea:focus{border-color:var(--blue)}
+.avis-textarea::placeholder{color:var(--muted)}
+.btn-avis{background:var(--blue);color:#fff;padding:10px 16px;border-radius:var(--rs);font-size:.82rem;font-weight:600;transition:all var(--t);white-space:nowrap;align-self:flex-end}
+.btn-avis:hover{background:#4f8ef7}
+.avis-stars-row{display:flex;gap:4px;margin-bottom:.6rem}
+.star-btn{font-size:1.1rem;cursor:pointer;transition:transform .1s;background:none;border:none;padding:0;color:var(--muted)}
+.star-btn.active{color:var(--gold)}
+.star-btn:hover{transform:scale(1.2)}
+.avis-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.avis-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem 1.4rem;position:relative;transition:all var(--t)}
+.avis-card:hover{border-color:var(--border2)}
+.avis-card::before{content:'"';position:absolute;top:.4rem;left:1rem;font-size:3rem;font-family:Georgia,serif;color:var(--accent);opacity:.2;line-height:1}
+.avis-text{font-size:.85rem;color:var(--text2);line-height:1.7;margin-bottom:.9rem;padding-top:.3rem}
+.avis-author{display:flex;align-items:center;gap:.6rem}
+.avis-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--accent));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff;overflow:hidden;flex-shrink:0}
+.avis-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.avis-name{font-size:.78rem;font-weight:600}
+.avis-year-tag{font-size:.68rem;color:var(--muted)}
+.avis-stars-display{font-size:.72rem;color:var(--gold);margin-left:auto}
+.avis-empty{text-align:center;padding:2rem;color:var(--muted);font-size:.85rem}
+
+/* FOOTER */
+.site-footer{background:var(--surface);border-top:1px solid var(--border);padding:2.5rem 0 1.5rem;margin-top:0}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem;margin-bottom:2rem}
+@media(max-width:640px){.footer-grid{grid-template-columns:1fr;gap:1.2rem}}
+.footer-brand .nav-logo{font-size:1.3rem;margin-bottom:.4rem}
+.footer-desc{font-size:.78rem;color:var(--muted);line-height:1.65;max-width:220px;margin-top:.3rem}
+.footer-col-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.7rem}
+.footer-links{display:flex;flex-direction:column;gap:.45rem}
+.footer-links a{font-size:.8rem;color:var(--text2);transition:color var(--t)}
+.footer-links a:hover{color:var(--accent)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:1px solid var(--border);flex-wrap:wrap;gap:.5rem}
+.footer-copy{font-size:.7rem;color:var(--muted)}
+.footer-badge{font-size:.66rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:100px;padding:3px 9px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .afu{animation:fadeUp .35s ease both}
@@ -660,52 +699,47 @@ a{color:inherit;text-decoration:none}button{font-family:var(--fb);cursor:pointer
   <section class="avis-section">
     <div class="container">
       <div class="section-label">💬 Avis des Étudiants</div>
-      <div class="avis-grid">
-        <div class="avis-card afu">
-          <p class="avis-text">Enfin une plateforme adaptée à notre fac ! Les cours sont bien classés par module et les QCM m'ont vraiment aidé à préparer mes partiels de 2ème année.</p>
-          <div class="avis-author">
-            <div class="avis-avatar">S</div>
-            <div><div class="avis-name">Sarah K.</div><div class="avis-year">2ème Année · Médecine Oran</div></div>
-            <div class="avis-stars">★★★★★</div>
-          </div>
+
+      <!-- Add review box -->
+      <div class="avis-add-box">
+        <div class="avis-add-title">✍️ Partager ton avis</div>
+        <div class="avis-stars-row" id="starsRow">
+          <button class="star-btn" data-v="1" onclick="setStars(1)">★</button>
+          <button class="star-btn" data-v="2" onclick="setStars(2)">★</button>
+          <button class="star-btn" data-v="3" onclick="setStars(3)">★</button>
+          <button class="star-btn" data-v="4" onclick="setStars(4)">★</button>
+          <button class="star-btn" data-v="5" onclick="setStars(5)">★</button>
         </div>
-        <div class="avis-card afu">
-          <p class="avis-text">J'utilise MEDX tous les jours avant les examens. Avoir les sujets des années précédentes par promo et par module, c'est un énorme gain de temps.</p>
-          <div class="avis-author">
-            <div class="avis-avatar" style="background:linear-gradient(135deg,#8b5cf6,#ec4899)">A</div>
-            <div><div class="avis-name">Amine T.</div><div class="avis-year">4ème Année · Médecine Oran</div></div>
-            <div class="avis-stars">★★★★★</div>
-          </div>
+        <div class="avis-add-row">
+          <textarea class="avis-textarea" id="avisInput" placeholder="Partage ton expérience avec MEDX..."></textarea>
+          <button class="btn-avis" onclick="submitAvis()">➤ Envoyer</button>
         </div>
-        <div class="avis-card afu">
-          <p class="avis-text">Les salles d'étude en direct sont vraiment utiles pendant la période des révisions. On s'organise entre étudiants du même module facilement.</p>
-          <div class="avis-author">
-            <div class="avis-avatar" style="background:linear-gradient(135deg,var(--green),var(--accent))">N</div>
-            <div><div class="avis-name">Nour B.</div><div class="avis-year">3ème Année · Médecine Oran</div></div>
-            <div class="avis-stars">★★★★★</div>
-          </div>
-        </div>
+      </div>
+
+      <!-- Reviews list -->
+      <div class="avis-grid" id="avisList">
+        <div class="avis-empty">Chargement des avis...</div>
       </div>
     </div>
   </section>
 
-  <footer class="footer">
+  <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-brand">
-          <div class="nav-logo">MED<span class="x">X</span></div>
+        <div>
+          <div class="nav-logo footer-brand">MED<span class="x">X</span></div>
           <p class="footer-desc">Plateforme numérique de révision médicale pour les étudiants de la Faculté de Médecine d'Oran.</p>
         </div>
         <div>
-          <div class="footer-title">Navigation</div>
+          <div class="footer-col-title">Navigation</div>
           <div class="footer-links">
             <a href="#" onclick="document.querySelector('.years-grid').scrollIntoView({behavior:'smooth'})">📚 Cours</a>
             <a href="#" onclick="document.getElementById('lbSection').scrollIntoView({behavior:'smooth'})">🏆 Classement</a>
-            <a href="#" onclick="openAdmin&&isAdmin&&openAdmin()">⚙️ Admin</a>
+            <a href="#" onclick="document.querySelector('.avis-section').scrollIntoView({behavior:'smooth'})">💬 Avis</a>
           </div>
         </div>
         <div>
-          <div class="footer-title">Contact</div>
+          <div class="footer-col-title">Contact</div>
           <div class="footer-links">
             <a href="mailto:medx.oran@gmail.com">📧 Email</a>
             <a href="#">💬 Telegram</a>
@@ -811,7 +845,7 @@ onAuthStateChanged(auth,async user=>{
     document.getElementById('mainApp').style.display='flex';
     if(isAdmin)document.getElementById('adminNavBtn').classList.remove('hidden');
     updateUI();buildYears();setupTabs();loadLB('global');loadStudentCount();
-    loadDriveLinks();startListeners();startPresence();
+    loadDriveLinks();startListeners();startPresence();loadAvis();
   } else {
     document.getElementById('authOverlay').style.display='flex';
     document.getElementById('mainApp').style.display='none';
@@ -1557,6 +1591,65 @@ function renderRoomsGrid(rooms){
     grid.appendChild(card);
   });
 }
+
+// ── AVIS ──
+let selectedStars=5;
+
+window.setStars=(n)=>{
+  selectedStars=n;
+  document.querySelectorAll('.star-btn').forEach(b=>{
+    b.classList.toggle('active',parseInt(b.dataset.v)<=n);
+  });
+};
+// Init stars
+setTimeout(()=>setStars(5),100);
+
+function loadAvis(){
+  db.collection('avis').orderBy('ts','desc').limit(30).onSnapshot(snap=>{
+    const list=document.getElementById('avisList');
+    if(!list)return;
+    if(snap.empty){list.innerHTML='<div class="avis-empty">Sois le premier à donner ton avis ! 💬</div>';return;}
+    list.innerHTML='';
+    snap.forEach(d=>{
+      const a=d.data();
+      const stars='★'.repeat(a.stars||5)+'☆'.repeat(5-(a.stars||5));
+      const av=a.photoURL?`<img src="${a.photoURL}" alt="">`:(a.name||'?').charAt(0).toUpperCase();
+      const card=document.createElement('div');card.className='avis-card';
+      card.innerHTML=`
+        <p class="avis-text">${a.text}</p>
+        <div class="avis-author">
+          <div class="avis-avatar">${av}</div>
+          <div><div class="avis-name">${a.name||'Anonyme'}</div><div class="avis-year-tag">${a.yearLabel||''}</div></div>
+          <div class="avis-stars-display">${stars}</div>
+        </div>`;
+      list.appendChild(card);
+    });
+  });
+}
+
+window.submitAvis=async()=>{
+  if(!CU||!UD){toast('Connecte-toi pour laisser un avis');return;}
+  const input=document.getElementById('avisInput');
+  const text=input.value.trim();
+  if(text.length<10){toast('Écris au moins 10 caractères');return;}
+  // Check if user already posted
+  try{
+    const existing=await db.collection('avis').where('uid','==',CU.uid).limit(1).get();
+    if(!existing.empty){toast('Tu as déjà laissé un avis 😊');return;}
+    await db.collection('avis').add({
+      uid:CU.uid,
+      name:UD.name||'Anonyme',
+      photoURL:UD.photoURL||null,
+      yearLabel:({1:'1ère Année',2:'2ème Année',3:'3ème Année',4:'4ème Année',5:'5ème Année',6:'6ème Année'})[UD.year]||'',
+      text,
+      stars:selectedStars,
+      ts:Date.now()
+    });
+    input.value='';
+    setStars(5);
+    toast('Avis publié ✓ Merci ! 🎉');
+  }catch(e){toast('Erreur: '+e.message);}
+};
 
 // ── AVATAR UPLOAD ──
 const CLOUDINARY_CLOUD='dfbsprbwy';
