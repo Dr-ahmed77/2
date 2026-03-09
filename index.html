@@ -1222,7 +1222,7 @@ window.createRoom=async()=>{
   }catch(e){toast('Erreur: '+e.message);}
 };
 
-async function joinRoom(roomId,roomName,module,year){
+window.joinRoom=async function(roomId,roomName,module,year){
   if(currentRoomId)await leaveRoom();
   currentRoomId=roomId;
 
@@ -1269,10 +1269,21 @@ async function joinRoom(roomId,roomName,module,year){
 
 async function leaveRoom(){
   if(!currentRoomId)return;
+  const roomId=currentRoomId;
   try{
     if(localAudioTrack){localAudioTrack.stop();localAudioTrack.close();}
     if(agoraClient){await agoraClient.leave();}
-    await updateDoc(doc(db,'rooms',currentRoomId),{[`members.${CU.uid}`]:null});
+    // Remove member from room
+    await updateDoc(doc(db,'rooms',roomId),{[`members.${CU.uid}`]:null});
+    // Check if room is empty → delete it
+    const snap=await getDoc(doc(db,'rooms',roomId));
+    if(snap.exists()){
+      const members=snap.data().members||{};
+      const active=Object.values(members).filter(Boolean);
+      if(active.length===0){
+        await deleteDoc(doc(db,'rooms',roomId));
+      }
+    }
   }catch(e){}
   if(chatListener){chatListener();chatListener=null;}
   localAudioTrack=null;agoraClient=null;currentRoomId=null;
