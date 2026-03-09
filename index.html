@@ -766,9 +766,9 @@ const auth=firebase.auth(),db=firebase.firestore();
 const increment=firebase.firestore.FieldValue.increment;
 const deleteField=()=>firebase.firestore.FieldValue.delete();
 function addDoc(col,data){return col.add(data);}
-function setDoc(ref,data){return ref.set(data);}
-function getDoc(ref){return ref.get();}
-function getDocs(q){return q.get();}
+function setDoc(ref,data,opts){return opts?ref.set(data,opts):ref.set(data);}
+async function getDoc(ref){const snap=await ref.get();return{exists:()=>snap.exists,data:()=>snap.data(),id:snap.id};}
+async function getDocs(q){const snap=await q.get();snap.forEach2=snap.forEach.bind(snap);return snap;}
 function updateDoc(ref,data){return ref.update(data);}
 function deleteDoc(ref){return ref.delete();}
 function doc(db,col,id){return id?db.collection(col).doc(id):db.collection(col).doc();}
