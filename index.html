@@ -757,13 +757,32 @@ a{color:inherit;text-decoration:none}button{font-family:var(--fb);cursor:pointer
 <div id="toast"></div>
 <div class="xp-popup" id="xpPopup"></div>
 
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import{getFirestore,doc,setDoc,getDoc,updateDoc,collection,query,orderBy,limit,getDocs,where,increment,addDoc,deleteDoc,onSnapshot,deleteField}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+const app=firebase.initializeApp({apiKey:"AIzaSyB7p3phF_ex1EY5bj3Wu3R9-CtOJnqHieA",authDomain:"medx-d67fb.firebaseapp.com",projectId:"medx-d67fb",storageBucket:"medx-d67fb.firebasestorage.app",messagingSenderId:"698164411256",appId:"1:698164411256:web:091edcae6c58749688a68d"});
+const auth=firebase.auth(),db=firebase.firestore();
+const increment=firebase.firestore.FieldValue.increment;
+const deleteField=()=>firebase.firestore.FieldValue.delete();
+function addDoc(col,data){return col.add(data);}
+function setDoc(ref,data){return ref.set(data);}
+function getDoc(ref){return ref.get();}
+function getDocs(q){return q.get();}
+function updateDoc(ref,data){return ref.update(data);}
+function deleteDoc(ref){return ref.delete();}
+function doc(db,col,id){return id?db.collection(col).doc(id):db.collection(col).doc();}
+function collection(db,col){return db.collection(col);}
+function query(col,...constraints){let q=col;constraints.forEach(c=>q=c(q));return q;}
+function where(f,op,v){return q=>q.where(f,op,v);}
+function orderBy(f,dir){return q=>q.orderBy(f,dir||'asc');}
+function limit(n){return q=>q.limit(n);}
+function onSnapshot(ref,cb){return ref.onSnapshot(cb);}
+function onAuthStateChanged(auth,cb){return auth.onAuthStateChanged(cb);}
+function signOut(auth){return auth.signOut();}
+function createUserWithEmailAndPassword(auth,e,p){return auth.createUserWithEmailAndPassword(e,p);}
+function signInWithEmailAndPassword(auth,e,p){return auth.signInWithEmailAndPassword(e,p);}
 
-const app=initializeApp({apiKey:"AIzaSyB7p3phF_ex1EY5bj3Wu3R9-CtOJnqHieA",authDomain:"medx-d67fb.firebaseapp.com",projectId:"medx-d67fb",storageBucket:"medx-d67fb.firebasestorage.app",messagingSenderId:"698164411256",appId:"1:698164411256:web:091edcae6c58749688a68d"});
-const auth=getAuth(app),db=getFirestore(app);
 const LEVELS=[0,100,250,500,900,1500,2500,4000,6000,10000];
 const YL={1:"1ère Année",2:"2ème Année",3:"3ème Année",4:"4ème Année",5:"5ème Année",6:"6ème Année"};
 
@@ -1562,4 +1581,10 @@ window.uploadAvatar=async(input)=>{
       UD.photoURL=data.secure_url;
       updateUI();
       toast('Photo mise à jour ✓ 🎉');
-    } else {toast('Erreur upload: '+JSON.stringify(
+    } else {toast('Erreur upload: '+JSON.stringify(data));}
+  }catch(e){toast('Erreur: '+e.message);}
+  finally{profAv.classList.remove('avatar-uploading');input.value='';}
+};
+</script>
+</body>
+</html>
