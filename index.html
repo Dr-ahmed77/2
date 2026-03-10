@@ -628,12 +628,10 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         <div class="nav-item active" data-view="home" onclick="navTo('home',this)">
           <span class="nav-item-icon">🏠</span> Accueil
         </div>
-        <div class="nav-section" style="margin-top:.5rem">Choisir une Année</div>
-        <div class="sidebar-year-selector" id="yearSelector"></div>
 
-        <!-- Sub-nav for selected year -->
-        <div id="yearSubNav" class="hidden">
-          <div class="nav-section" style="margin-top:.3rem">Contenu</div>
+        <div class="nav-section" style="margin-top:.5rem">Mon Contenu</div>
+        <div style="margin:2px .4rem 6px;padding:4px 8px;background:var(--accent-dim);border:1px solid rgba(0,229,255,.2);border-radius:var(--rs);font-size:.7rem;color:var(--accent);font-weight:600" id="sidebarYearLabel">...</div>
+        <div id="yearSubNav">
           <div class="nav-item" data-view="cours" onclick="navTo('cours',this)">
             <span class="nav-item-icon">📖</span> Cours
           </div>
@@ -907,7 +905,7 @@ auth.onAuthStateChanged(async user=>{
     document.getElementById('authOverlay').style.display='none';
     document.getElementById('mainApp').style.display='flex';
     if(isAdmin)document.getElementById('adminNavBtn').classList.remove('hidden');
-    updateUI();buildYearSelector();loadLB('global');loadStudentCount();
+    updateUI();loadLB('global');loadStudentCount();
     loadDriveLinks();startListeners();startPresence();loadAvis();
     buildDiscordChannels();
   } else {
@@ -1006,26 +1004,32 @@ function buildYearSelector(){
   }
 }
 
-function selectYear(y){
+function selectYear(y, silent=false){
   CY=y;
-  document.querySelectorAll('.year-btn').forEach((b,i)=>b.classList.toggle('active',i+1===y));
-  document.getElementById('yearSubNav').classList.remove('hidden');
-  // Set titles
+  const lbl=document.getElementById('sidebarYearLabel');
+  if(lbl)lbl.textContent='📅 '+YL[y];
   document.getElementById('coursTitle').textContent='📖 Cours — '+YL[y];
   document.getElementById('qcmTitle').textContent='🧩 QCM — '+YL[y];
   document.getElementById('examensTitle').textContent='📄 Examens — '+YL[y];
-  document.getElementById('discordServerName').textContent='🎙️ '+YL[y];
   renderCours(y);renderQCM(y);renderExams(y);renderDrive(y);buildDiscordChannels();
-  navTo('cours',document.querySelector('.nav-item[data-view="cours"]'));
-  toast(YL[y]+' sélectionnée ✓');
+  if(!silent){
+    navTo('cours',document.querySelector('.nav-item[data-view="cours"]'));
+    toast(YL[y]+' ✓');
+  }
 }
 
 // ── LISTENERS ──
+let _firstLoad=true;
 function startListeners(){
   db.collection('lessons').onSnapshot(snap=>{
     allLessons=snap.docs.map(d=>({id:d.id,...d.data()}));
     document.getElementById('statLessons').textContent=allLessons.length;
-    buildYearSelector();if(CY)renderCours(CY);if(isAdmin)renderAdminLessons();
+    if(CY)renderCours(CY);
+    if(isAdmin)renderAdminLessons();
+    if(_firstLoad&&UD&&UD.year){
+      _firstLoad=false;
+      selectYear(parseInt(UD.year),true);
+    }
   });
   db.collection('qcm').onSnapshot(snap=>{
     allQCM=snap.docs.map(d=>({id:d.id,...d.data()}));
