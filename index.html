@@ -387,7 +387,22 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .modal-form{display:flex;flex-direction:column;gap:.7rem}
 .modal-actions{display:flex;gap:.5rem;flex-wrap:wrap}
 
-/* ── MISC ── */
+/* ── CHAT LINES (new style) ── */
+.chat-line{display:flex;gap:.6rem;padding:.4rem .5rem;border-radius:var(--rs);transition:background var(--t);margin-bottom:.15rem}
+.chat-line:hover{background:var(--surface2)}
+.chat-line:hover .msg-del{opacity:1}
+.chat-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--accent));display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#fff;overflow:hidden;flex-shrink:0;margin-top:2px}
+.chat-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.chat-body{flex:1;min-width:0}
+.chat-meta{display:flex;align-items:center;gap:.4rem;margin-bottom:.15rem;flex-wrap:wrap}
+.chat-author{font-size:.78rem;font-weight:700;color:var(--text)}
+.chat-time{font-size:.62rem;color:var(--muted)}
+.chat-text{font-size:.82rem;color:var(--text2);line-height:1.55;word-break:break-word}
+.msg-del{background:none;border:none;cursor:pointer;font-size:.75rem;opacity:0;transition:opacity .2s;padding:0 2px;color:var(--red)}
+.btn-mod-tiny{background:var(--surface2);border:1px solid var(--border2);border-radius:4px;font-size:.6rem;padding:1px 5px;color:var(--muted);cursor:pointer;transition:all var(--t)}
+.btn-mod-tiny:hover{background:var(--gold-dim);color:var(--gold);border-color:rgba(245,158,11,.3)}
+.mod-action-btn{width:100%;text-align:left;padding:.6rem .8rem;border-radius:var(--rs);background:var(--surface2);border:1px solid var(--border);font-size:.8rem;color:var(--text);cursor:pointer;transition:all var(--t)}
+.mod-action-btn:hover{background:var(--surface3);border-color:var(--border2)}
 .btn-ghost{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:500;padding:6px 12px;border-radius:var(--rs);transition:all var(--t);border:1px solid var(--border);color:var(--muted)}
 .btn-ghost:hover{color:var(--text);border-color:var(--border2);background:var(--surface2)}
 #toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:var(--surface2);border:1px solid rgba(0,229,255,.25);color:var(--text);padding:9px 16px;border-radius:var(--rs);font-size:.78rem;box-shadow:var(--shadow);transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:260px}
@@ -613,13 +628,6 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         <div class="nav-item active" data-view="home" onclick="navTo('home',this)">
           <span class="nav-item-icon">🏠</span> Accueil
         </div>
-        <div class="nav-item" data-view="classement" onclick="navTo('classement',this)">
-          <span class="nav-item-icon">🏆</span> Classement
-        </div>
-        <div class="nav-item" data-view="avis" onclick="navTo('avis',this)">
-          <span class="nav-item-icon">💬</span> Avis
-        </div>
-
         <div class="nav-section" style="margin-top:.5rem">Choisir une Année</div>
         <div class="sidebar-year-selector" id="yearSelector"></div>
 
@@ -641,6 +649,14 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
           <div class="nav-item" data-view="rooms" onclick="navTo('rooms',this)">
             <span class="nav-item-icon">🎙️</span> Salles d'étude
           </div>
+        </div>
+
+        <div class="nav-section" style="margin-top:.5rem">Communauté</div>
+        <div class="nav-item" data-view="classement" onclick="navTo('classement',this)">
+          <span class="nav-item-icon">🏆</span> Classement
+        </div>
+        <div class="nav-item" data-view="avis" onclick="navTo('avis',this)">
+          <span class="nav-item-icon">💬</span> Avis
         </div>
       </div>
     </div>
@@ -746,23 +762,21 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
           <div id="driveGrid"></div>
         </div>
 
-        <!-- ROOMS VIEW (Discord style) -->
+        <!-- ROOMS VIEW (new: permanent rooms per year + general chat) -->
         <div class="view" id="view-rooms" style="padding:0;margin:-1.5rem">
           <div class="discord-layout" style="height:calc(100vh - var(--topbar))">
             <!-- Channels sidebar -->
             <div class="discord-sidebar">
               <div class="discord-server-header">
-                <div class="discord-server-name" id="discordServerName">🎙️ Salles</div>
+                <div class="discord-server-name">🎙️ Salles MEDX</div>
               </div>
               <div class="discord-channels" id="discordChannels"></div>
             </div>
             <!-- Main area -->
-            <div class="discord-main">
-              <div id="discordContent">
-                <div class="dc-empty">
-                  <div class="dc-empty-icon">🎙️</div>
-                  <div class="dc-empty-text">Sélectionne une catégorie</div>
-                </div>
+            <div class="discord-main" id="discordContent">
+              <div class="dc-empty">
+                <div class="dc-empty-icon">🎙️</div>
+                <div class="dc-empty-text">Sélectionne une salle</div>
               </div>
             </div>
           </div>
@@ -821,20 +835,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
   </div>
 </div>
 
-<!-- CREATE ROOM MODAL -->
-<div id="createRoomModal" class="modal-overlay hidden">
-  <div class="modal-box">
-    <div class="modal-title">🎙️ Créer une salle</div>
-    <div class="modal-form">
-      <input class="form-input" type="text" id="roomName" placeholder="Nom de la salle (ex: Révision partiel)">
-      <input class="form-input" type="text" id="roomModule" placeholder="Module (ex: Immunologie)">
-      <div class="modal-actions">
-        <button class="btn-auth" style="margin-top:0;width:auto;padding:8px 16px" onclick="createRoom()">🚀 Créer</button>
-        <button class="btn-ghost" onclick="closeCreateRoom()">Annuler</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 <div id="toast"></div>
 <div class="xp-popup" id="xpPopup"></div>
@@ -858,9 +859,7 @@ const AGORA_APP_ID='f19452a586d7415f9205fdef9209d8f8';
 let CU=null,UD=null,isAdmin=false,CY=null;
 let allLessons=[],allQCM=[],allExams=[];
 const driveLinks={1:"#",2:"#",3:"https://drive.google.com/drive/folders/1coBMUiI0stbz0BlmmZ3wwxlU33MrQzX5?usp=drive_link",4:"#",5:"#",6:"#"};
-let agoraClient=null,localAudioTrack=null,currentRoomId=null,micOn=true;
-let chatListener=null,roomsListener=null,membersListener=null;
-let selectedStars=5,currentDCYear=null,currentDCView='text';
+let selectedStars=5;
 
 // ── HELPERS ──
 function getLevel(xp){let l=1;LEVELS.forEach((v,i)=>{if(xp>=v)l=i+1});return Math.min(l,10)}
@@ -1171,235 +1170,230 @@ async function loadLB(mode){
 }
 window.switchLB=(mode,btn)=>{document.querySelectorAll('.lb-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');loadLB(mode);};
 
-// ── DISCORD ROOMS ──
+// ── ROOMS (Permanent per year + General chat) ──
+// Permanent room IDs: "year-1" through "year-6", general: "general"
+const ROOM_NAMES={1:'1ère Année',2:'2ème Année',3:'3ème Année',4:'4ème Année',5:'5ème Année',6:'6ème Année'};
+let currentRoomId=null,currentChatChannel=null;
+let chatListener=null,membersListener=null,roomsListener=null;
+let agoraClient=null,localAudioTrack=null,micOn=true;
+const AGORA_APP_ID='f19452a586d7415f9205fdef9209d8f8';
+
 function buildDiscordChannels(){
   const channels=document.getElementById('discordChannels');
-  if(!channels)return;
-  channels.innerHTML='';
-  // General channels (not year-specific)
-  const genCat=document.createElement('div');genCat.className='dc-category';genCat.textContent='📢 Général';channels.appendChild(genCat);
-  ['general','annonces'].forEach(ch=>{
-    const d=document.createElement('div');d.className='dc-channel'+(currentDCYear===ch?' active':'');
-    d.innerHTML=`<span class="dc-channel-icon">#</span><span class="dc-channel-name">${ch}</span>`;
-    d.onclick=()=>openDCChannel(ch,ch==='general'?'Général':'Annonces','text');
-    channels.appendChild(d);
-  });
-  // Year categories
+  if(!channels)return;channels.innerHTML='';
+
+  // General chat
+  const genCat=makeDCCat('💬 Chat Général');channels.appendChild(genCat);
+  const genCh=makeDCChannel('#','général',false,()=>openRoomChat('general','💬 Chat Général',null));
+  channels.appendChild(genCh);
+
+  // Per year permanent voice rooms
+  const voiceCat=makeDCCat('🎙️ Salles Vocales');channels.appendChild(voiceCat);
   for(let y=1;y<=6;y++){
-    const roomCount=0; // will update via listener
-    const cat=document.createElement('div');cat.className='dc-category';
-    cat.innerHTML=`${YL[y]} <span style="font-size:.7rem">▾</span>`;
-    channels.appendChild(cat);
-    // text channel
-    const textCh=document.createElement('div');
-    textCh.className='dc-channel'+(currentDCYear===`text-${y}`?' active':'');
-    textCh.innerHTML=`<span class="dc-channel-icon">#</span><span class="dc-channel-name">discussion-${y}ème</span>`;
-    textCh.onclick=()=>openDCChannel(`text-${y}`,`💬 Discussion — ${YL[y]}`,'text');
-    channels.appendChild(textCh);
-    // voice channel category
-    const voiceCat=document.createElement('div');
-    voiceCat.className='dc-channel'+(currentDCYear===`voice-${y}`?' active':'');
-    voiceCat.innerHTML=`<span class="dc-channel-icon">🔊</span><span class="dc-channel-name">salles-${y}ème</span>`;
-    voiceCat.onclick=()=>openDCChannel(`voice-${y}`,`🎙️ Salles — ${YL[y]}`,'voice',y);
-    channels.appendChild(voiceCat);
+    const ch=makeDCChannel('🔊','Salle '+YL[y],false,()=>joinPermanentRoom(y));
+    ch.id='dc-room-'+y;channels.appendChild(ch);
   }
 }
+function makeDCCat(label){const d=document.createElement('div');d.className='dc-category';d.textContent=label;return d;}
+function makeDCChannel(icon,name,active,fn){
+  const d=document.createElement('div');d.className='dc-channel'+(active?' active':'');
+  d.innerHTML=`<span class="dc-channel-icon">${icon}</span><span class="dc-channel-name">${name}</span><span class="dc-channel-count" id="cnt-${name.replace(/\s/g,'')}"></span>`;
+  d.onclick=fn;return d;
+}
 
-function openDCChannel(id,name,type,year){
-  currentDCYear=id;
+// ── OPEN CHAT ──
+function openRoomChat(channelId,title,year){
+  // Mark active
   document.querySelectorAll('.dc-channel').forEach(c=>c.classList.remove('active'));
-  document.querySelectorAll('.dc-channel').forEach(c=>{if(c.textContent.includes(name.replace(/[🎙️💬#]/g,'').trim().split(' ')[0]))c.classList.add('active');});
   const content=document.getElementById('discordContent');
-  if(type==='voice'&&year){
-    renderVoiceRooms(content,name,year);
-  } else {
-    renderTextChannel(content,name,id);
-  }
-}
-
-function renderVoiceRooms(content,name,year){
+  content.style.cssText='flex:1;display:flex;flex-direction:column;overflow:hidden';
   content.innerHTML=`
-    <div class="dc-channel-header">
-      <span class="dc-channel-header-icon">🎙️</span>
-      <span class="dc-channel-header-name">${name}</span>
-      <button class="btn-create-room" onclick="openCreateRoom(${year})">+ Créer une salle</button>
-    </div>
-    <div class="dc-rooms-list" id="dcRoomsList-${year}">
-      <div class="lb-loading">Chargement...</div>
-    </div>
-    <div id="activeRoomBox"></div>`;
-  // Start rooms listener for this year
-  if(roomsListener)roomsListener();
-  roomsListener=db.collection('rooms').where('active','==',true).where('year','==',year).onSnapshot(snap=>{
-    const rooms=snap.docs.map(d=>({id:d.id,...d.data()}));
-    rooms.sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
-    const list=document.getElementById(`dcRoomsList-${year}`);
-    if(!list)return;
-    if(!rooms.length){list.innerHTML='<div class="dc-no-rooms">Aucune salle active — crée la première ! 🎙️</div>';return;}
-    list.innerHTML='';
-    rooms.forEach(r=>{
-      const members=Object.values(r.members||{}).filter(Boolean);
-      const isJoined=r.id===currentRoomId;
-      const card=document.createElement('div');card.className='room-card'+(isJoined?' active-room':'');
-      card.innerHTML=`<div class="room-top"><div class="room-name">🎙️ ${r.name}</div><div class="room-live">LIVE</div></div><div class="room-meta">${r.module} · Par ${r.creatorName||'?'}</div><div class="room-footer"><div class="room-members">👥 ${members.length} membre${members.length>1?'s':''}</div>${isJoined?`<button class="btn-leave" onclick="leaveRoom()">🚪 Quitter</button>`:`<button class="btn-join" onclick="joinRoom('${r.id}','${r.name.replace(/'/g,"\\'")}','${r.module.replace(/'/g,"\\'")}',${r.year})">🎙️ Rejoindre</button>`}</div>`;
-      list.appendChild(card);
-    });
-  });
-}
-
-function renderTextChannel(content,name,channelId){
-  content.innerHTML=`
-    <div class="dc-channel-header">
+    <div class="dc-channel-header" style="flex-shrink:0">
       <span class="dc-channel-header-icon">#</span>
-      <span class="dc-channel-header-name">${name}</span>
+      <span class="dc-channel-header-name">${title}</span>
+      ${year?`<span class="dc-channel-header-desc" id="roomMemberCount"></span>`:''}
     </div>
-    <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;height:calc(100vh - var(--topbar) - 52px)">
-      <div class="chat-messages" id="textChatMessages" style="flex:1;overflow-y:auto;padding:.7rem"></div>
-      <div class="chat-input-row">
-        <input class="chat-input" type="text" id="textChatInput" placeholder="Message dans #${name}..." onkeydown="if(event.key==='Enter')sendTextChat('${channelId}')">
-        <button class="btn-send" onclick="sendTextChat('${channelId}')">➤</button>
-      </div>
+    <div class="chat-messages" id="chatMessages" style="flex:1;overflow-y:auto;padding:.8rem"></div>
+    <div class="chat-input-row" style="flex-shrink:0">
+      <input class="chat-input" type="text" id="chatInput" placeholder="Message..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="btn-send" onclick="sendChat()">➤</button>
     </div>`;
-  // Load messages
-  if(chatListener)chatListener();
-  chatListener=db.collection('channels').doc(channelId).collection('messages').orderBy('ts','asc').limitToLast(50).onSnapshot(snap=>{
-    const container=document.getElementById('textChatMessages');
-    if(!container)return;
-    container.innerHTML='';
-    snap.forEach(d=>{
-      const m=d.data();const isMe=m.uid===CU.uid;
-      const div=document.createElement('div');div.className='chat-msg '+(isMe?'me':'other');
-      div.innerHTML=`${!isMe?`<div class="chat-msg-name">${m.name}</div>`:''}<div class="chat-msg-text">${m.text}</div>`;
-      container.appendChild(div);
+  if(chatListener){chatListener();chatListener=null;}
+  currentChatChannel=channelId;
+  chatListener=db.collection('channels').doc(channelId).collection('messages')
+    .orderBy('ts','asc').limitToLast(60).onSnapshot(snap=>{
+      const box=document.getElementById('chatMessages');if(!box)return;
+      box.innerHTML='';
+      snap.forEach(d=>{
+        const m=d.data();const isMe=m.uid===CU.uid;
+        const av=m.photoURL?`<img src="${m.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:(m.name||'?').charAt(0);
+        const delBtn=isAdmin?`<button class="msg-del" onclick="deleteMsg('${channelId}','${d.id}')" title="Supprimer">🗑</button>`:'';
+        const div=document.createElement('div');div.className='chat-line';
+        div.innerHTML=`<div class="chat-av">${av}</div><div class="chat-body"><div class="chat-meta"><span class="chat-author">${m.name||'Anonyme'}</span>${isAdmin&&!isMe?`<button class="btn-mod-tiny" onclick="openModMenu('${m.uid}','${(m.name||'').replace(/'/g,"\\'")}')">⚙</button>`:''}<span class="chat-time">${fmtTime(m.ts)}</span>${delBtn}</div><div class="chat-text">${escHtml(m.text)}</div></div>`;
+        box.appendChild(div);
+      });
+      box.scrollTop=box.scrollHeight;
     });
-    container.scrollTop=container.scrollHeight;
-  });
 }
-
-window.sendTextChat=async(channelId)=>{
-  const input=document.getElementById('textChatInput');
+function sendChat(){
+  const input=document.getElementById('chatInput');if(!input)return;
   const text=input.value.trim();if(!text)return;input.value='';
-  await db.collection('channels').doc(channelId).collection('messages').add({uid:CU.uid,name:UD.name||'Anonyme',text,ts:Date.now()});
-};
+  db.collection('channels').doc(currentChatChannel).collection('messages').add({uid:CU.uid,name:UD.name||'Anonyme',photoURL:UD.photoURL||null,text,ts:Date.now()});
+}
+window.sendChat=sendChat;
 
-// ── CREATE / JOIN / LEAVE ROOM ──
-window.openCreateRoom=(year)=>{
-  document.getElementById('createRoomModal').classList.remove('hidden');
-  window._createRoomYear=year||CY||1;
-};
-window.closeCreateRoom=()=>document.getElementById('createRoomModal').classList.add('hidden');
-
-window.createRoom=async()=>{
-  const name=document.getElementById('roomName').value.trim();
-  const module=document.getElementById('roomModule').value.trim();
-  if(!name||!module){toast('Nom et module obligatoires');return;}
-  const year=window._createRoomYear||CY||1;
+// ── PERMANENT VOICE ROOMS ──
+async function joinPermanentRoom(year){
+  if(currentRoomId===`year-${year}`)return; // already in
+  if(currentRoomId)await leaveRoom(true);
+  const roomId=`year-${year}`;currentRoomId=roomId;micOn=true;
+  // Set active channel visual
+  document.querySelectorAll('.dc-channel').forEach(c=>c.classList.remove('active'));
+  const chEl=document.getElementById('dc-room-'+year);if(chEl)chEl.classList.add('active');
+  // Join Agora
   try{
-    await db.collection('rooms').add({name,module,year,creatorName:UD.name||'Anonyme',active:true,members:{},createdAt:new Date().toISOString()});
-    document.getElementById('roomName').value='';document.getElementById('roomModule').value='';
-    closeCreateRoom();toast('Salle créée ✓');
-  }catch(e){toast('Erreur: '+e.message);}
-};
-
-window.joinRoom=async(roomId,roomName,module,year)=>{
-  if(currentRoomId){toast('Quitte d\'abord ta salle actuelle');return;}
-  currentRoomId=roomId;micOn=true;
-  try{
-    await db.collection('rooms').doc(roomId).update({[`members.${CU.uid}`]:{name:UD.name||'Anonyme',photoURL:UD.photoURL||null,uid:CU.uid}});
     agoraClient=AgoraRTC.createClient({mode:'rtc',codec:'vp8'});
     await agoraClient.join(AGORA_APP_ID,roomId,null,CU.uid);
     localAudioTrack=await AgoraRTC.createMicrophoneAudioTrack();
     await agoraClient.publish([localAudioTrack]);
-    agoraClient.on('user-published',async(user,mt)=>{if(mt==='audio'){await agoraClient.subscribe(user,mt);user.audioTrack.play();}});
-    renderActiveRoomOverlay(roomId,roomName,module);
-    toast('Connecté 🎙️');
-  }catch(e){toast('Erreur micro: '+e.message);currentRoomId=null;}
-};
+    agoraClient.on('user-published',async(u,mt)=>{if(mt==='audio'){await agoraClient.subscribe(u,mt);u.audioTrack.play();}});
+  }catch(e){toast('Micro: '+e.message);}
+  // Add to members in Firestore
+  await db.collection('rooms').doc(roomId).set({year,name:YL[year],active:true},{merge:true});
+  await db.collection('rooms').doc(roomId).update({[`members.${CU.uid}`]:{name:UD.name||'Anonyme',photoURL:UD.photoURL||null,uid:CU.uid,joinedAt:Date.now()}});
+  // Open the voice room view + chat
+  renderVoiceRoomView(roomId,year);
+  toast('🎙️ Connecté — '+YL[year]);
+}
 
-function renderActiveRoomOverlay(roomId,roomName,module){
-  let box=document.getElementById('activeRoomBox');
-  if(!box){const el=document.createElement('div');el.id='activeRoomBox';document.getElementById('discordContent').appendChild(el);box=el;}
-  box.style.cssText='position:fixed;bottom:0;left:240px;right:0;height:320px;background:var(--surface);border-top:2px solid var(--accent);display:flex;flex-direction:column;z-index:50';
-  box.innerHTML=`
-    <div class="active-room-header">
+function renderVoiceRoomView(roomId,year){
+  const content=document.getElementById('discordContent');
+  content.style.cssText='flex:1;display:flex;flex-direction:column;overflow:hidden';
+  content.innerHTML=`
+    <div class="dc-channel-header" style="flex-shrink:0;gap:.5rem">
       <span class="room-live">EN DIRECT</span>
-      <span class="active-room-title" style="margin-left:.5rem">${roomName} · ${module}</span>
-      <div class="room-controls">
+      <span class="dc-channel-header-name">Salle ${YL[year]}</span>
+      <div style="margin-left:auto;display:flex;gap:.4rem">
         <button class="btn-mic on" id="micBtn" onclick="toggleMic()">🎙️ ON</button>
-        <button class="btn-leave" onclick="leaveRoom()">🚪 Quitter</button>
+        <button class="btn-leave" onclick="leaveRoom(false)">🚪 Quitter</button>
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:160px 1fr;flex:1;overflow:hidden">
+    <div style="flex:1;display:grid;grid-template-columns:170px 1fr;overflow:hidden">
       <div class="members-panel">
-        <div class="members-title">👥 Membres</div>
-        <div id="membersList"></div>
+        <div class="members-title">👥 Dans la salle</div>
+        <div id="voiceMembers"></div>
       </div>
-      <div class="chat-panel">
-        <div class="chat-messages" id="chatMessages"></div>
-        <div class="chat-input-row">
-          <input class="chat-input" type="text" id="chatInput" placeholder="Message..." onkeydown="if(event.key==='Enter')sendVoiceChat()">
-          <button class="btn-send" onclick="sendVoiceChat()">➤</button>
+      <div class="chat-panel" style="display:flex;flex-direction:column;overflow:hidden">
+        <div class="chat-messages" id="chatMessages" style="flex:1;overflow-y:auto;padding:.8rem"></div>
+        <div class="chat-input-row" style="flex-shrink:0">
+          <input class="chat-input" type="text" id="chatInput" placeholder="Message dans la salle..." onkeydown="if(event.key==='Enter')sendChat()">
+          <button class="btn-send" onclick="sendChat()">➤</button>
         </div>
       </div>
     </div>`;
-  if(membersListener)membersListener();
+  currentChatChannel=roomId;
+  // Members listener
+  if(membersListener){membersListener();membersListener=null;}
   membersListener=db.collection('rooms').doc(roomId).onSnapshot(snap=>{
     if(!snap.exists)return;
     const members=snap.data().members||{};
-    const ml=document.getElementById('membersList');if(!ml)return;
+    const ml=document.getElementById('voiceMembers');if(!ml)return;
+    const cnt=Object.keys(members).length;
     ml.innerHTML='';
+    // Update sidebar count
+    const cntEl=document.getElementById('dc-room-'+year)?.querySelector('.dc-channel-count');
+    if(cntEl)cntEl.textContent=cnt>0?cnt:'';
     Object.entries(members).forEach(([uid,m])=>{
-      if(!m)return;
-      const isMe=uid===CU.uid;
-      const av=m.photoURL?`<img src="${m.photoURL}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:(m.name||'?').charAt(0).toUpperCase();
+      if(!m)return;const isMe=uid===CU.uid;
+      const av=m.photoURL?`<img src="${m.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:(m.name||'?').charAt(0);
       const d=document.createElement('div');d.className='member-item';
-      d.innerHTML=`<div class="member-avatar">${av}</div><div class="member-name">${m.name||'Anonyme'}${isMe?' ✓':''}</div>`;
+      const modBtn=isAdmin&&!isMe?`<button class="btn-mod-tiny" onclick="openModMenu('${uid}','${(m.name||'').replace(/'/g,"\\'")}')">⚙</button>`:'';
+      d.innerHTML=`<div class="member-avatar">${av}</div><div class="member-name">${m.name||'?'}${isMe?' ✓':''}</div>${modBtn}`;
       ml.appendChild(d);
     });
   });
-  if(chatListener)chatListener();
-  chatListener=db.collection('rooms').doc(roomId).collection('messages').orderBy('ts','asc').limitToLast(30).onSnapshot(snap=>{
-    const container=document.getElementById('chatMessages');if(!container)return;
-    container.innerHTML='';
-    snap.forEach(d=>{
-      const m=d.data();const isMe=m.uid===CU.uid;
-      const div=document.createElement('div');div.className='chat-msg '+(isMe?'me':'other');
-      div.innerHTML=`${!isMe?`<div class="chat-msg-name">${m.name}</div>`:''}<div class="chat-msg-text">${m.text}</div>`;
-      container.appendChild(div);
+  // Chat listener
+  if(chatListener){chatListener();chatListener=null;}
+  chatListener=db.collection('channels').doc(roomId).collection('messages')
+    .orderBy('ts','asc').limitToLast(60).onSnapshot(snap=>{
+      const box=document.getElementById('chatMessages');if(!box)return;
+      box.innerHTML='';
+      snap.forEach(d=>{
+        const m=d.data();const isMe=m.uid===CU.uid;
+        const av=m.photoURL?`<img src="${m.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:(m.name||'?').charAt(0);
+        const delBtn=isAdmin?`<button class="msg-del" onclick="deleteMsg('${roomId}','${d.id}')" title="Supprimer">🗑</button>`:'';
+        const div=document.createElement('div');div.className='chat-line';
+        div.innerHTML=`<div class="chat-av">${av}</div><div class="chat-body"><div class="chat-meta"><span class="chat-author">${m.name||'Anonyme'}</span>${isAdmin&&!isMe?`<button class="btn-mod-tiny" onclick="openModMenu('${m.uid}','${(m.name||'').replace(/'/g,"\\'")}')">⚙</button>`:''}<span class="chat-time">${fmtTime(m.ts)}</span>${delBtn}</div><div class="chat-text">${escHtml(m.text)}</div></div>`;
+        box.appendChild(div);
+      });
+      box.scrollTop=box.scrollHeight;
     });
-    container.scrollTop=container.scrollHeight;
-  });
 }
 
-window.sendVoiceChat=async()=>{
+window.leaveRoom=async(silent=false)=>{
   if(!currentRoomId)return;
-  const input=document.getElementById('chatInput');
-  const text=input.value.trim();if(!text)return;input.value='';
-  await db.collection('rooms').doc(currentRoomId).collection('messages').add({uid:CU.uid,name:UD.name||'Anonyme',text,ts:Date.now()});
-};
-
-window.leaveRoom=async()=>{
-  if(!currentRoomId)return;
-  const roomId=currentRoomId;
-  try{if(localAudioTrack){localAudioTrack.stop();localAudioTrack.close();}if(agoraClient)await agoraClient.leave();}catch(e){}
-  try{
-    await db.collection('rooms').doc(roomId).update({[`members.${CU.uid}`]:FV.delete()});
-    const snap=await db.collection('rooms').doc(roomId).get();
-    if(snap.exists){const members=snap.data().members||{};if(!Object.keys(members).length)await db.collection('rooms').doc(roomId).delete();}
-  }catch(e){}
+  const roomId=currentRoomId;currentRoomId=null;
+  try{if(localAudioTrack){localAudioTrack.stop();localAudioTrack.close();}if(agoraClient){await agoraClient.leave();}}catch(e){}
+  try{await db.collection('rooms').doc(roomId).update({[`members.${CU.uid}`]:FV.delete()});}catch(e){}
   if(chatListener){chatListener();chatListener=null;}
   if(membersListener){membersListener();membersListener=null;}
-  localAudioTrack=null;agoraClient=null;currentRoomId=null;
-  const box=document.getElementById('activeRoomBox');if(box)box.remove();
-  toast('Salle quittée');
+  localAudioTrack=null;agoraClient=null;
+  document.querySelectorAll('.dc-channel').forEach(c=>c.classList.remove('active'));
+  const content=document.getElementById('discordContent');
+  if(content&&!silent)content.innerHTML=`<div class="dc-empty"><div class="dc-empty-icon">🎙️</div><div class="dc-empty-text">Salle quittée</div></div>`;
+  if(!silent)toast('Salle quittée');
 };
 
 window.toggleMic=async()=>{
-  if(!localAudioTrack)return;
-  micOn=!micOn;await localAudioTrack.setEnabled(micOn);
+  if(!localAudioTrack)return;micOn=!micOn;
+  await localAudioTrack.setEnabled(micOn);
   const btn=document.getElementById('micBtn');
   if(btn){btn.className='btn-mic '+(micOn?'on':'off');btn.textContent=micOn?'🎙️ ON':'🔇 OFF';}
 };
+
+// ── ADMIN MODERATION ──
+let _modTarget=null;
+window.openModMenu=(uid,name)=>{
+  _modTarget={uid,name};
+  const existing=document.getElementById('modMenu');if(existing)existing.remove();
+  const menu=document.createElement('div');menu.id='modMenu';
+  menu.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:700;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:1.2rem;min-width:240px;box-shadow:var(--shadow)';
+  menu.innerHTML=`
+    <div style="font-family:var(--ff);font-weight:800;margin-bottom:.9rem">⚙️ Modérer — ${name}</div>
+    <div style="display:flex;flex-direction:column;gap:.5rem">
+      <button class="mod-action-btn" onclick="kickUser('${uid}')">🚪 Kick (expulser de la salle)</button>
+      <button class="mod-action-btn" onclick="muteUser('${uid}')">🔇 Mute (retirer micro)</button>
+      <button class="mod-action-btn" style="color:var(--red)" onclick="banUser('${uid}','${name.replace(/'/g,"\\'")}')">🚫 Ban (bannir définitif)</button>
+      <button class="btn-ghost" style="margin-top:.3rem" onclick="document.getElementById('modMenu').remove()">Annuler</button>
+    </div>`;
+  document.body.appendChild(menu);
+};
+window.kickUser=async(uid)=>{
+  if(!isAdmin||!currentRoomId){document.getElementById('modMenu')?.remove();return;}
+  await db.collection('rooms').doc(currentRoomId).update({[`members.${uid}`]:FV.delete()});
+  await db.collection('kicked').doc(currentRoomId+'_'+uid).set({uid,kickedAt:Date.now(),by:CU.uid});
+  document.getElementById('modMenu')?.remove();toast('Étudiant expulsé 🚪');
+};
+window.muteUser=async(uid)=>{
+  if(!isAdmin){document.getElementById('modMenu')?.remove();return;}
+  await db.collection('users').doc(uid).update({muted:true});
+  document.getElementById('modMenu')?.remove();toast('Micro coupé 🔇');
+};
+window.banUser=async(uid,name)=>{
+  if(!isAdmin||!confirm(`Bannir ${name} définitivement ?`)){document.getElementById('modMenu')?.remove();return;}
+  await db.collection('users').doc(uid).update({banned:true,bannedAt:Date.now(),bannedBy:CU.uid});
+  if(currentRoomId)await db.collection('rooms').doc(currentRoomId).update({[`members.${uid}`]:FV.delete()});
+  document.getElementById('modMenu')?.remove();toast('Banni ✓');
+};
+window.deleteMsg=async(channelId,msgId)=>{
+  if(!isAdmin)return;
+  await db.collection('channels').doc(channelId).collection('messages').doc(msgId).delete();
+  toast('Message supprimé 🗑');
+};
+
+// ── HELPERS ──
+function fmtTime(ts){if(!ts)return'';const d=new Date(ts);return d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}
+function escHtml(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
 // ── PRESENCE ──
 function startPresence(){
