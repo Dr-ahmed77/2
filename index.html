@@ -143,6 +143,14 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .profile-name{font-family:var(--ff);font-size:.95rem;font-weight:700}
 .btn-edit-name{background:var(--surface3);border:1px solid var(--border2);border-radius:5px;padding:2px 6px;font-size:.62rem;color:var(--muted);transition:color var(--t)}
 .btn-edit-name:hover{color:var(--text)}
+.rename-modal{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:1rem}
+.rename-box{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:1.5rem;width:100%;max-width:340px;box-shadow:var(--shadow)}
+.rename-title{font-family:var(--ff);font-size:.95rem;font-weight:800;margin-bottom:1rem}
+.rename-actions{display:flex;gap:.5rem;margin-top:1rem}
+.btn-rename-save{flex:1;background:var(--blue);color:#fff;padding:8px;border-radius:var(--rs);font-size:.82rem;font-weight:600;transition:all var(--t)}
+.btn-rename-save:hover{background:#4f8ef7}
+.btn-rename-cancel{flex:1;background:var(--surface2);color:var(--muted);padding:8px;border-radius:var(--rs);font-size:.82rem;font-weight:600}
+.btn-rename-cancel:hover{color:var(--text)}
 .profile-year-lbl{font-size:.7rem;color:var(--muted);margin-top:2px}
 .profile-xp-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:.7rem}
 .xp-total{font-family:var(--ff);font-size:1.8rem;font-weight:800;color:var(--gold);line-height:1}
@@ -484,10 +492,14 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 @media(max-width:480px){
   .home-profile{grid-template-columns:1fr}
   .discord-layout{flex-direction:column}
-  .discord-sidebar{width:100%;height:auto;border-right:none;border-bottom:1px solid var(--border)}
-  .discord-channels{display:flex;flex-direction:row;overflow-x:auto;padding:.3rem}
+  .discord-sidebar{width:100%;height:auto;max-height:140px;border-right:none;border-bottom:1px solid var(--border);flex-shrink:0}
+  .discord-channels{display:flex;flex-direction:row;overflow-x:auto;padding:.3rem;gap:.2rem}
   .dc-category{display:none}
-  .dc-channel{flex-shrink:0;white-space:nowrap}
+  .dc-channel{flex-shrink:0;white-space:nowrap;padding:.35rem .7rem}
+  .discord-main{flex:1;min-height:0;overflow:hidden}
+  .discord-content{height:100%}
+  .active-room-body{grid-template-columns:1fr}
+  .chat-panel{height:100%}
 }
 </style>
 </head>
@@ -685,7 +697,10 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         <div class="sidebar-user-avatar" id="sidebarAvatar" onclick="document.getElementById('avatarInput').click()"></div>
         <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="uploadAvatar(this)">
         <div class="sidebar-user-info">
-          <div class="sidebar-user-name" id="sidebarName">...</div>
+          <div style="display:flex;align-items:center;gap:.4rem">
+            <div class="sidebar-user-name" id="sidebarName">...</div>
+            <button class="btn-edit-name" onclick="openRename()" title="Modifier le nom">✏️</button>
+          </div>
           <div class="sidebar-user-year" id="sidebarYear">...</div>
         </div>
       </div>
@@ -888,6 +903,17 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
   </div>
 </div>
 
+<div id="renameModal" class="rename-modal hidden">
+  <div class="rename-box">
+    <div class="rename-title">✏️ Modifier mon nom</div>
+    <div class="form-group"><label>Nouveau nom</label><input class="form-input" type="text" id="renameInput" placeholder="Prénom Nom" onkeydown="if(event.key==='Enter')saveRename()"></div>
+    <div class="rename-actions">
+      <button class="btn-rename-cancel" onclick="document.getElementById('renameModal').classList.add('hidden')">Annuler</button>
+      <button class="btn-rename-save" onclick="saveRename()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 <div class="xp-popup" id="xpPopup"></div>
 
@@ -926,6 +952,25 @@ async function doRegister(){
   }catch(e){setErr(frErr(e.code));}
 }
 function doLogout(){auth.signOut();}
+window.openRename=()=>{
+  const input=document.getElementById('renameInput');
+  if(input&&UD)input.value=UD.name||'';
+  document.getElementById('renameModal').classList.remove('hidden');
+  setTimeout(()=>input&&input.focus(),100);
+};
+window.saveRename=async()=>{
+  const input=document.getElementById('renameInput');
+  const newName=input?input.value.trim():'';
+  if(!newName){toast('❌ Nom invalide');return;}
+  if(!CU){toast('❌ Non connecté');return;}
+  try{
+    await db.collection('users').doc(CU.uid).update({name:newName});
+    UD.name=newName;
+    updateUI();
+    document.getElementById('renameModal').classList.add('hidden');
+    toast('✅ Nom mis à jour');
+  }catch(e){toast('❌ Erreur: '+e.message);}
+};
 function switchAuthTab(tab){
   document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',['login','register'][i]===tab));
   document.getElementById('loginForm').classList.toggle('hidden',tab!=='login');
