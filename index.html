@@ -7,11 +7,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--surface3:#212d44;
+  --bg:#0F172A;--surface:#1E293B;--surface2:#243044;--surface3:#2d3d55;
   --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
   --text:#e8edf5;--text2:#a8b4cc;--muted:#6b7a99;
   --blue:#3b82f6;--blue-dim:rgba(59,130,246,0.12);
-  --accent:#00e5ff;--accent-dim:rgba(0,229,255,0.08);
+  --accent:#6366f1;--accent-dim:rgba(99,102,241,0.10);
   --red:#ff4d6d;--red-dim:rgba(255,77,109,0.10);
   --green:#10b981;--green-dim:rgba(16,185,129,0.10);
   --gold:#f59e0b;--gold-dim:rgba(245,158,11,0.12);
@@ -33,7 +33,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 #authOverlay{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:1rem}
 .auth-box{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:2.2rem 2rem;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 .auth-logo{font-family:var(--ff);font-size:2rem;font-weight:800;color:#fff;text-align:center;margin-bottom:.2rem}
-.auth-logo .x{color:var(--accent);text-shadow:0 0 20px rgba(0,229,255,.6)}
+.auth-logo .x{color:var(--accent);text-shadow:0 0 20px rgba(99,102,241,.6)}
 .auth-sub{text-align:center;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1.8rem}
 .auth-tabs{display:flex;gap:3px;background:var(--surface2);border-radius:var(--r);padding:3px;margin-bottom:1.4rem}
 .auth-tab{flex:1;padding:7px;border-radius:var(--rs);font-size:.8rem;font-weight:500;color:var(--muted);transition:all var(--t);text-align:center;cursor:pointer}
@@ -53,7 +53,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 #mainApp{display:none;height:100vh;flex-direction:column}
 .topbar{height:var(--topbar);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1rem;gap:.6rem;flex-shrink:0;z-index:50}
 .topbar-logo{font-family:var(--ff);font-size:1.2rem;font-weight:800;letter-spacing:-0.5px;color:#fff}
-.topbar-logo .x{color:var(--accent);text-shadow:0 0 18px rgba(0,229,255,.6)}
+.topbar-logo .x{color:var(--accent);text-shadow:0 0 18px rgba(99,102,241,.6)}
 .topbar-divider{width:1px;height:20px;background:var(--border2);flex-shrink:0}
 .topbar-page-title{font-size:.82rem;font-weight:600;color:var(--text2);flex:1}
 .topbar-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
@@ -143,6 +143,12 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .profile-name{font-family:var(--ff);font-size:.95rem;font-weight:700}
 .btn-edit-name{background:var(--surface3);border:1px solid var(--border2);border-radius:5px;padding:2px 6px;font-size:.62rem;color:var(--muted);transition:color var(--t)}
 .btn-edit-name:hover{color:var(--text)}
+.rename-modal{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:1rem}
+.rename-box{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:1.5rem;width:100%;max-width:340px;box-shadow:var(--shadow)}
+.rename-title{font-family:var(--ff);font-size:.95rem;font-weight:800;margin-bottom:1rem}
+.rename-actions{display:flex;gap:.5rem;margin-top:1rem}
+.btn-rename-save{flex:1;background:var(--blue);color:#fff;padding:8px;border-radius:var(--rs);font-size:.82rem;font-weight:600}
+.btn-rename-cancel{flex:1;background:var(--surface2);color:var(--muted);padding:8px;border-radius:var(--rs);font-size:.82rem;font-weight:600}
 .profile-year-lbl{font-size:.7rem;color:var(--muted);margin-top:2px}
 .profile-xp-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:.7rem}
 .xp-total{font-family:var(--ff);font-size:1.8rem;font-weight:800;color:var(--gold);line-height:1}
@@ -189,6 +195,13 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .lesson-name{flex:1;font-size:.82rem;font-weight:500}
 .lesson-open{font-size:.7rem;color:var(--accent);font-weight:600}
 .lesson-soon{font-size:.68rem;color:var(--muted)}
+.btn-check{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border2);background:transparent;color:transparent;font-size:.7rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all var(--t);cursor:pointer}
+.btn-check:hover{border-color:var(--green);color:var(--green)}
+.btn-check.checked{background:var(--green);border-color:var(--green);color:#fff}
+.lesson-item.done .lesson-name{text-decoration:line-through;text-decoration-color:var(--green);text-decoration-thickness:2px;color:var(--muted)}
+.btn-check-qcm{background:var(--green-dim);color:var(--green);border:1px solid rgba(16,185,129,.3);padding:4px 12px;border-radius:var(--rs);font-size:.72rem;font-weight:600;cursor:pointer;transition:all var(--t)}
+.btn-check-qcm.checked{background:var(--green);color:#fff}
+.qcm-card.done{opacity:.5}
 
 /* ── QCM VIEW ── */
 .qcm-filter{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
@@ -231,7 +244,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .exam-item{display:flex;align-items:center;justify-content:space-between;padding:.6rem .9rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:.35rem;gap:.5rem;flex-wrap:wrap}
 .exam-module-name{font-size:.82rem;font-weight:500;flex:1;display:flex;align-items:center;gap:6px;}
 .exam-module-name svg{width:16px;height:16px;}
-.exam-dl{font-size:.72rem;font-weight:600;color:var(--accent);padding:4px 10px;border:1px solid rgba(0,229,255,.25);border-radius:100px;transition:all var(--t)}
+.exam-dl{font-size:.72rem;font-weight:600;color:var(--accent);padding:4px 10px;border:1px solid rgba(99,102,241,.25);border-radius:100px;transition:all var(--t)}
 .exam-dl:hover{background:var(--accent-dim)}
 .exam-dl.disabled{color:var(--muted);border-color:var(--border);pointer-events:none}
 
@@ -278,7 +291,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .dc-no-rooms{text-align:center;padding:2rem;color:var(--muted);font-size:.82rem}
 .room-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1rem;margin-bottom:.6rem;transition:all var(--t)}
 .room-card:hover{border-color:var(--border2)}
-.room-card.active-room{border-color:rgba(0,229,255,.3);background:var(--accent-dim)}
+.room-card.active-room{border-color:rgba(99,102,241,.3);background:var(--accent-dim)}
 .room-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem}
 .room-name{font-size:.88rem;font-weight:700}
 .room-live{font-size:.58rem;font-weight:700;background:var(--red);color:#fff;padding:2px 6px;border-radius:100px;letter-spacing:.05em}
@@ -445,7 +458,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .btn-ghost{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:500;padding:6px 12px;border-radius:var(--rs);transition:all var(--t);border:1px solid var(--border);color:var(--muted)}
 .btn-ghost:hover{color:var(--text);border-color:var(--border2);background:var(--surface2)}
 
-#toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:var(--surface2);border:1px solid rgba(0,229,255,.25);color:var(--text);padding:9px 16px;border-radius:var(--rs);font-size:.78rem;box-shadow:var(--shadow);transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:260px}
+#toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:var(--surface2);border:1px solid rgba(99,102,241,.25);color:var(--text);padding:9px 16px;border-radius:var(--rs);font-size:.78rem;box-shadow:var(--shadow);transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:260px}
 #toast.show{transform:translateY(0);opacity:1}
 .xp-popup{position:fixed;top:70px;right:1.5rem;z-index:9998;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);color:var(--gold);padding:9px 16px;border-radius:var(--rs);font-family:var(--ff);font-size:.88rem;font-weight:700;box-shadow:var(--shadow);transform:translateY(-20px);opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
 .xp-popup.show{transform:translateY(0);opacity:1}
@@ -569,7 +582,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
     
     <div class="admin-pane" id="ap-qcm">
       <div class="admin-section">
-        <div style="background:rgba(0,229,255,.05);border:1.5px dashed rgba(0,229,255,.25);border-radius:10px;padding:1rem 1.2rem;margin-bottom:1.2rem">
+        <div style="background:rgba(99,102,241,.05);border:1.5px dashed rgba(99,102,241,.25);border-radius:10px;padding:1rem 1.2rem;margin-bottom:1.2rem">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
             <div style="font-size:.78rem;font-weight:700;color:var(--accent)">📥 Import CSV — Ajouter plusieurs QCM d'un coup</div>
             <button class="btn-add" style="padding:4px 12px;font-size:.7rem" onclick="downloadQCMTemplate()">⬇ Template CSV</button>
@@ -681,7 +694,10 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         <div class="sidebar-user-avatar" id="sidebarAvatar" onclick="document.getElementById('avatarInput').click()"></div>
         <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="uploadAvatar(this)">
         <div class="sidebar-user-info">
-          <div class="sidebar-user-name" id="sidebarName">...</div>
+          <div style="display:flex;align-items:center;gap:.4rem">
+            <div class="sidebar-user-name" id="sidebarName">...</div>
+            <button class="btn-edit-name" onclick="openRename()" title="Modifier le nom">✏️</button>
+          </div>
           <div class="sidebar-user-year" id="sidebarYear">...</div>
         </div>
       </div>
@@ -695,26 +711,26 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
       <div class="sidebar-nav">
         <div class="nav-section">Menu</div>
         <div class="nav-item active" data-view="home" onclick="navTo('home',this)">
-          <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n1" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M8 22L26 6L44 22V44H33V32H19V44H8V22Z" fill="url(#n1)" opacity=".15"/><path d="M8 22L26 6L44 22V44H33V32H19V44H8V22Z" stroke="url(#n1)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none"/><circle cx="26" cy="24" r="3.5" fill="url(#n1)"/></svg></span> Accueil
+          <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n1" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><path d="M8 22L26 6L44 22V44H33V32H19V44H8V22Z" fill="url(#n1)" opacity=".15"/><path d="M8 22L26 6L44 22V44H33V32H19V44H8V22Z" stroke="url(#n1)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none"/><circle cx="26" cy="24" r="3.5" fill="url(#n1)"/></svg></span> Accueil
         </div>
 
         <div class="nav-section" style="margin-top:.5rem">Mon Contenu</div>
-        <div style="margin:2px .4rem 6px;padding:4px 8px;background:var(--accent-dim);border:1px solid rgba(0,229,255,.2);border-radius:var(--rs);font-size:.7rem;color:var(--accent);font-weight:600" id="sidebarYearLabel">...</div>
+        <div style="margin:2px .4rem 6px;padding:4px 8px;background:var(--accent-dim);border:1px solid rgba(99,102,241,.2);border-radius:var(--rs);font-size:.7rem;color:var(--accent);font-weight:600" id="sidebarYearLabel">...</div>
         <div id="yearSubNav">
           <div class="nav-item" data-view="cours" onclick="navTo('cours',this)">
-            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n2" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#n2)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#n2)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#n2)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#n2)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#n2)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="23" x2="33" y2="23" stroke="url(#n2)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="29" x2="27" y2="29" stroke="url(#n2)" stroke-width="2" stroke-linecap="round"/></svg></span> Cours
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n2" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#n2)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#n2)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#n2)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#n2)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#n2)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="23" x2="33" y2="23" stroke="url(#n2)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="29" x2="27" y2="29" stroke="url(#n2)" stroke-width="2" stroke-linecap="round"/></svg></span> Cours
           </div>
           <div class="nav-item" data-view="qcm" onclick="navTo('qcm',this)">
-            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n3" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="8" fill="url(#n3)" opacity=".12"/><rect x="8" y="8" width="36" height="36" rx="8" stroke="url(#n3)" stroke-width="2.2" fill="none"/><rect x="14" y="16" width="6" height="6" rx="1.5" stroke="url(#n3)" stroke-width="1.8" fill="none"/><path d="M15.5 19l1.5 1.5 2.5-3" stroke="url(#n3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="24" y1="19" x2="36" y2="19" stroke="url(#n3)" stroke-width="2" stroke-linecap="round"/><rect x="14" y="26" width="6" height="6" rx="1.5" stroke="url(#n3)" stroke-width="1.8" fill="none"/><line x1="24" y1="29" x2="36" y2="29" stroke="url(#n3)" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="19" r="2.5" fill="url(#n3)"/></svg></span> QCM
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n3" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="8" fill="url(#n3)" opacity=".12"/><rect x="8" y="8" width="36" height="36" rx="8" stroke="url(#n3)" stroke-width="2.2" fill="none"/><rect x="14" y="16" width="6" height="6" rx="1.5" stroke="url(#n3)" stroke-width="1.8" fill="none"/><path d="M15.5 19l1.5 1.5 2.5-3" stroke="url(#n3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="24" y1="19" x2="36" y2="19" stroke="url(#n3)" stroke-width="2" stroke-linecap="round"/><rect x="14" y="26" width="6" height="6" rx="1.5" stroke="url(#n3)" stroke-width="1.8" fill="none"/><line x1="24" y1="29" x2="36" y2="29" stroke="url(#n3)" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="19" r="2.5" fill="url(#n3)"/></svg></span> QCM
           </div>
           <div class="nav-item" data-view="examens" onclick="navTo('examens',this)">
-            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n4" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="11" y="6" width="24" height="30" rx="3" fill="url(#n4)" opacity=".12"/><rect x="11" y="6" width="24" height="30" rx="3" stroke="url(#n4)" stroke-width="2.2" fill="none"/><line x1="16" y1="14" x2="30" y2="14" stroke="url(#n4)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="20" x2="30" y2="20" stroke="url(#n4)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="26" x2="24" y2="26" stroke="url(#n4)" stroke-width="2" stroke-linecap="round"/><path d="M30 34l8-8 4 4-8 8-4-4z" stroke="url(#n4)" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M30 34l-2 6 6-2" stroke="url(#n4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="34" y1="28" x2="38" y2="32" stroke="url(#n4)" stroke-width="1.5" stroke-linecap="round"/></svg></span> Examens passés
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n4" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="11" y="6" width="24" height="30" rx="3" fill="url(#n4)" opacity=".12"/><rect x="11" y="6" width="24" height="30" rx="3" stroke="url(#n4)" stroke-width="2.2" fill="none"/><line x1="16" y1="14" x2="30" y2="14" stroke="url(#n4)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="20" x2="30" y2="20" stroke="url(#n4)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="26" x2="24" y2="26" stroke="url(#n4)" stroke-width="2" stroke-linecap="round"/><path d="M30 34l8-8 4 4-8 8-4-4z" stroke="url(#n4)" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M30 34l-2 6 6-2" stroke="url(#n4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="34" y1="28" x2="38" y2="32" stroke="url(#n4)" stroke-width="1.5" stroke-linecap="round"/></svg></span> Examens passés
           </div>
           <div class="nav-item" data-view="drive" onclick="navTo('drive',this)">
-            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n5" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" fill="url(#n5)" opacity=".12"/><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" stroke="url(#n5)" stroke-width="2.2" fill="none"/><line x1="26" y1="39" x2="26" y2="25" stroke="url(#n5)" stroke-width="2.2" stroke-linecap="round"/><path d="M21 30l5-5 5 5" stroke="url(#n5)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="20" y1="39" x2="32" y2="39" stroke="url(#n5)" stroke-width="2.2" stroke-linecap="round"/></svg></span> Drive Promo
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n5" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" fill="url(#n5)" opacity=".12"/><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" stroke="url(#n5)" stroke-width="2.2" fill="none"/><line x1="26" y1="39" x2="26" y2="25" stroke="url(#n5)" stroke-width="2.2" stroke-linecap="round"/><path d="M21 30l5-5 5 5" stroke="url(#n5)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="20" y1="39" x2="32" y2="39" stroke="url(#n5)" stroke-width="2.2" stroke-linecap="round"/></svg></span> Drive Promo
           </div>
           <div class="nav-item" data-view="rooms" onclick="navTo('rooms',this)">
-            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n6" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#n6)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#n6)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#n6)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#n6)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#n6)" stroke-width="2.2" stroke-linecap="round"/><path d="M10 24a18 18 0 000 8" stroke="url(#n6)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/><path d="M42 24a18 18 0 010 8" stroke="url(#n6)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/></svg></span> Salles d'étude
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n6" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#n6)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#n6)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#n6)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#n6)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#n6)" stroke-width="2.2" stroke-linecap="round"/><path d="M10 24a18 18 0 000 8" stroke="url(#n6)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/><path d="M42 24a18 18 0 010 8" stroke="url(#n6)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/></svg></span> Salles d'étude
           </div>
         </div>
 
@@ -723,7 +739,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
           <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n7" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#fcd34d"/></linearGradient></defs><path d="M16 8h20v16a10 10 0 01-20 0V8z" fill="url(#n7)" opacity=".18"/><path d="M16 8h20v16a10 10 0 01-20 0V8z" stroke="url(#n7)" stroke-width="2.2" fill="none"/><path d="M16 12H10a4 4 0 004 4h2" stroke="url(#n7)" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M36 12h6a4 4 0 01-4 4h-2" stroke="url(#n7)" stroke-width="2" stroke-linecap="round" fill="none"/><line x1="26" y1="34" x2="26" y2="40" stroke="url(#n7)" stroke-width="2.2" stroke-linecap="round"/><rect x="18" y="40" width="16" height="4" rx="2" fill="url(#n7)" opacity=".4"/><rect x="18" y="40" width="16" height="4" rx="2" stroke="url(#n7)" stroke-width="2" fill="none"/><path d="M26 14l1.5 4h4l-3.2 2.4 1.2 4L26 22l-3.5 2.4 1.2-4L20.5 18h4z" fill="url(#n7)"/></svg></span> Classement
         </div>
         <div class="nav-item" data-view="avis" onclick="navTo('avis',this)">
-          <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n8" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" fill="url(#n8)" opacity=".12"/><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" stroke="url(#n8)" stroke-width="2.2" fill="none" stroke-linejoin="round"/><path d="M17 24l1 3h3l-2.5 2 1 3L17 30l-2.5 2 1-3L13 27h3z" fill="url(#n8)"/><path d="M26 24l1 3h3l-2.5 2 1 3L26 30l-2.5 2 1-3L22 27h3z" fill="url(#n8)"/><path d="M35 24l1 3h3l-2.5 2 1 3L35 30l-2.5 2 1-3L31 27h3z" fill="url(#n8)" opacity=".4"/></svg></span> Avis
+          <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n8" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" fill="url(#n8)" opacity=".12"/><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" stroke="url(#n8)" stroke-width="2.2" fill="none" stroke-linejoin="round"/><path d="M17 24l1 3h3l-2.5 2 1 3L17 30l-2.5 2 1-3L13 27h3z" fill="url(#n8)"/><path d="M26 24l1 3h3l-2.5 2 1 3L26 30l-2.5 2 1-3L22 27h3z" fill="url(#n8)"/><path d="M35 24l1 3h3l-2.5 2 1 3L35 30l-2.5 2 1-3L31 27h3z" fill="url(#n8)" opacity=".4"/></svg></span> Avis
         </div>
       </div>
     </div>
@@ -735,7 +751,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
           <div class="home-stats afu">
             <div class="stat-card">
               <div class="stat-icon" style="background:var(--blue-dim)">
-                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="s2a" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="6" y="10" width="14" height="32" rx="3" fill="url(#s2a)" opacity=".2"/><rect x="6" y="10" width="14" height="32" rx="3" stroke="url(#s2a)" stroke-width="2" fill="none"/><rect x="22" y="18" width="14" height="24" rx="3" fill="url(#s2a)" opacity=".15"/><rect x="22" y="18" width="14" height="24" rx="3" stroke="url(#s2a)" stroke-width="2" fill="none"/><rect x="38" y="26" width="8" height="16" rx="2" fill="url(#s2a)" opacity=".1"/><rect x="38" y="26" width="8" height="16" rx="2" stroke="url(#s2a)" stroke-width="2" fill="none"/></svg>
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="s2a" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="6" y="10" width="14" height="32" rx="3" fill="url(#s2a)" opacity=".2"/><rect x="6" y="10" width="14" height="32" rx="3" stroke="url(#s2a)" stroke-width="2" fill="none"/><rect x="22" y="18" width="14" height="24" rx="3" fill="url(#s2a)" opacity=".15"/><rect x="22" y="18" width="14" height="24" rx="3" stroke="url(#s2a)" stroke-width="2" fill="none"/><rect x="38" y="26" width="8" height="16" rx="2" fill="url(#s2a)" opacity=".1"/><rect x="38" y="26" width="8" height="16" rx="2" stroke="url(#s2a)" stroke-width="2" fill="none"/></svg>
               </div>
               <div><div class="stat-val" style="color:var(--blue)" id="statLessons">0</div><div class="stat-lbl">Cours</div></div>
             </div>
@@ -747,13 +763,13 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
             </div>
             <div class="stat-card">
               <div class="stat-icon" style="background:var(--green-dim)">
-                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="s1b" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><circle cx="26" cy="18" r="8" fill="url(#s1b)" opacity=".15"/><circle cx="26" cy="18" r="8" stroke="url(#s1b)" stroke-width="2.2" fill="none"/><path d="M10 44c0-8.8 7.2-16 16-16s16 7.2 16 16" stroke="url(#s1b)" stroke-width="2.2" stroke-linecap="round" fill="none"/><path d="M20 12l6 2 6-2" stroke="url(#s1b)" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg>
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="s1b" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><circle cx="26" cy="18" r="8" fill="url(#s1b)" opacity=".15"/><circle cx="26" cy="18" r="8" stroke="url(#s1b)" stroke-width="2.2" fill="none"/><path d="M10 44c0-8.8 7.2-16 16-16s16 7.2 16 16" stroke="url(#s1b)" stroke-width="2.2" stroke-linecap="round" fill="none"/><path d="M20 12l6 2 6-2" stroke="url(#s1b)" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg>
               </div>
               <div><div class="stat-val" style="color:var(--green)" id="statStudents">0</div><div class="stat-lbl">Étudiants</div></div>
             </div>
             <div class="stat-card">
               <div class="stat-icon" style="background:var(--accent-dim)">
-                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="s4b" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="6" y="6" width="18" height="18" rx="4" fill="url(#s4b)" opacity=".16"/><rect x="6" y="6" width="18" height="18" rx="4" stroke="url(#s4b)" stroke-width="2" fill="none"/><rect x="28" y="6" width="18" height="18" rx="4" fill="url(#s4b)" opacity=".11"/><rect x="28" y="6" width="18" height="18" rx="4" stroke="url(#s4b)" stroke-width="2" fill="none"/><rect x="6" y="28" width="18" height="18" rx="4" fill="url(#s4b)" opacity=".08"/><rect x="6" y="28" width="18" height="18" rx="4" stroke="url(#s4b)" stroke-width="2" fill="none"/><rect x="28" y="28" width="18" height="18" rx="4" fill="url(#s4b)" opacity=".06"/><rect x="28" y="28" width="18" height="18" rx="4" stroke="url(#s4b)" stroke-width="2" fill="none"/></svg>
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="s4b" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="6" y="6" width="18" height="18" rx="4" fill="url(#s4b)" opacity=".16"/><rect x="6" y="6" width="18" height="18" rx="4" stroke="url(#s4b)" stroke-width="2" fill="none"/><rect x="28" y="6" width="18" height="18" rx="4" fill="url(#s4b)" opacity=".11"/><rect x="28" y="6" width="18" height="18" rx="4" stroke="url(#s4b)" stroke-width="2" fill="none"/><rect x="6" y="28" width="18" height="18" rx="4" fill="url(#s4b)" opacity=".08"/><rect x="6" y="28" width="18" height="18" rx="4" stroke="url(#s4b)" stroke-width="2" fill="none"/><rect x="28" y="28" width="18" height="18" rx="4" fill="url(#s4b)" opacity=".06"/><rect x="28" y="28" width="18" height="18" rx="4" stroke="url(#s4b)" stroke-width="2" fill="none"/></svg>
               </div>
               <div><div class="stat-val" style="color:var(--accent)">6</div><div class="stat-lbl">Années</div></div>
             </div>
@@ -761,52 +777,12 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 
           <div class="home-profile afu d2">
             <div class="profile-card">
-              <div class="profile-card-title">Continuer un cours</div>
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem">
-                <div style="flex:1">
-                  <div style="font-family:var(--ff);font-size:1rem;font-weight:800;margin-bottom:.25rem">Reprendre là où vous étiez</div>
-                  <div style="font-size:.8rem;color:var(--muted);line-height:1.5">Accédez directement à vos cours de l’année sélectionnée.</div>
-                </div>
-                <button class="btn-auth" style="margin-top:0;width:auto;padding:8px 14px" onclick="navTo('cours', document.querySelector('.nav-item[data-view=&quot;cours&quot;]'))">Ouvrir</button>
-              </div>
-            </div>
-
-            <div class="profile-card">
-              <div class="profile-card-title">QCM recommandé</div>
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem">
-                <div style="flex:1">
-                  <div style="font-family:var(--ff);font-size:1rem;font-weight:800;margin-bottom:.25rem">Une session rapide (10–15 min)</div>
-                  <div style="font-size:.8rem;color:var(--muted);line-height:1.5">Idéal pour maintenir votre rythme و gagner des XP.</div>
-                </div>
-                <button class="btn-auth" style="margin-top:0;width:auto;padding:8px 14px" onclick="navTo('qcm', document.querySelector('.nav-item[data-view=&quot;qcm&quot;]'))">Lancer</button>
-              </div>
-            </div>
-
-            <div class="profile-card">
-              <div class="profile-card-title">Activité récente</div>
-              <div style="display:flex;flex-direction:column;gap:.5rem">
-                <div class="xp-action-item" style="justify-content:flex-start;gap:.55rem">
-                  <span style="opacity:.9"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="nq3" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="8" fill="url(#nq3)" opacity=".12"/><rect x="8" y="8" width="36" height="36" rx="8" stroke="url(#nq3)" stroke-width="2.2" fill="none"/><rect x="14" y="16" width="6" height="6" rx="1.5" stroke="url(#nq3)" stroke-width="1.8" fill="none"/><path d="M15.5 19l1.5 1.5 2.5-3" stroke="url(#nq3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="24" y1="19" x2="36" y2="19" stroke="url(#nq3)" stroke-width="2" stroke-linecap="round"/><rect x="14" y="26" width="6" height="6" rx="1.5" stroke="url(#nq3)" stroke-width="1.8" fill="none"/><line x1="24" y1="29" x2="36" y2="29" stroke="url(#nq3)" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="19" r="2.5" fill="url(#nq3)"/></svg></span>
-                  <span style="flex:1">Dernier QCM — statistiques à venir</span><span style="color:var(--muted);font-size:.7rem">—</span>
-                </div>
-                <div class="xp-action-item" style="justify-content:flex-start;gap:.55rem">
-                  <span style="opacity:.9"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="nc2" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#nc2)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#nc2)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#nc2)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#nc2)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#nc2)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="23" x2="33" y2="23" stroke="url(#nc2)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="29" x2="27" y2="29" stroke="url(#nc2)" stroke-width="2" stroke-linecap="round"/></svg></span>
-                  <span style="flex:1">Dernier cours ouvert — à venir</span><span style="color:var(--muted);font-size:.7rem">—</span>
-                </div>
-                <div class="xp-action-item" style="justify-content:flex-start;gap:.55rem">
-                  <span style="opacity:.9"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="nx2" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M26 6l3.6 7.2 7.9 1.2-5.7 5.6 1.4 7.9L26 24l-7.2 3.9 1.4-7.9-5.7-5.6 7.9-1.2z" fill="url(#nx2)" opacity=".2"/><path d="M26 6l3.6 7.2 7.9 1.2-5.7 5.6 1.4 7.9L26 24l-7.2 3.9 1.4-7.9-5.7-5.6 7.9-1.2z" stroke="url(#nx2)" stroke-width="2" stroke-linejoin="round" fill="none"/></svg></span>
-                  <span style="flex:1">Progression XP — à jour</span><span style="color:var(--muted);font-size:.7rem" id="navXPInline">—</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="profile-card">
               <div class="profile-card-title">Comment gagner des XP</div>
               <div class="xp-actions">
-                <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n2a" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#n2a)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#n2a)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#n2a)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#n2a)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#n2a)" stroke-width="2" stroke-linecap="round"/></svg> Ouvrir un cours</span><span class="xp-pill">+5 XP</span></div>
+                <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n2a" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#n2a)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#n2a)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#n2a)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#n2a)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#n2a)" stroke-width="2" stroke-linecap="round"/></svg> Ouvrir un cours</span><span class="xp-pill">+5 XP</span></div>
                 <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="q1x" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#34d399"/></linearGradient></defs><circle cx="26" cy="26" r="20" fill="url(#q1x)" opacity=".15"/><circle cx="26" cy="26" r="20" stroke="url(#q1x)" stroke-width="2.5" fill="none"/><path d="M16 26l7 7 14-14" stroke="url(#q1x)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Compléter un QCM</span><span class="xp-pill">+30 XP</span></div>
                 <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="x6x" x1="0" y1="52" x2="52" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs><path d="M26 8c0 0-14 12-14 24a14 14 0 0028 0c0-6-4-10-4-10s-1 6-6 8c-2-4 2-14-4-22z" fill="url(#x6x)" opacity=".25"/><path d="M26 8c0 0-14 12-14 24a14 14 0 0028 0c0-6-4-10-4-10s-1 6-6 8c-2-4 2-14-4-22z" stroke="url(#x6x)" stroke-width="2" stroke-linejoin="round" fill="none"/><circle cx="26" cy="36" r="4" fill="url(#x6x)"/></svg> Connexion quotidienne</span><span class="xp-pill">+10 XP</span></div>
-                <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="c2x" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="8" fill="url(#c2x)" opacity=".1"/><rect x="8" y="8" width="36" height="36" rx="8" stroke="url(#c2x)" stroke-width="2" fill="none"/><line x1="26" y1="14" x2="26" y2="30" stroke="url(#c2x)" stroke-width="2.5" stroke-linecap="round"/><path d="M18 24l8 8 8-8" stroke="url(#c2x)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="16" y1="38" x2="36" y2="38" stroke="url(#c2x)" stroke-width="2.5" stroke-linecap="round"/></svg> Télécharger un examen</span><span class="xp-pill">+15 XP</span></div>
+                <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="c2x" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="8" fill="url(#c2x)" opacity=".1"/><rect x="8" y="8" width="36" height="36" rx="8" stroke="url(#c2x)" stroke-width="2" fill="none"/><line x1="26" y1="14" x2="26" y2="30" stroke="url(#c2x)" stroke-width="2.5" stroke-linecap="round"/><path d="M18 24l8 8 8-8" stroke="url(#c2x)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="16" y1="38" x2="36" y2="38" stroke="url(#c2x)" stroke-width="2.5" stroke-linecap="round"/></svg> Télécharger un examen</span><span class="xp-pill">+15 XP</span></div>
               </div>
             </div>
           </div>
@@ -815,7 +791,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         <div class="view" id="view-cours">
           <div class="view-header">
             <div class="view-title" id="coursTitle">
-                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="tc" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#tc)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#tc)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#tc)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#tc)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#tc)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="23" x2="33" y2="23" stroke="url(#tc)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="29" x2="27" y2="29" stroke="url(#tc)" stroke-width="2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="tc" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#tc)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#tc)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#tc)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#tc)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#tc)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="23" x2="33" y2="23" stroke="url(#tc)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="29" x2="27" y2="29" stroke="url(#tc)" stroke-width="2" stroke-linecap="round"/></svg>
                 Cours
             </div>
           </div>
@@ -832,7 +808,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         <div class="view" id="view-qcm">
           <div class="view-header">
             <div class="view-title" id="qcmTitle">
-                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="tq" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="8" fill="url(#tq)" opacity=".12"/><rect x="8" y="8" width="36" height="36" rx="8" stroke="url(#tq)" stroke-width="2.2" fill="none"/><rect x="14" y="16" width="6" height="6" rx="1.5" stroke="url(#tq)" stroke-width="1.8" fill="none"/><path d="M15.5 19l1.5 1.5 2.5-3" stroke="url(#tq)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="24" y1="19" x2="36" y2="19" stroke="url(#tq)" stroke-width="2" stroke-linecap="round"/><rect x="14" y="26" width="6" height="6" rx="1.5" stroke="url(#tq)" stroke-width="1.8" fill="none"/><line x1="24" y1="29" x2="36" y2="29" stroke="url(#tq)" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="19" r="2.5" fill="url(#tq)"/></svg>
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="tq" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="8" fill="url(#tq)" opacity=".12"/><rect x="8" y="8" width="36" height="36" rx="8" stroke="url(#tq)" stroke-width="2.2" fill="none"/><rect x="14" y="16" width="6" height="6" rx="1.5" stroke="url(#tq)" stroke-width="1.8" fill="none"/><path d="M15.5 19l1.5 1.5 2.5-3" stroke="url(#tq)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="24" y1="19" x2="36" y2="19" stroke="url(#tq)" stroke-width="2" stroke-linecap="round"/><rect x="14" y="26" width="6" height="6" rx="1.5" stroke="url(#tq)" stroke-width="1.8" fill="none"/><line x1="24" y1="29" x2="36" y2="29" stroke="url(#tq)" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="19" r="2.5" fill="url(#tq)"/></svg>
                 QCM
             </div>
           </div>
@@ -842,7 +818,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         <div class="view" id="view-examens">
           <div class="view-header">
             <div class="view-title" id="examensTitle">
-                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="te" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="11" y="6" width="24" height="30" rx="3" fill="url(#te)" opacity=".12"/><rect x="11" y="6" width="24" height="30" rx="3" stroke="url(#te)" stroke-width="2.2" fill="none"/><line x1="16" y1="14" x2="30" y2="14" stroke="url(#te)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="20" x2="30" y2="20" stroke="url(#te)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="26" x2="24" y2="26" stroke="url(#te)" stroke-width="2" stroke-linecap="round"/><path d="M30 34l8-8 4 4-8 8-4-4z" stroke="url(#te)" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M30 34l-2 6 6-2" stroke="url(#te)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="34" y1="28" x2="38" y2="32" stroke="url(#te)" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="te" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="11" y="6" width="24" height="30" rx="3" fill="url(#te)" opacity=".12"/><rect x="11" y="6" width="24" height="30" rx="3" stroke="url(#te)" stroke-width="2.2" fill="none"/><line x1="16" y1="14" x2="30" y2="14" stroke="url(#te)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="20" x2="30" y2="20" stroke="url(#te)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="26" x2="24" y2="26" stroke="url(#te)" stroke-width="2" stroke-linecap="round"/><path d="M30 34l8-8 4 4-8 8-4-4z" stroke="url(#te)" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M30 34l-2 6 6-2" stroke="url(#te)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="34" y1="28" x2="38" y2="32" stroke="url(#te)" stroke-width="1.5" stroke-linecap="round"/></svg>
                 Examens Passés
             </div>
           </div>
@@ -852,7 +828,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         <div class="view" id="view-drive">
           <div class="view-header">
             <div class="view-title">
-                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="td" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" fill="url(#td)" opacity=".12"/><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" stroke="url(#td)" stroke-width="2.2" fill="none"/><line x1="26" y1="39" x2="26" y2="25" stroke="url(#td)" stroke-width="2.2" stroke-linecap="round"/><path d="M21 30l5-5 5 5" stroke="url(#td)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="20" y1="39" x2="32" y2="39" stroke="url(#td)" stroke-width="2.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="td" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" fill="url(#td)" opacity=".12"/><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" stroke="url(#td)" stroke-width="2.2" fill="none"/><line x1="26" y1="39" x2="26" y2="25" stroke="url(#td)" stroke-width="2.2" stroke-linecap="round"/><path d="M21 30l5-5 5 5" stroke="url(#td)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="20" y1="39" x2="32" y2="39" stroke="url(#td)" stroke-width="2.2" stroke-linecap="round"/></svg>
                 Drive Promo
             </div>
           </div>
@@ -864,7 +840,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
             <div class="discord-sidebar">
               <div class="discord-server-header">
                 <div class="discord-server-name">
-                    <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="tr" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#tr)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#tr)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round"/><path d="M10 24a18 18 0 000 8" stroke="url(#tr)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/><path d="M42 24a18 18 0 010 8" stroke="url(#tr)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/></svg>
+                    <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="tr" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#tr)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#tr)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round"/><path d="M10 24a18 18 0 000 8" stroke="url(#tr)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/><path d="M42 24a18 18 0 010 8" stroke="url(#tr)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/></svg>
                     Salles MEDX
                 </div>
               </div>
@@ -873,7 +849,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
             <div class="discord-main" id="discordContent">
               <div class="dc-empty">
                 <div class="dc-empty-icon">
-                    <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="e3m" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#e3m)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#e3m)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#e3m)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#e3m)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#e3m)" stroke-width="2.2" stroke-linecap="round"/></svg>
+                    <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="e3m" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#e3m)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#e3m)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#e3m)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#e3m)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#e3m)" stroke-width="2.2" stroke-linecap="round"/></svg>
                 </div>
                 <div class="dc-empty-text">Sélectionne une salle</div>
               </div>
@@ -889,8 +865,8 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
             </div>
           </div>
           <div class="lb-tabs">
-            <div class="lb-tab active" onclick="switchLB('global',this)">🌍 Global</div>
-            <div class="lb-tab" onclick="switchLB('year',this)">📅 Ma Promotion</div>
+            <div class="lb-tab active" onclick="switchLB('global',this)"><svg viewBox="0 0 20 20" fill="none" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M2 10h16M10 2c-2 2-3 5-3 8s1 6 3 8M10 2c2 2 3 5 3 8s-1 6-3 8" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>Global</div>
+            <div class="lb-tab" onclick="switchLB('year',this)"><svg viewBox="0 0 20 20" fill="none" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"><path d="M10 2l2 5h5l-4 3 1.5 5L10 13l-4.5 2 1.5-5-4-3h5z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>Ma Promotion</div>
           </div>
           <div class="lb-list" id="lbList"><div class="lb-loading">Chargement...</div></div>
         </div>
@@ -898,7 +874,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         <div class="view" id="view-avis">
           <div class="view-header">
             <div class="view-title">
-                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="ta" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" fill="url(#ta)" opacity=".12"/><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" stroke="url(#ta)" stroke-width="2.2" fill="none" stroke-linejoin="round"/><path d="M17 24l1 3h3l-2.5 2 1 3L17 30l-2.5 2 1-3L13 27h3z" fill="url(#ta)"/><path d="M26 24l1 3h3l-2.5 2 1 3L26 30l-2.5 2 1-3L22 27h3z" fill="url(#ta)"/><path d="M35 24l1 3h3l-2.5 2 1 3L35 30l-2.5 2 1-3L31 27h3z" fill="url(#ta)" opacity=".4"/></svg>
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="ta" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" fill="url(#ta)" opacity=".12"/><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" stroke="url(#ta)" stroke-width="2.2" fill="none" stroke-linejoin="round"/><path d="M17 24l1 3h3l-2.5 2 1 3L17 30l-2.5 2 1-3L13 27h3z" fill="url(#ta)"/><path d="M26 24l1 3h3l-2.5 2 1 3L26 30l-2.5 2 1-3L22 27h3z" fill="url(#ta)"/><path d="M35 24l1 3h3l-2.5 2 1 3L35 30l-2.5 2 1-3L31 27h3z" fill="url(#ta)" opacity=".4"/></svg>
                 Avis des Étudiants
             </div>
           </div>
@@ -924,6 +900,16 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
   </div>
 </div>
 
+<div id="renameModal" class="rename-modal hidden">
+  <div class="rename-box">
+    <div class="rename-title">✏️ Modifier mon nom</div>
+    <div class="form-group"><label>Nouveau nom</label><input class="form-input" type="text" id="renameInput" placeholder="Prénom Nom" onkeydown="if(event.key==='Enter')saveRename()"></div>
+    <div class="rename-actions">
+      <button class="btn-rename-cancel" onclick="document.getElementById('renameModal').classList.add('hidden')">Annuler</button>
+      <button class="btn-rename-save" onclick="saveRename()">Enregistrer</button>
+    </div>
+  </div>
+</div>
 <div id="toast"></div>
 <div class="xp-popup" id="xpPopup"></div>
 
@@ -935,10 +921,10 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 <script data-cfasync="false">
 // ── ICONS SVGs FOR JS DYNAMIC ELEMENTS ──
 const SVG_ICONS = {
-  module: `<svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="c3z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="6" y="6" width="18" height="18" rx="4" fill="url(#c3z)" opacity=".2"/><rect x="6" y="6" width="18" height="18" rx="4" stroke="url(#c3z)" stroke-width="2" fill="none"/><rect x="28" y="6" width="18" height="18" rx="4" fill="url(#c3z)" opacity=".1"/><rect x="28" y="6" width="18" height="18" rx="4" stroke="url(#c3z)" stroke-width="2" fill="none"/><rect x="6" y="28" width="18" height="18" rx="4" fill="url(#c3z)" opacity=".1"/><rect x="6" y="28" width="18" height="18" rx="4" stroke="url(#c3z)" stroke-width="2" fill="none"/><rect x="28" y="28" width="18" height="18" rx="4" fill="url(#c3z)" opacity=".05"/><rect x="28" y="28" width="18" height="18" rx="4" stroke="url(#c3z)" stroke-width="2" stroke-dasharray="3 2" fill="none"/><line x1="37" y1="32" x2="37" y2="42" stroke="url(#c3z)" stroke-width="2" stroke-linecap="round"/><line x1="32" y1="37" x2="42" y2="37" stroke="url(#c3z)" stroke-width="2" stroke-linecap="round"/></svg>`,
-  semestre: `<svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="c4z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="6" y="10" width="40" height="36" rx="5" fill="url(#c4z)" opacity=".1"/><rect x="6" y="10" width="40" height="36" rx="5" stroke="url(#c4z)" stroke-width="2" fill="none"/><line x1="6" y1="20" x2="46" y2="20" stroke="url(#c4z)" stroke-width="2"/><line x1="16" y1="6" x2="16" y2="16" stroke="url(#c4z)" stroke-width="2.5" stroke-linecap="round"/><line x1="36" y1="6" x2="36" y2="16" stroke="url(#c4z)" stroke-width="2.5" stroke-linecap="round"/><rect x="12" y="26" width="8" height="6" rx="1.5" fill="url(#c4z)" opacity=".4"/><rect x="22" y="26" width="8" height="6" rx="1.5" fill="url(#c4z)" opacity=".6"/><rect x="32" y="26" width="8" height="6" rx="1.5" fill="url(#c4z)"/></svg>`,
-  chatMsg: `<svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="m1z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M6 10h40a4 4 0 014 4v20a4 4 0 01-4 4H28l-8 8v-8H6a4 4 0 01-4-4V14a4 4 0 014-4z" fill="url(#m1z)" opacity=".1"/><path d="M6 10h40a4 4 0 014 4v20a4 4 0 01-4 4H28l-8 8v-8H6a4 4 0 01-4-4V14a4 4 0 014-4z" stroke="url(#m1z)" stroke-width="2" fill="none" stroke-linejoin="round"/><line x1="12" y1="22" x2="32" y2="22" stroke="url(#m1z)" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="28" x2="26" y2="28" stroke="url(#m1z)" stroke-width="2" stroke-linecap="round"/></svg>`,
-  micOn: `<svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="m3z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#m3z)" opacity=".2"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#m3z)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#m3z)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#m3z)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#m3z)" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  module: `<svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="c3z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="6" y="6" width="18" height="18" rx="4" fill="url(#c3z)" opacity=".2"/><rect x="6" y="6" width="18" height="18" rx="4" stroke="url(#c3z)" stroke-width="2" fill="none"/><rect x="28" y="6" width="18" height="18" rx="4" fill="url(#c3z)" opacity=".1"/><rect x="28" y="6" width="18" height="18" rx="4" stroke="url(#c3z)" stroke-width="2" fill="none"/><rect x="6" y="28" width="18" height="18" rx="4" fill="url(#c3z)" opacity=".1"/><rect x="6" y="28" width="18" height="18" rx="4" stroke="url(#c3z)" stroke-width="2" fill="none"/><rect x="28" y="28" width="18" height="18" rx="4" fill="url(#c3z)" opacity=".05"/><rect x="28" y="28" width="18" height="18" rx="4" stroke="url(#c3z)" stroke-width="2" stroke-dasharray="3 2" fill="none"/><line x1="37" y1="32" x2="37" y2="42" stroke="url(#c3z)" stroke-width="2" stroke-linecap="round"/><line x1="32" y1="37" x2="42" y2="37" stroke="url(#c3z)" stroke-width="2" stroke-linecap="round"/></svg>`,
+  semestre: `<svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="c4z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="6" y="10" width="40" height="36" rx="5" fill="url(#c4z)" opacity=".1"/><rect x="6" y="10" width="40" height="36" rx="5" stroke="url(#c4z)" stroke-width="2" fill="none"/><line x1="6" y1="20" x2="46" y2="20" stroke="url(#c4z)" stroke-width="2"/><line x1="16" y1="6" x2="16" y2="16" stroke="url(#c4z)" stroke-width="2.5" stroke-linecap="round"/><line x1="36" y1="6" x2="36" y2="16" stroke="url(#c4z)" stroke-width="2.5" stroke-linecap="round"/><rect x="12" y="26" width="8" height="6" rx="1.5" fill="url(#c4z)" opacity=".4"/><rect x="22" y="26" width="8" height="6" rx="1.5" fill="url(#c4z)" opacity=".6"/><rect x="32" y="26" width="8" height="6" rx="1.5" fill="url(#c4z)"/></svg>`,
+  chatMsg: `<svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="m1z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><path d="M6 10h40a4 4 0 014 4v20a4 4 0 01-4 4H28l-8 8v-8H6a4 4 0 01-4-4V14a4 4 0 014-4z" fill="url(#m1z)" opacity=".1"/><path d="M6 10h40a4 4 0 014 4v20a4 4 0 01-4 4H28l-8 8v-8H6a4 4 0 01-4-4V14a4 4 0 014-4z" stroke="url(#m1z)" stroke-width="2" fill="none" stroke-linejoin="round"/><line x1="12" y1="22" x2="32" y2="22" stroke="url(#m1z)" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="28" x2="26" y2="28" stroke="url(#m1z)" stroke-width="2" stroke-linecap="round"/></svg>`,
+  micOn: `<svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="m3z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#m3z)" opacity=".2"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#m3z)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#m3z)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#m3z)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#m3z)" stroke-width="2.2" stroke-linecap="round"/></svg>`,
 };
 
 // ── FIREBASE ──
@@ -962,6 +948,24 @@ async function doRegister(){
   }catch(e){setErr(frErr(e.code));}
 }
 function doLogout(){auth.signOut();}
+window.openRename=()=>{
+  const input=document.getElementById('renameInput');
+  if(input&&UD)input.value=UD.name||'';
+  document.getElementById('renameModal').classList.remove('hidden');
+  setTimeout(()=>input&&input.focus(),100);
+};
+window.saveRename=async()=>{
+  const input=document.getElementById('renameInput');
+  const newName=input?input.value.trim():'';
+  if(!newName){toast('❌ Nom invalide');return;}
+  if(!CU){toast('❌ Non connecté');return;}
+  try{
+    await db.collection('users').doc(CU.uid).update({name:newName});
+    UD.name=newName;updateUI();
+    document.getElementById('renameModal').classList.add('hidden');
+    toast('✅ Nom mis à jour');
+  }catch(e){toast('❌ Erreur: '+e.message);}
+};
 function switchAuthTab(tab){
   document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',['login','register'][i]===tab));
   document.getElementById('loginForm').classList.toggle('hidden',tab!=='login');
@@ -972,7 +976,40 @@ function switchAuthTab(tab){
 const LEVELS=[0,100,250,500,900,1500,2500,4000,6000,10000];
 const YL={1:"1ère Année",2:"2ème Année",3:"3ème Année",4:"4ème Année",5:"5ème Année",6:"6ème Année"};
 let CU=null,UD=null,isAdmin=false,CY=null;
+let userProgress={lessons:{},qcm:{}};
 let allLessons=[],allQCM=[],allExams=[];
+
+async function loadProgress(){
+  if(!CU)return;
+  try{
+    const snap=await db.collection('users').doc(CU.uid).get();
+    if(snap.exists){const d=snap.data();userProgress.lessons=d.progress_lessons||{};userProgress.qcm=d.progress_qcm||{};}
+  }catch(e){console.error('loadProgress:',e);}
+}
+async function saveProgress(){
+  if(!CU)return;
+  try{await db.collection('users').doc(CU.uid).update({progress_lessons:userProgress.lessons,progress_qcm:userProgress.qcm});}
+  catch(e){console.error('saveProgress:',e);}
+}
+window.toggleLessonCheck=async(e,lessonId,itemEl)=>{
+  e.stopPropagation();
+  const isDone=!!userProgress.lessons[lessonId];
+  if(isDone)delete userProgress.lessons[lessonId]; else userProgress.lessons[lessonId]=true;
+  const btn=itemEl.querySelector('.btn-check');
+  if(btn){btn.classList.toggle('checked',!isDone);btn.textContent=!isDone?'✓':'';}
+  itemEl.classList.toggle('done',!isDone);
+  await saveProgress();
+  toast(!isDone?'✅ Cours marqué comme lu':'↩️ Marquage retiré');
+};
+window.toggleQCMCheck=async(e,qcmId,btnEl)=>{
+  e.stopPropagation();
+  const isDone=!!userProgress.qcm[qcmId];
+  if(isDone)delete userProgress.qcm[qcmId]; else userProgress.qcm[qcmId]=true;
+  btnEl.classList.toggle('checked',!isDone);
+  btnEl.textContent=!isDone?'✓ Maîtrisé':'Maîtrisé ?';
+  btnEl.closest('.qcm-card')?.classList.toggle('done',!isDone);
+  await saveProgress();
+};
 const driveLinks={1:"#",2:"#",3:"https://drive.google.com/drive/folders/1coBMUiI0stbz0BlmmZ3wwxlU33MrQzX5?usp=drive_link",4:"#",5:"#",6:"#"};
 let selectedStars=5;
 
@@ -997,13 +1034,14 @@ auth.onAuthStateChanged(async user=>{
     document.getElementById('authOverlay').style.display='none';
     document.getElementById('mainApp').style.display='flex';
     if(isAdmin)document.getElementById('adminNavBtn').classList.remove('hidden');
+    await loadProgress();
     updateUI();loadLB('global');loadStudentCount();
     loadDriveLinks();startListeners();startPresence();loadAvis();
     buildDiscordChannels();
   } else {
     document.getElementById('authOverlay').style.display='flex';
     document.getElementById('mainApp').style.display='none';
-    CU=null;UD=null;isAdmin=false;
+    CU=null;UD=null;isAdmin=false;userProgress={lessons:{},qcm:{}};
   }
 });
 
@@ -1149,7 +1187,9 @@ function openLessons(mod,lessons){
   lessons.forEach((l,i)=>{
     const d=document.createElement('div');d.className='lesson-item';
     const hasLink=l.link&&l.link!=='#';
-    d.innerHTML=`<div class="lesson-num">${String(i+1).padStart(2,'0')}</div><div class="lesson-name">${l.name}</div>${hasLink?'<span class="lesson-open">📄 Ouvrir</span>':'<span class="lesson-soon">Bientôt</span>'}`;
+    const isDone=!!userProgress.lessons[l.id];
+    if(isDone)d.classList.add('done');
+    d.innerHTML=`<div class="lesson-num">${String(i+1).padStart(2,'0')}</div><div class="lesson-name">${l.name}</div>${hasLink?'<span class="lesson-open">📄 Ouvrir</span>':'<span class="lesson-soon">Bientôt</span>'}<button class="btn-check${isDone?' checked':''}" onclick="toggleLessonCheck(event,'${l.id}',this.closest('.lesson-item'))" title="Marquer comme lu">${isDone?'✓':''}</button>`;
     if(hasLink)d.onclick=()=>{openPDF(l.name,l.link);addXP(5,'Cours ouvert 📖');};
     ll.appendChild(d);
   });
@@ -1181,11 +1221,15 @@ function renderQCMList(qcms){
     </div>`;
   let answered=0;
   qcms.forEach((q,idx)=>{
-    const card=document.createElement('div');card.className='qcm-card';card.id='qcard-'+q.id;
+    const card=document.createElement('div');card.className='qcm-card'+(userProgress.qcm[q.id]?' done':'');card.id='qcard-'+q.id;
     const letters=['A','B','C','D','E'];
     const choices=letters.map(l=>q['choice'+l]?{letter:l,text:q['choice'+l]}:null).filter(Boolean);
+    const isDoneQCM=!!userProgress.qcm[q.id];
     card.innerHTML=`
-      <div class="qcm-num">Q${idx+1} / ${total} · ${q.module}${q.lesson?' · '+q.lesson:''}</div>
+      <div class="qcm-num" style="display:flex;align-items:center;justify-content:space-between">
+        <span>Q${idx+1} / ${total} · ${q.module}${q.lesson?' · '+q.lesson:''}</span>
+        <button class="btn-check-qcm${isDoneQCM?' checked':''}" onclick="toggleQCMCheck(event,'${q.id}',this)">${isDoneQCM?'✓ Maîtrisé':'Maîtrisé ?'}</button>
+      </div>
       <div class="qcm-question">${q.question}</div>
       <div class="qcm-choices" id="choices-${q.id}">
         ${choices.map(c=>`<div class="qcm-choice" data-letter="${c.letter}" onclick="selectChoice(this)">
@@ -1237,7 +1281,7 @@ function renderExams(y){
   container.innerHTML='';
   Object.entries(promos).sort((a,b)=>b[0].localeCompare(a[0])).forEach(([promo,unites])=>{
     const pb=document.createElement('div');pb.className='promo-block';
-    pb.innerHTML=`<div class="promo-title"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="prg" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M26 10L6 20l20 10 20-10z" fill="url(#prg)" opacity=".15"/><path d="M26 10L6 20l20 10 20-10z" stroke="url(#prg)" stroke-width="2.2" stroke-linejoin="round" fill="none"/><path d="M14 25v10c0 4 5.4 7 12 7s12-3 12-7V25" stroke="url(#prg)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="46" y1="20" x2="46" y2="32" stroke="url(#prg)" stroke-width="2.2" stroke-linecap="round"/><circle cx="46" cy="33" r="2.5" fill="url(#prg)"/></svg> ${promo}</div>`;
+    pb.innerHTML=`<div class="promo-title"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="prg" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><path d="M26 10L6 20l20 10 20-10z" fill="url(#prg)" opacity=".15"/><path d="M26 10L6 20l20 10 20-10z" stroke="url(#prg)" stroke-width="2.2" stroke-linejoin="round" fill="none"/><path d="M14 25v10c0 4 5.4 7 12 7s12-3 12-7V25" stroke="url(#prg)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="46" y1="20" x2="46" y2="32" stroke="url(#prg)" stroke-width="2.2" stroke-linecap="round"/><circle cx="46" cy="33" r="2.5" fill="url(#prg)"/></svg> ${promo}</div>`;
     Object.entries(unites).forEach(([unite,exams])=>{
       const ub=document.createElement('div');ub.className='unite-exam-block';
       if(unite!=='__none__')ub.innerHTML=`<div class="unite-exam-title">🔷 ${unite}</div>`;
@@ -1257,7 +1301,7 @@ function renderExams(y){
 
 function renderDrive(y){
   const link=driveLinks[y]||'#',has=link&&link!=='#';
-  document.getElementById('driveGrid').innerHTML=`<div class="drive-box"><div class="drive-big-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n5z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" fill="url(#n5z)" opacity=".12"/><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" stroke="url(#n5z)" stroke-width="2.2" fill="none"/><line x1="26" y1="39" x2="26" y2="25" stroke="url(#n5z)" stroke-width="2.2" stroke-linecap="round"/><path d="M21 30l5-5 5 5" stroke="url(#n5z)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="20" y1="39" x2="32" y2="39" stroke="url(#n5z)" stroke-width="2.2" stroke-linecap="round"/></svg></div><h3>Drive — ${YL[y]}</h3><p>Tous les fichiers partagés : cours PDF, fiches, vidéos, examens corrigés.</p>${has?`<a class="drive-btn" href="${link}" target="_blank">📂 Ouvrir le Drive</a>`:`<div class="drive-btn disabled">🔒 Bientôt disponible</div><div class="drive-coming">Le lien sera ajouté prochainement</div>`}</div>`;
+  document.getElementById('driveGrid').innerHTML=`<div class="drive-box"><div class="drive-big-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n5z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" fill="url(#n5z)" opacity=".12"/><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" stroke="url(#n5z)" stroke-width="2.2" fill="none"/><line x1="26" y1="39" x2="26" y2="25" stroke="url(#n5z)" stroke-width="2.2" stroke-linecap="round"/><path d="M21 30l5-5 5 5" stroke="url(#n5z)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="20" y1="39" x2="32" y2="39" stroke="url(#n5z)" stroke-width="2.2" stroke-linecap="round"/></svg></div><h3>Drive — ${YL[y]}</h3><p>Tous les fichiers partagés : cours PDF, fiches, vidéos, examens corrigés.</p>${has?`<a class="drive-btn" href="${link}" target="_blank">📂 Ouvrir le Drive</a>`:`<div class="drive-btn disabled">🔒 Bientôt disponible</div><div class="drive-coming">Le lien sera ajouté prochainement</div>`}</div>`;
 }
 
 function openPDF(name,link){
@@ -1306,7 +1350,7 @@ function buildDiscordChannels(){
   if(!channels)return;channels.innerHTML='';
 
   const genCat=makeDCCat('💬 Chat Général');channels.appendChild(genCat);
-  const genCh=makeDCChannel(SVG_ICONS.chatMsg,'général',false,()=>openRoomChat('general','💬 Chat Général',null));
+  const genCh=makeDCChannel(`<svg viewBox="0 0 20 20" fill="none"><path d="M10 2C5.6 2 2 5.1 2 9c0 2 .9 3.8 2.3 5.1L3.5 17l3.2-1.3C7.7 16.5 8.8 17 10 17c4.4 0 8-3.1 8-7s-3.6-8-8-8z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/><circle cx="7" cy="9" r="1" fill="currentColor"/><circle cx="10" cy="9" r="1" fill="currentColor"/><circle cx="13" cy="9" r="1" fill="currentColor"/></svg>`,'général',false,()=>openRoomChat('general','Général',null));
   channels.appendChild(genCh);
 
   const voiceCat=makeDCCat('🎙️ Salles Vocales');channels.appendChild(voiceCat);
@@ -1324,17 +1368,24 @@ function makeDCChannel(icon,name,active,fn){
 
 function openRoomChat(channelId,title,year){
   document.querySelectorAll('.dc-channel').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.dc-channel').forEach(c=>{if(c.querySelector('.dc-channel-name')?.textContent==='général')c.classList.add('active');});
   const content=document.getElementById('discordContent');
   content.style.cssText='flex:1;display:flex;flex-direction:column;overflow:hidden';
+  let backBtn='';
+  if(currentRoomId){
+    const yr=currentRoomId.replace('year-','');
+    backBtn=`<button onclick="joinPermanentRoom(${yr})" style="margin-left:auto;background:var(--accent-dim);color:var(--accent);border:1px solid rgba(99,102,241,.3);border-radius:var(--rs);padding:4px 10px;font-size:.72rem;font-weight:600;cursor:pointer;flex-shrink:0">🎙️ Ma salle</button>`;
+  }
   content.innerHTML=`
-    <div class="dc-channel-header" style="flex-shrink:0">
-      <span class="dc-channel-header-icon">#</span>
-      <span class="dc-channel-header-name">${title}</span>
-      ${year?`<span class="dc-channel-header-desc" id="roomMemberCount"></span>`:''}
+    <div class="dc-channel-header" style="flex-shrink:0;gap:.5rem">
+      <svg viewBox="0 0 20 20" fill="none" style="width:15px;height:15px;flex-shrink:0"><path d="M10 2C5.6 2 2 5.1 2 9c0 2 .9 3.8 2.3 5.1L3.5 17l3.2-1.3C7.7 16.5 8.8 17 10 17c4.4 0 8-3.1 8-7s-3.6-8-8-8z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/><circle cx="7" cy="9" r="1" fill="currentColor"/><circle cx="10" cy="9" r="1" fill="currentColor"/><circle cx="13" cy="9" r="1" fill="currentColor"/></svg>
+      <span class="dc-channel-header-name">Général</span>
+      <span class="dc-channel-header-desc">Discussion libre</span>
+      ${backBtn}
     </div>
     <div class="chat-messages" id="chatMessages" style="flex:1;overflow-y:auto;padding:.8rem"></div>
     <div class="chat-input-row" style="flex-shrink:0">
-      <input class="chat-input" type="text" id="chatInput" placeholder="Message..." onkeydown="if(event.key==='Enter')sendChat()">
+      <input class="chat-input" type="text" id="chatInput" placeholder="Écrire un message..." onkeydown="if(event.key==='Enter')sendChat()">
       <button class="btn-send" onclick="sendChat()">➤</button>
     </div>`;
   if(chatListener){chatListener();chatListener=null;}
@@ -1363,9 +1414,10 @@ function sendChat(){
 window.sendChat=sendChat;
 
 async function joinPermanentRoom(year){
-  if(currentRoomId===`year-${year}`)return; 
+  const roomId=`year-${year}`;
+  if(currentRoomId===roomId){renderVoiceRoomView(roomId,year);return;}
   if(currentRoomId)await leaveRoom(true);
-  const roomId=`year-${year}`;currentRoomId=roomId;micOn=true;
+  currentRoomId=roomId;micOn=true;
   document.querySelectorAll('.dc-channel').forEach(c=>c.classList.remove('active'));
   const chEl=document.getElementById('dc-room-'+year);if(chEl)chEl.classList.add('active');
   try{
