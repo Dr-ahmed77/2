@@ -104,9 +104,52 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .main-content{flex:1;overflow-y:auto;display:flex;flex-direction:column}
 .content-area{flex:1;padding:1.5rem}
 
-/* ── VIEWS ── */
-.view{display:none}
-.view.active{display:block}
+/* ── SMOOTH TRANSITIONS ── */
+.view{
+  display:none;
+  animation:none;
+}
+.view.active{
+  display:block;
+  animation:viewIn .25s cubic-bezier(.4,0,.2,1) both;
+}
+.view.leaving{
+  animation:viewOut .2s cubic-bezier(.4,0,.2,1) both;
+}
+@keyframes viewIn{
+  from{opacity:0;transform:translateX(18px)}
+  to{opacity:1;transform:translateX(0)}
+}
+@keyframes viewOut{
+  from{opacity:1;transform:translateX(0)}
+  to{opacity:0;transform:translateX(-18px)}
+}
+
+/* Sidebar nav items — smooth hover */
+.nav-item{
+  transition:background .18s ease, color .18s ease, transform .15s ease;
+}
+.nav-item:hover{transform:translateX(3px)}
+.nav-item.active{transform:translateX(3px)}
+
+/* Sidebar slide-in on mobile */
+.sidebar{transition:transform .28s cubic-bezier(.4,0,.2,1)}
+
+/* Cards pop-in */
+.module-card,.stat-card,.lb-item,.avis-card,.profile-card{
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1), border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+.module-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.stat-card:hover{transform:translateY(-2px)}
+.lb-item:hover{transform:translateX(3px)}
+
+/* Topbar page title smooth change */
+#topbarTitle{transition:opacity .15s ease}
+
+/* Scrollable areas smooth scroll */
+.main-content,.sidebar-nav,.chat-messages,.dc-rooms-list{
+  scroll-behavior:smooth;
+}
 
 /* ── HOME VIEW ── */
 .home-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.5rem}
@@ -180,8 +223,18 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .qcm-choice{display:flex;align-items:center;gap:.6rem;padding:.6rem .8rem;border-radius:var(--rs);border:1px solid var(--border2);cursor:pointer;transition:all var(--t);font-size:.82rem}
 .qcm-choice:hover{border-color:var(--blue);background:var(--blue-dim)}
 .qcm-choice.selected{border-color:var(--blue);background:var(--blue-dim)}
-.qcm-choice.correct{border-color:var(--green);background:var(--green-dim);color:var(--green)}
-.qcm-choice.wrong{border-color:var(--red);background:var(--red-dim);color:var(--red)}
+.qcm-choice.correct{border-color:#22C55E;background:rgba(34,197,94,0.2);color:#22C55E;font-weight:600}
+.qcm-choice.wrong{border-color:#EF4444;background:rgba(239,68,68,0.2);color:#EF4444;font-weight:600}
+.qcm-choice:hover:not(.correct):not(.wrong){border-color:var(--blue);background:var(--blue-dim)}
+.qcm-choice.selected:not(.correct):not(.wrong){border-color:#2563EB;background:rgba(37,99,235,0.18)}
+.btn-submit{background:#2563EB;color:#fff;padding:7px 18px;border-radius:var(--rs);font-size:.82rem;font-weight:700;transition:all .2s}
+.btn-submit:hover{background:#1d4ed8;transform:scale(1.04)}
+
+/* QCM Progress Bar */
+.qcm-progress{margin-bottom:1rem}
+.qcm-progress-top{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-bottom:.4rem}
+.qcm-progress-bar{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.qcm-progress-fill{height:100%;background:linear-gradient(90deg,#2563EB,var(--accent));border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
 .qcm-choice-letter{width:22px;height:22px;border-radius:6px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-family:var(--ff);font-size:.72rem;font-weight:800;flex-shrink:0}
 .qcm-actions{display:flex;align-items:center;gap:.7rem}
 .btn-submit{background:var(--blue);color:#fff;padding:7px 16px;border-radius:var(--rs);font-size:.8rem;font-weight:600;transition:all var(--t)}
@@ -964,19 +1017,33 @@ async function addXP(amount,reason){
 
 // ── NAVIGATION ──
 function navTo(view,el){
-  // deactivate all nav items
+  const current=document.querySelector('.view.active');
+  const next=document.getElementById('view-'+view);
+  if(!next||current===next)return;
+
+  // Fade out current
+  if(current){
+    current.classList.add('leaving');
+    setTimeout(()=>{current.classList.remove('active','leaving');},180);
+  }
+
+  // Fade in next (slight delay)
+  setTimeout(()=>{
+    document.querySelectorAll('.view').forEach(v=>{if(v!==next)v.classList.remove('active');});
+    next.classList.add('active');
+  },current?160:0);
+
+  // Nav items
   document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
   if(el)el.classList.add('active');
-  // hide all views
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  const vEl=document.getElementById('view-'+view);
-  if(vEl)vEl.classList.add('active');
-  // update topbar title
+
+  // Topbar title
   const titles={home:'Accueil',cours:'Cours',qcm:'QCM',examens:'Examens Passés',drive:'Drive Promo',rooms:'Salles d\'étude',classement:'Classement',avis:'Avis des Étudiants'};
-  document.getElementById('topbarTitle').textContent=titles[view]||view;
-  // rooms
+  const titleEl=document.getElementById('topbarTitle');
+  titleEl.style.opacity='0';
+  setTimeout(()=>{titleEl.textContent=titles[view]||view;titleEl.style.opacity='1';},120);
+
   if(view==='rooms')buildDiscordChannels();
-  // close sidebar on mobile
   if(window.innerWidth<=768)closeSidebar();
 }
 
@@ -1105,25 +1172,64 @@ function renderQCM(y){
   window.filterQCM=(mod,btn)=>{document.querySelectorAll('.qcm-filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderQCMList(mod==='all'?yQCM:yQCM.filter(q=>q.module===mod));};
 }
 function renderQCMList(qcms){
-  const list=document.getElementById('qcmList');if(!list)return;list.innerHTML='';
+  const list=document.getElementById('qcmList');if(!list)return;
+  const total=qcms.length;
+  list.innerHTML=`
+    <div class="qcm-progress">
+      <div class="qcm-progress-top">
+        <span id="qcmProgressLabel">Question 1 / ${total}</span>
+        <span id="qcmProgressPct">0%</span>
+      </div>
+      <div class="qcm-progress-bar"><div class="qcm-progress-fill" id="qcmProgressFill" style="width:0%"></div></div>
+    </div>`;
+  let answered=0;
   qcms.forEach((q,idx)=>{
-    const card=document.createElement('div');card.className='qcm-card';
+    const card=document.createElement('div');card.className='qcm-card';card.id='qcard-'+q.id;
     const letters=['A','B','C','D','E'];
-    const choices=letters.map((l,i)=>q['choice'+l]?{letter:l,text:q['choice'+l]}:null).filter(Boolean);
-    card.innerHTML=`<div class="qcm-num">Q${idx+1} · ${q.module}${q.lesson?' · '+q.lesson:''}</div><div class="qcm-question">${q.question}</div><div class="qcm-choices" id="choices-${q.id}">${choices.map(c=>`<div class="qcm-choice" data-letter="${c.letter}" onclick="selectChoice(this,'${q.id}')"><div class="qcm-choice-letter">${c.letter}</div><span>${c.text}</span></div>`).join('')}</div><div class="qcm-actions"><button class="btn-submit" onclick="submitQCM('${q.id}',${JSON.stringify(q.correct)})">Valider</button><div class="qcm-result hidden" id="res-${q.id}"></div></div>`;
+    const choices=letters.map(l=>q['choice'+l]?{letter:l,text:q['choice'+l]}:null).filter(Boolean);
+    card.innerHTML=`
+      <div class="qcm-num">Q${idx+1} / ${total} · ${q.module}${q.lesson?' · '+q.lesson:''}</div>
+      <div class="qcm-question">${q.question}</div>
+      <div class="qcm-choices" id="choices-${q.id}">
+        ${choices.map(c=>`<div class="qcm-choice" data-letter="${c.letter}" onclick="selectChoice(this)">
+          <div class="qcm-choice-letter">${c.letter}</div><span>${c.text}</span>
+        </div>`).join('')}
+      </div>
+      <div class="qcm-actions">
+        <button class="btn-submit" onclick="submitQCM('${q.id}',${JSON.stringify(q.correct)},${total})">Valider</button>
+        <div class="qcm-result hidden" id="res-${q.id}"></div>
+      </div>`;
     list.appendChild(card);
   });
+  window._qcmAnswered=0;window._qcmTotal=total;
 }
 window.selectChoice=(el)=>el.classList.toggle('selected');
-window.submitQCM=(qid,correct)=>{
+window.submitQCM=(qid,correct,total)=>{
   const choicesEl=document.querySelectorAll(`#choices-${qid} .qcm-choice`);
   const selected=[...choicesEl].filter(c=>c.classList.contains('selected')).map(c=>c.dataset.letter);
+  if(!selected.length){toast('Sélectionne au moins une réponse');return;}
   const cSet=new Set(correct),sSet=new Set(selected);
   const ok=cSet.size===sSet.size&&[...cSet].every(c=>sSet.has(c));
-  choicesEl.forEach(c=>{c.classList.remove('selected');if(cSet.has(c.dataset.letter))c.classList.add('correct');else if(sSet.has(c.dataset.letter))c.classList.add('wrong');c.onclick=null;});
+  choicesEl.forEach(c=>{
+    c.classList.remove('selected');
+    if(cSet.has(c.dataset.letter))c.classList.add('correct');
+    else if(sSet.has(c.dataset.letter))c.classList.add('wrong');
+    c.onclick=null;
+  });
   const res=document.getElementById('res-'+qid);res.classList.remove('hidden');
   if(ok){res.className='qcm-result ok';res.textContent='✅ Bonne réponse !';addXP(30,'QCM réussi 🧩');}
-  else{res.className='qcm-result ko';res.textContent='❌ Incorrecte — Correcte(s): '+correct.join(', ');}
+  else{res.className='qcm-result ko';res.textContent='❌ Incorrecte — Réponse(s): '+correct.join(', ');}
+  // Update progress bar
+  window._qcmAnswered=(window._qcmAnswered||0)+1;
+  const t=total||window._qcmTotal||1;
+  const pct=Math.round((window._qcmAnswered/t)*100);
+  const fill=document.getElementById('qcmProgressFill');
+  const lbl=document.getElementById('qcmProgressLabel');
+  const pctLbl=document.getElementById('qcmProgressPct');
+  if(fill)fill.style.width=pct+'%';
+  if(lbl)lbl.textContent='Question '+(window._qcmAnswered)+' / '+t+' répondues';
+  if(pctLbl)pctLbl.textContent=pct+'%';
+  if(window._qcmAnswered===t)setTimeout(()=>toast('🎉 QCM terminé ! '+pct+'% complété'),400);
 };
 
 // ── EXAMS ──
