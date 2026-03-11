@@ -563,7 +563,13 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
           </div>
           <input class="admin-input" type="text" id="aModule" placeholder="Module (ex: Immunologie)">
           <input class="admin-input" type="text" id="aLesson" placeholder="Nom du cours">
-          <input class="admin-input" type="url" id="aLink" placeholder="Lien PDF (optionnel)">
+          <!-- PDF: upload ou lien -->
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <input class="admin-input" type="url" id="aLink" placeholder="Lien PDF — ou utilise le bouton →" style="flex:1">
+            <input type="file" id="pdfUploadInput" accept="application/pdf" style="display:none" onchange="uploadPDFToCloudinary()">
+            <button class="btn-add" style="white-space:nowrap;padding:7px 12px;font-size:.72rem" onclick="document.getElementById('pdfUploadInput').click()" id="pdfUploadBtn">☁️ Uploader PDF</button>
+          </div>
+          <div id="pdfUploadStatus" style="font-size:.68rem;color:var(--muted);display:none;margin-top:-.3rem">⏳ Upload en cours...</div>
           <div><button class="btn-add" onclick="addLesson()">➕ Ajouter</button></div>
         </div>
         <div class="admin-list" id="adminLessonList"></div>
@@ -571,7 +577,27 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
     </div>
     <div class="admin-pane" id="ap-qcm">
       <div class="admin-section">
-        <div class="admin-section-title">➕ Ajouter un QCM</div>
+
+        <!-- CSV IMPORT -->
+        <div style="background:rgba(0,229,255,.05);border:1.5px dashed rgba(0,229,255,.25);border-radius:10px;padding:1rem 1.2rem;margin-bottom:1.2rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+            <div style="font-size:.78rem;font-weight:700;color:var(--accent)">📥 Import CSV — Ajouter plusieurs QCM d'un coup</div>
+            <button class="btn-add" style="padding:4px 12px;font-size:.7rem" onclick="downloadQCMTemplate()">⬇ Template CSV</button>
+          </div>
+          <div style="font-size:.68rem;color:var(--muted);margin-bottom:.7rem">Colonnes: <code style="color:var(--accent)">year, unite, module, lesson, question, choiceA, choiceB, choiceC, choiceD, choiceE, correct</code><br>La colonne <code style="color:var(--accent)">correct</code> = les lettres séparées par virgule ex: <code>B</code> ou <code>A,C</code></div>
+          <div style="display:flex;align-items:center;gap:.6rem">
+            <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="importCSV()">
+            <button class="btn-add" style="padding:6px 16px" onclick="document.getElementById('csvFileInput').click()">📂 Choisir fichier CSV</button>
+            <span id="csvStatus" style="font-size:.72rem;color:var(--muted)">Aucun fichier</span>
+          </div>
+          <div id="csvPreview" style="margin-top:.8rem;display:none">
+            <div style="font-size:.72rem;color:var(--text2);margin-bottom:.4rem" id="csvPreviewTitle"></div>
+            <div style="max-height:140px;overflow-y:auto;background:var(--surface3);border-radius:6px;padding:.5rem" id="csvPreviewList"></div>
+            <button class="btn-add" style="margin-top:.6rem;background:var(--green)" id="csvConfirmBtn" onclick="confirmCSVImport()">✅ Importer tout dans Firestore</button>
+          </div>
+        </div>
+
+        <div class="admin-section-title">➕ Ajouter un QCM manuellement</div>
         <div class="admin-form">
           <div class="admin-row-3">
             <select class="admin-select" id="qYear"><option value="1">1ère Année</option><option value="2">2ème Année</option><option value="3">3ème Année</option><option value="4">4ème Année</option><option value="5">5ème Année</option><option value="6">6ème Année</option></select>
@@ -614,7 +640,12 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
             <input class="admin-input" type="text" id="eUnite" placeholder="Unité (optionnel)">
             <input class="admin-input" type="text" id="eModule" placeholder="Module">
           </div>
-          <input class="admin-input" type="url" id="eLink" placeholder="Lien PDF">
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <input class="admin-input" type="url" id="eLink" placeholder="Lien PDF — ou utilise le bouton →" style="flex:1">
+            <input type="file" id="pdfUploadInputExam" accept="application/pdf" style="display:none" onchange="uploadPDFToCloudinary('exam')">
+            <button class="btn-add" style="white-space:nowrap;padding:7px 12px;font-size:.72rem" onclick="document.getElementById('pdfUploadInputExam').click()" id="pdfUploadBtnExam">☁️ Uploader PDF</button>
+          </div>
+          <div id="pdfUploadStatusExam" style="font-size:.68rem;color:var(--muted);display:none;margin-top:-.3rem">⏳ Upload en cours...</div>
           <div><button class="btn-add" onclick="addExam()">➕ Ajouter</button></div>
         </div>
         <div class="admin-list" id="adminExamList"></div>
@@ -679,35 +710,35 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
       <div class="sidebar-nav">
         <div class="nav-section">Menu</div>
         <div class="nav-item active" data-view="home" onclick="navTo('home',this)">
-          <span class="nav-item-icon">🏠</span> Accueil
+          <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gh" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M8 22L26 6L44 22V44H33V32H19V44H8V22Z" fill="url(#gh)" opacity=".15"/><path d="M8 22L26 6L44 22V44H33V32H19V44H8V22Z" stroke="url(#gh)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none"/><circle cx="26" cy="24" r="3.5" fill="url(#gh)"/></svg></span> Accueil
         </div>
 
         <div class="nav-section" style="margin-top:.5rem">Mon Contenu</div>
         <div style="margin:2px .4rem 6px;padding:4px 8px;background:var(--accent-dim);border:1px solid rgba(0,229,255,.2);border-radius:var(--rs);font-size:.7rem;color:var(--accent);font-weight:600" id="sidebarYearLabel">...</div>
         <div id="yearSubNav">
           <div class="nav-item" data-view="cours" onclick="navTo('cours',this)">
-            <span class="nav-item-icon">📖</span> Cours
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gb" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#gb)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#gb)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#gb)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#gb)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#gb)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="23" x2="33" y2="23" stroke="url(#gb)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="29" x2="27" y2="29" stroke="url(#gb)" stroke-width="2" stroke-linecap="round"/></svg></span> Cours
           </div>
           <div class="nav-item" data-view="qcm" onclick="navTo('qcm',this)">
-            <span class="nav-item-icon">🧩</span> QCM
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gq" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="8" fill="url(#gq)" opacity=".12"/><rect x="8" y="8" width="36" height="36" rx="8" stroke="url(#gq)" stroke-width="2.2" fill="none"/><rect x="14" y="16" width="6" height="6" rx="1.5" stroke="url(#gq)" stroke-width="1.8" fill="none"/><path d="M15.5 19l1.5 1.5 2.5-3" stroke="url(#gq)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="24" y1="19" x2="36" y2="19" stroke="url(#gq)" stroke-width="2" stroke-linecap="round"/><rect x="14" y="26" width="6" height="6" rx="1.5" stroke="url(#gq)" stroke-width="1.8" fill="none"/><line x1="24" y1="29" x2="36" y2="29" stroke="url(#gq)" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="19" r="2.5" fill="url(#gq)"/></svg></span> QCM
           </div>
           <div class="nav-item" data-view="examens" onclick="navTo('examens',this)">
-            <span class="nav-item-icon">📄</span> Examens passés
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="ge" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="11" y="6" width="24" height="30" rx="3" fill="url(#ge)" opacity=".12"/><rect x="11" y="6" width="24" height="30" rx="3" stroke="url(#ge)" stroke-width="2.2" fill="none"/><line x1="16" y1="14" x2="30" y2="14" stroke="url(#ge)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="20" x2="30" y2="20" stroke="url(#ge)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="26" x2="24" y2="26" stroke="url(#ge)" stroke-width="2" stroke-linecap="round"/><path d="M30 34l8-8 4 4-8 8-4-4z" stroke="url(#ge)" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M30 34l-2 6 6-2" stroke="url(#ge)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span> Examens passés
           </div>
           <div class="nav-item" data-view="drive" onclick="navTo('drive',this)">
-            <span class="nav-item-icon">☁️</span> Drive Promo
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gd" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" fill="url(#gd)" opacity=".12"/><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" stroke="url(#gd)" stroke-width="2.2" fill="none"/><line x1="26" y1="39" x2="26" y2="25" stroke="url(#gd)" stroke-width="2.2" stroke-linecap="round"/><path d="M21 30l5-5 5 5" stroke="url(#gd)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="20" y1="39" x2="32" y2="39" stroke="url(#gd)" stroke-width="2.2" stroke-linecap="round"/></svg></span> Drive Promo
           </div>
           <div class="nav-item" data-view="rooms" onclick="navTo('rooms',this)">
-            <span class="nav-item-icon">🎙️</span> Salles d'étude
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gm" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#gm)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#gm)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#gm)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#gm)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#gm)" stroke-width="2.2" stroke-linecap="round"/><path d="M10 24a18 18 0 000 8" stroke="url(#gm)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/><path d="M42 24a18 18 0 010 8" stroke="url(#gm)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/></svg></span> Salles d'étude
           </div>
         </div>
 
         <div class="nav-section" style="margin-top:.5rem">Communauté</div>
         <div class="nav-item" data-view="classement" onclick="navTo('classement',this)">
-          <span class="nav-item-icon">🏆</span> Classement
+          <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gt" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#fcd34d"/></linearGradient></defs><path d="M16 8h20v16a10 10 0 01-20 0V8z" fill="url(#gt)" opacity=".18"/><path d="M16 8h20v16a10 10 0 01-20 0V8z" stroke="url(#gt)" stroke-width="2.2" fill="none"/><path d="M16 12H10a4 4 0 004 4h2" stroke="url(#gt)" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M36 12h6a4 4 0 01-4 4h-2" stroke="url(#gt)" stroke-width="2" stroke-linecap="round" fill="none"/><line x1="26" y1="34" x2="26" y2="40" stroke="url(#gt)" stroke-width="2.2" stroke-linecap="round"/><rect x="18" y="40" width="16" height="4" rx="2" fill="url(#gt)" opacity=".4"/><rect x="18" y="40" width="16" height="4" rx="2" stroke="url(#gt)" stroke-width="2" fill="none"/><path d="M26 14l1.5 4h4l-3.2 2.4 1.2 4L26 22l-3.5 2.4 1.2-4L20.5 18h4z" fill="url(#gt)"/></svg></span> Classement
         </div>
         <div class="nav-item" data-view="avis" onclick="navTo('avis',this)">
-          <span class="nav-item-icon">💬</span> Avis
+          <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gav" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" fill="url(#gav)" opacity=".12"/><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" stroke="url(#gav)" stroke-width="2.2" fill="none" stroke-linejoin="round"/><path d="M17 24l1 3h3l-2.5 2 1 3L17 30l-2.5 2 1-3L13 27h3z" fill="url(#gav)"/><path d="M26 24l1 3h3l-2.5 2 1 3L26 30l-2.5 2 1-3L22 27h3z" fill="url(#gav)"/><path d="M35 24l1 3h3l-2.5 2 1 3L35 30l-2.5 2 1-3L31 27h3z" fill="url(#gav)" opacity=".4"/></svg></span> Avis
         </div>
       </div>
     </div>
@@ -1578,7 +1609,152 @@ window.saveName=async()=>{
   catch(e){toast('Erreur: '+e.message);}
 };
 
-// ── ADMIN ──
+// ── CLOUDINARY PDF UPLOAD ──
+async function uploadPDFToCloudinary(target='cours'){
+  const inputId = target==='exam' ? 'pdfUploadInputExam' : 'pdfUploadInput';
+  const btnId   = target==='exam' ? 'pdfUploadBtnExam'   : 'pdfUploadBtn';
+  const statId  = target==='exam' ? 'pdfUploadStatusExam': 'pdfUploadStatus';
+  const linkId  = target==='exam' ? 'eLink'               : 'aLink';
+
+  const file = document.getElementById(inputId).files[0];
+  if(!file) return;
+  if(file.size > 10*1024*1024){ toast('❌ PDF trop grand (max 10MB)'); return; }
+
+  const btn  = document.getElementById(btnId);
+  const stat = document.getElementById(statId);
+  btn.disabled = true;
+  btn.textContent = '⏳...';
+  stat.style.display = 'block';
+  stat.style.color = 'var(--muted)';
+  stat.textContent = '⏳ Upload en cours...';
+
+  try {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', 'medx_avatars'); // même preset — Cloudinary accepte PDF aussi
+    fd.append('resource_type', 'raw');
+    fd.append('folder', 'medx_pdfs');
+
+    const res = await fetch(
+      'https://api.cloudinary.com/v1_1/dfbsprbwy/raw/upload',
+      { method:'POST', body:fd }
+    );
+    const data = await res.json();
+
+    if(data.secure_url){
+      document.getElementById(linkId).value = data.secure_url;
+      stat.style.color = 'var(--green)';
+      stat.textContent = '✅ '+file.name+' uploadé !';
+      btn.textContent = '✅ Uploadé';
+      toast('✅ PDF uploadé avec succès !');
+    } else {
+      throw new Error(data.error?.message || 'Erreur Cloudinary');
+    }
+  } catch(e){
+    stat.style.color = 'var(--red)';
+    stat.textContent = '❌ Erreur: '+e.message;
+    btn.textContent = '☁️ Réessayer';
+    btn.disabled = false;
+  }
+}
+
+// ── CSV IMPORT ──
+let _csvParsed=[];
+
+function downloadQCMTemplate(){
+  const header='year,unite,module,lesson,question,choiceA,choiceB,choiceC,choiceD,choiceE,correct';
+  const example='2,Unité 1,Immunologie,Introduction,Quel est le rôle des lymphocytes T ?,Phagocytose,Immunité cellulaire,Production d\'anticorps,Activation du complément,Aucun rôle,B';
+  const example2='2,Unité 1,Immunologie,Introduction,Les immunoglobulines sont produites par ?,Lymphocytes T,Lymphocytes B,Macrophages,Cellules NK,Cellules dendritiques,B';
+  const csv=[header,example,example2].join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='template_qcm_medx.csv';a.click();
+}
+
+function parseCSVLine(line){
+  const result=[];let cur='';let inQ=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){inQ=!inQ;}
+    else if(c===','&&!inQ){result.push(cur.trim());cur='';}
+    else cur+=c;
+  }
+  result.push(cur.trim());
+  return result;
+}
+
+function importCSV(){
+  const file=document.getElementById('csvFileInput').files[0];
+  if(!file)return;
+  document.getElementById('csvStatus').textContent=file.name;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const lines=e.target.result.split('\n').filter(l=>l.trim());
+    const headers=parseCSVLine(lines[0]).map(h=>h.toLowerCase().trim());
+    const rows=lines.slice(1);
+    _csvParsed=[];
+    const errors=[];
+    rows.forEach((row,i)=>{
+      if(!row.trim())return;
+      const vals=parseCSVLine(row);
+      const obj={};
+      headers.forEach((h,j)=>obj[h]=vals[j]||'');
+      if(!obj.question||!obj.module||!obj.choicea){
+        errors.push('Ligne '+(i+2)+': question/module/choiceA manquant');return;
+      }
+      const correct=(obj.correct||'').toUpperCase().split(',').map(s=>s.trim()).filter(Boolean);
+      _csvParsed.push({
+        year:parseInt(obj.year)||1,
+        unite:obj.unite||'',
+        module:obj.module||'',
+        lesson:obj.lesson||'',
+        question:obj.question||'',
+        choiceA:obj.choicea||'',choiceB:obj.choiceb||'',choiceC:obj.choicec||'',
+        choiceD:obj.choiced||'',choiceE:obj.choicee||'',
+        correct
+      });
+    });
+    const preview=document.getElementById('csvPreview');
+    const pList=document.getElementById('csvPreviewList');
+    const pTitle=document.getElementById('csvPreviewTitle');
+    preview.style.display='block';
+    pTitle.textContent=`✅ ${_csvParsed.length} QCM prêts à importer${errors.length?' — ⚠️ '+errors.length+' erreurs ignorées':''}`;
+    pList.innerHTML=_csvParsed.slice(0,8).map((q,i)=>
+      `<div style="padding:3px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.68rem;color:var(--text2)">
+        <span style="color:var(--accent);font-weight:600">${i+1}.</span> 
+        [${q.year}ème] ${q.module} — ${q.question.substring(0,60)}${q.question.length>60?'...':''}
+        <span style="color:var(--green)"> ✓${q.correct.join(',')}</span>
+      </div>`
+    ).join('')+(
+      _csvParsed.length>8?`<div style="font-size:.65rem;color:var(--muted);padding-top:.3rem">... et ${_csvParsed.length-8} autres</div>`:''
+    );
+  };
+  reader.readAsText(file,'UTF-8');
+}
+
+async function confirmCSVImport(){
+  if(!_csvParsed.length)return;
+  const btn=document.getElementById('csvConfirmBtn');
+  btn.disabled=true;btn.textContent='⏳ Import en cours...';
+  let ok=0,fail=0;
+  // Batch par 500 (limite Firestore)
+  const batches=[];
+  for(let i=0;i<_csvParsed.length;i+=400){batches.push(_csvParsed.slice(i,i+400));}
+  for(const batch of batches){
+    const b=db.batch();
+    batch.forEach(q=>{const ref=db.collection('qcm').doc();b.set(ref,q);});
+    try{await b.commit();ok+=batch.length;}catch(e){fail+=batch.length;console.error(e);}
+  }
+  btn.textContent='✅ Importé!';
+  toast(`✅ ${ok} QCM importés${fail?' — ❌ '+fail+' échecs':''}`);
+  setTimeout(()=>{
+    document.getElementById('csvPreview').style.display='none';
+    document.getElementById('csvStatus').textContent='Aucun fichier';
+    document.getElementById('csvFileInput').value='';
+    btn.disabled=false;btn.textContent='✅ Importer tout dans Firestore';
+    _csvParsed=[];
+  },2000);
+}
 window.openAdmin=()=>{if(!isAdmin)return;document.getElementById('adminOverlay').classList.remove('hidden');renderAdminLessons();renderAdminQCM();renderAdminExams();renderAdminDrive();};
 window.closeAdmin=()=>document.getElementById('adminOverlay').classList.add('hidden');
 window.setAdminTab=(tab,btn)=>{
