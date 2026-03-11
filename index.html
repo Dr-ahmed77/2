@@ -89,7 +89,8 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .nav-item:hover{background:var(--surface2);color:var(--text)}
 .nav-item.active{background:var(--blue-dim);color:var(--blue)}
 .nav-item.active::before{content:'';position:absolute;left:-4px;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--blue);border-radius:0 2px 2px 0}
-.nav-item-icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
+.nav-item-icon{font-size:1rem;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-item-icon svg {width: 100%; height: 100%;}
 .nav-item-badge{margin-left:auto;font-size:.6rem;font-weight:700;background:var(--blue);color:#fff;padding:1px 6px;border-radius:100px}
 .sidebar-year-selector{padding:.5rem .4rem}
 .year-btn{display:flex;align-items:center;gap:.5rem;padding:.45rem .8rem;border-radius:var(--rs);margin:1px 0;cursor:pointer;transition:all var(--t);font-size:.8rem;color:var(--text2);width:100%}
@@ -105,57 +106,28 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .content-area{flex:1;padding:1.5rem}
 
 /* ── SMOOTH TRANSITIONS ── */
-.view{
-  display:none;
-  animation:none;
-}
-.view.active{
-  display:block;
-  animation:viewIn .25s cubic-bezier(.4,0,.2,1) both;
-}
-.view.leaving{
-  animation:viewOut .2s cubic-bezier(.4,0,.2,1) both;
-}
-@keyframes viewIn{
-  from{opacity:0;transform:translateX(18px)}
-  to{opacity:1;transform:translateX(0)}
-}
-@keyframes viewOut{
-  from{opacity:1;transform:translateX(0)}
-  to{opacity:0;transform:translateX(-18px)}
-}
-
-/* Sidebar nav items — smooth hover */
-.nav-item{
-  transition:background .18s ease, color .18s ease, transform .15s ease;
-}
+.view{display:none;animation:none;}
+.view.active{display:block;animation:viewIn .25s cubic-bezier(.4,0,.2,1) both;}
+.view.leaving{animation:viewOut .2s cubic-bezier(.4,0,.2,1) both;}
+@keyframes viewIn{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+@keyframes viewOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-18px)}}
+.nav-item{transition:background .18s ease, color .18s ease, transform .15s ease;}
 .nav-item:hover{transform:translateX(3px)}
 .nav-item.active{transform:translateX(3px)}
-
-/* Sidebar slide-in on mobile */
 .sidebar{transition:transform .28s cubic-bezier(.4,0,.2,1)}
-
-/* Cards pop-in */
-.module-card,.stat-card,.lb-item,.avis-card,.profile-card{
-  transition:transform .2s cubic-bezier(.34,1.56,.64,1), border-color .2s ease, background .2s ease, box-shadow .2s ease;
-}
+.module-card,.stat-card,.lb-item,.avis-card,.profile-card{transition:transform .2s cubic-bezier(.34,1.56,.64,1), border-color .2s ease, background .2s ease, box-shadow .2s ease;}
 .module-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
 .stat-card:hover{transform:translateY(-2px)}
 .lb-item:hover{transform:translateX(3px)}
-
-/* Topbar page title smooth change */
 #topbarTitle{transition:opacity .15s ease}
-
-/* Scrollable areas smooth scroll */
-.main-content,.sidebar-nav,.chat-messages,.dc-rooms-list{
-  scroll-behavior:smooth;
-}
+.main-content,.sidebar-nav,.chat-messages,.dc-rooms-list{scroll-behavior:smooth;}
 
 /* ── HOME VIEW ── */
 .home-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.5rem}
 @media(max-width:700px){.home-stats{grid-template-columns:repeat(2,1fr)}}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1rem;display:flex;align-items:center;gap:.75rem}
-.stat-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.stat-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-icon svg {width: 22px; height: 22px;}
 .stat-val{font-family:var(--ff);font-size:1.2rem;font-weight:800;line-height:1}
 .stat-lbl{font-size:.65rem;color:var(--muted);margin-top:2px}
 .home-profile{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem}
@@ -184,25 +156,32 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .level-progress-text{text-align:center;font-size:.65rem;color:var(--muted);margin-top:.3rem}
 .xp-actions{display:flex;flex-direction:column;gap:.4rem}
 .xp-action-item{display:flex;align-items:center;justify-content:space-between;padding:.5rem .7rem;background:var(--surface2);border-radius:var(--rs);font-size:.75rem}
+.xp-action-item span{display:flex;align-items:center;gap:6px;}
+.xp-action-item svg {width: 16px; height: 16px;}
 .xp-pill{font-family:var(--ff);font-size:.68rem;font-weight:700;color:var(--gold);background:var(--gold-dim);border:1px solid rgba(245,158,11,.2);padding:2px 7px;border-radius:100px}
 
 /* ── COURS VIEW ── */
 .view-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:.5rem}
-.view-title{font-family:var(--ff);font-size:1.1rem;font-weight:800}
+.view-title{font-family:var(--ff);font-size:1.1rem;font-weight:800;display:flex;align-items:center;gap:8px;}
+.view-title svg{width:22px;height:22px;}
 .section-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.8rem}
 .sem-block{margin-bottom:1.2rem}
-.sem-title{font-family:var(--ff);font-size:.8rem;font-weight:700;color:var(--text2);margin-bottom:.6rem;padding:.4rem .8rem;background:var(--surface2);border-radius:var(--rs);display:inline-block}
+.sem-title{font-family:var(--ff);font-size:.8rem;font-weight:700;color:var(--text2);margin-bottom:.6rem;padding:.4rem .8rem;background:var(--surface2);border-radius:var(--rs);display:inline-flex;align-items:center;gap:6px;}
+.sem-title svg{width:16px;height:16px;}
 .unite-block{margin-bottom:.8rem}
-.unite-title{font-size:.75rem;font-weight:600;color:var(--accent);margin-bottom:.5rem}
+.unite-title{font-size:.75rem;font-weight:600;color:var(--accent);margin-bottom:.5rem;display:flex;align-items:center;gap:6px;}
+.unite-title svg{width:14px;height:14px;}
 .modules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.6rem}
 .module-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1rem;cursor:pointer;transition:all var(--t);display:flex;align-items:center;gap:.7rem}
 .module-card:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-1px)}
-.module-emoji{font-size:1.3rem}
+.module-emoji{display:flex;align-items:center;justify-content:center;width:32px;height:32px;}
+.module-emoji svg{width:100%;height:100%;}
 .module-info h3{font-size:.82rem;font-weight:700;margin-bottom:2px}
 .module-info span{font-size:.65rem;color:var(--muted)}
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-top:1rem;overflow:hidden}
 .panel-header{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1rem;border-bottom:1px solid var(--border)}
-.panel-title{font-family:var(--ff);font-size:.88rem;font-weight:700}
+.panel-title{font-family:var(--ff);font-size:.88rem;font-weight:700;display:flex;align-items:center;gap:6px}
+.panel-title svg{width:18px;height:18px;}
 .panel-body{padding:.7rem}
 .lesson-item{display:flex;align-items:center;gap:.7rem;padding:.6rem .7rem;border-radius:var(--rs);cursor:pointer;transition:all var(--t)}
 .lesson-item:hover{background:var(--surface2)}
@@ -245,18 +224,21 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 
 /* ── EXAMS VIEW ── */
 .promo-block{margin-bottom:1.2rem}
-.promo-title{font-family:var(--ff);font-size:.82rem;font-weight:700;color:var(--gold);margin-bottom:.6rem;padding:.4rem .8rem;background:var(--gold-dim);border:1px solid rgba(245,158,11,.2);border-radius:var(--rs);display:inline-block}
+.promo-title{font-family:var(--ff);font-size:.82rem;font-weight:700;color:var(--gold);margin-bottom:.6rem;padding:.4rem .8rem;background:var(--gold-dim);border:1px solid rgba(245,158,11,.2);border-radius:var(--rs);display:inline-flex;align-items:center;gap:6px;}
+.promo-title svg{width:16px;height:16px;}
 .unite-exam-block{margin-bottom:.7rem}
 .unite-exam-title{font-size:.72rem;font-weight:600;color:var(--accent);margin-bottom:.4rem}
 .exam-item{display:flex;align-items:center;justify-content:space-between;padding:.6rem .9rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:.35rem;gap:.5rem;flex-wrap:wrap}
-.exam-module-name{font-size:.82rem;font-weight:500;flex:1}
+.exam-module-name{font-size:.82rem;font-weight:500;flex:1;display:flex;align-items:center;gap:6px;}
+.exam-module-name svg{width:16px;height:16px;}
 .exam-dl{font-size:.72rem;font-weight:600;color:var(--accent);padding:4px 10px;border:1px solid rgba(0,229,255,.25);border-radius:100px;transition:all var(--t)}
 .exam-dl:hover{background:var(--accent-dim)}
 .exam-dl.disabled{color:var(--muted);border-color:var(--border);pointer-events:none}
 
 /* ── DRIVE VIEW ── */
 .drive-box{text-align:center;padding:2.5rem 2rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
-.drive-big-icon{font-size:3rem;margin-bottom:1rem}
+.drive-big-icon{display:flex;justify-content:center;margin-bottom:1rem}
+.drive-big-icon svg{width:64px;height:64px;}
 .drive-box h3{font-family:var(--ff);font-size:1.1rem;font-weight:800;margin-bottom:.5rem}
 .drive-box p{font-size:.82rem;color:var(--text2);line-height:1.7;margin-bottom:1.3rem}
 .drive-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--blue);color:#fff;padding:9px 20px;border-radius:var(--rs);font-size:.85rem;font-weight:600;transition:all var(--t)}
@@ -269,19 +251,22 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .discord-sidebar{width:220px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 .discord-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .discord-server-header{padding:.8rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.discord-server-name{font-family:var(--ff);font-size:.88rem;font-weight:800}
+.discord-server-name{font-family:var(--ff);font-size:.88rem;font-weight:800;display:flex;align-items:center;gap:6px;}
+.discord-server-name svg{width:18px;height:18px;}
 .discord-channels{flex:1;overflow-y:auto;padding:.4rem 0}
 .dc-category{padding:.5rem .7rem .2rem;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
 .dc-category:hover{color:var(--text)}
 .dc-channel{display:flex;align-items:center;gap:.5rem;padding:.38rem .9rem;border-radius:var(--rs);margin:1px .4rem;cursor:pointer;transition:all var(--t);font-size:.8rem;color:var(--text2)}
 .dc-channel:hover{background:var(--surface2);color:var(--text)}
 .dc-channel.active{background:var(--surface2);color:var(--text)}
-.dc-channel-icon{font-size:.85rem;width:16px;text-align:center;flex-shrink:0}
+.dc-channel-icon{width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dc-channel-icon svg{width:100%;height:100%;}
 .dc-channel-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dc-channel-count{font-size:.6rem;font-weight:700;color:var(--green)}
 .discord-content{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
 .dc-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--muted);gap:.7rem}
-.dc-empty-icon{font-size:3rem;opacity:.4}
+.dc-empty-icon{display:flex;opacity:.4}
+.dc-empty-icon svg{width:64px;height:64px;}
 .dc-empty-text{font-size:.85rem}
 .dc-channel-header{padding:.8rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.6rem;flex-shrink:0}
 .dc-channel-header-icon{font-size:1rem}
@@ -357,7 +342,8 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 
 /* ── AVIS VIEW ── */
 .avis-add-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.2rem;margin-bottom:1.2rem}
-.avis-add-title{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.7rem}
+.avis-add-title{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.7rem;display:flex;align-items:center;gap:4px;}
+.avis-add-title svg{width:14px;height:14px;}
 .avis-stars-row{display:flex;gap:3px;margin-bottom:.6rem}
 .star-btn{font-size:1.2rem;cursor:pointer;background:none;border:none;padding:0;color:var(--muted);transition:transform .1s}
 .star-btn.active{color:var(--gold)}
@@ -440,7 +426,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .modal-form{display:flex;flex-direction:column;gap:.7rem}
 .modal-actions{display:flex;gap:.5rem;flex-wrap:wrap}
 
-/* ── CHAT LINES (new style) ── */
+/* ── CHAT LINES ── */
 .chat-line{display:flex;gap:.6rem;padding:.4rem .5rem;border-radius:var(--rs);transition:background var(--t);margin-bottom:.15rem}
 .chat-line:hover{background:var(--surface2)}
 .chat-line:hover .msg-del{opacity:1}
@@ -458,6 +444,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .mod-action-btn:hover{background:var(--surface3);border-color:var(--border2)}
 .btn-ghost{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:500;padding:6px 12px;border-radius:var(--rs);transition:all var(--t);border:1px solid var(--border);color:var(--muted)}
 .btn-ghost:hover{color:var(--text);border-color:var(--border2);background:var(--surface2)}
+
 #toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:var(--surface2);border:1px solid rgba(0,229,255,.25);color:var(--text);padding:9px 16px;border-radius:var(--rs);font-size:.78rem;box-shadow:var(--shadow);transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:260px}
 #toast.show{transform:translateY(0);opacity:1}
 .xp-popup{position:fixed;top:70px;right:1.5rem;z-index:9998;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);color:var(--gold);padding:9px 16px;border-radius:var(--rs);font-family:var(--ff);font-size:.88rem;font-weight:700;box-shadow:var(--shadow);transform:translateY(-20px);opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
@@ -495,7 +482,6 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 </head>
 <body>
 
-<!-- AUTH -->
 <div id="authOverlay">
   <div class="auth-box">
     <div class="auth-logo">MED<span class="x">X</span></div>
@@ -525,7 +511,6 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
   </div>
 </div>
 
-<!-- PDF VIEWER -->
 <div id="pdfOverlay" class="hidden">
   <div class="pdf-header">
     <div class="pdf-title" id="pdfTitle">Cours</div>
@@ -537,7 +522,6 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
   <iframe id="pdfFrame" src=""></iframe>
 </div>
 
-<!-- ADMIN PANEL -->
 <div id="adminOverlay" class="hidden">
   <div class="admin-wrap">
     <div class="admin-header">
@@ -553,6 +537,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
       <button class="admin-tab-btn" onclick="setAdminTab('exams',this)">📄 Examens</button>
       <button class="admin-tab-btn" onclick="setAdminTab('drive',this)">☁️ Drive</button>
     </div>
+    
     <div class="admin-pane active" id="ap-cours">
       <div class="admin-section">
         <div class="admin-section-title">➕ Ajouter un Cours</div>
@@ -563,7 +548,6 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
           </div>
           <input class="admin-input" type="text" id="aModule" placeholder="Module (ex: Immunologie)">
           <input class="admin-input" type="text" id="aLesson" placeholder="Nom du cours">
-          <!-- PDF: upload ou lien -->
           <div style="display:flex;gap:.5rem;align-items:center">
             <input class="admin-input" type="url" id="aLink" placeholder="Lien PDF — ou utilise le bouton →" style="flex:1">
             <input type="file" id="pdfUploadInput" accept="application/pdf" style="display:none" onchange="uploadPDFToCloudinary()">
@@ -575,10 +559,9 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         <div class="admin-list" id="adminLessonList"></div>
       </div>
     </div>
+    
     <div class="admin-pane" id="ap-qcm">
       <div class="admin-section">
-
-        <!-- CSV IMPORT -->
         <div style="background:rgba(0,229,255,.05);border:1.5px dashed rgba(0,229,255,.25);border-radius:10px;padding:1rem 1.2rem;margin-bottom:1.2rem">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
             <div style="font-size:.78rem;font-weight:700;color:var(--accent)">📥 Import CSV — Ajouter plusieurs QCM d'un coup</div>
@@ -628,6 +611,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         <div class="admin-list" id="adminQCMList"></div>
       </div>
     </div>
+    
     <div class="admin-pane" id="ap-exams">
       <div class="admin-section">
         <div class="admin-section-title">➕ Ajouter un Examen</div>
@@ -651,6 +635,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         <div class="admin-list" id="adminExamList"></div>
       </div>
     </div>
+    
     <div class="admin-pane" id="ap-drive">
       <div class="admin-section">
         <div class="admin-section-title">☁️ Liens Drive par Année</div>
@@ -660,10 +645,8 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
   </div>
 </div>
 
-<!-- MAIN APP -->
 <div id="mainApp" style="display:none;flex-direction:column;height:100vh">
 
-  <!-- TOPBAR -->
   <div class="topbar">
     <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()">
       <span></span><span></span><span></span>
@@ -684,12 +667,9 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
   </div>
 
   <div class="app-body">
-    <!-- SIDEBAR OVERLAY -->
     <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
-      <!-- User info -->
       <div class="sidebar-user">
         <div class="sidebar-user-avatar" id="sidebarAvatar" onclick="document.getElementById('avatarInput').click()"></div>
         <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="uploadAvatar(this)">
@@ -698,7 +678,6 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
           <div class="sidebar-user-year" id="sidebarYear">...</div>
         </div>
       </div>
-      <!-- XP bar -->
       <div class="sidebar-xp-bar">
         <div class="sidebar-xp-top">
           <span id="sidebarLvlLabel">Niv. 1</span>
@@ -706,128 +685,132 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         </div>
         <div class="sidebar-bar"><div class="sidebar-bar-fill" id="sidebarBarFill" style="width:0%"></div></div>
       </div>
-      <!-- Nav -->
       <div class="sidebar-nav">
         <div class="nav-section">Menu</div>
         <div class="nav-item active" data-view="home" onclick="navTo('home',this)">
-          <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gh" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M8 22L26 6L44 22V44H33V32H19V44H8V22Z" fill="url(#gh)" opacity=".15"/><path d="M8 22L26 6L44 22V44H33V32H19V44H8V22Z" stroke="url(#gh)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none"/><circle cx="26" cy="24" r="3.5" fill="url(#gh)"/></svg></span> Accueil
+          <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n1" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M8 22L26 6L44 22V44H33V32H19V44H8V22Z" fill="url(#n1)" opacity=".15"/><path d="M8 22L26 6L44 22V44H33V32H19V44H8V22Z" stroke="url(#n1)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none"/><circle cx="26" cy="24" r="3.5" fill="url(#n1)"/></svg></span> Accueil
         </div>
 
         <div class="nav-section" style="margin-top:.5rem">Mon Contenu</div>
         <div style="margin:2px .4rem 6px;padding:4px 8px;background:var(--accent-dim);border:1px solid rgba(0,229,255,.2);border-radius:var(--rs);font-size:.7rem;color:var(--accent);font-weight:600" id="sidebarYearLabel">...</div>
         <div id="yearSubNav">
           <div class="nav-item" data-view="cours" onclick="navTo('cours',this)">
-            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gb" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#gb)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#gb)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#gb)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#gb)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#gb)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="23" x2="33" y2="23" stroke="url(#gb)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="29" x2="27" y2="29" stroke="url(#gb)" stroke-width="2" stroke-linecap="round"/></svg></span> Cours
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n2" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#n2)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#n2)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#n2)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#n2)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#n2)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="23" x2="33" y2="23" stroke="url(#n2)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="29" x2="27" y2="29" stroke="url(#n2)" stroke-width="2" stroke-linecap="round"/></svg></span> Cours
           </div>
           <div class="nav-item" data-view="qcm" onclick="navTo('qcm',this)">
-            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gq" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="8" fill="url(#gq)" opacity=".12"/><rect x="8" y="8" width="36" height="36" rx="8" stroke="url(#gq)" stroke-width="2.2" fill="none"/><rect x="14" y="16" width="6" height="6" rx="1.5" stroke="url(#gq)" stroke-width="1.8" fill="none"/><path d="M15.5 19l1.5 1.5 2.5-3" stroke="url(#gq)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="24" y1="19" x2="36" y2="19" stroke="url(#gq)" stroke-width="2" stroke-linecap="round"/><rect x="14" y="26" width="6" height="6" rx="1.5" stroke="url(#gq)" stroke-width="1.8" fill="none"/><line x1="24" y1="29" x2="36" y2="29" stroke="url(#gq)" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="19" r="2.5" fill="url(#gq)"/></svg></span> QCM
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n3" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="8" fill="url(#n3)" opacity=".12"/><rect x="8" y="8" width="36" height="36" rx="8" stroke="url(#n3)" stroke-width="2.2" fill="none"/><rect x="14" y="16" width="6" height="6" rx="1.5" stroke="url(#n3)" stroke-width="1.8" fill="none"/><path d="M15.5 19l1.5 1.5 2.5-3" stroke="url(#n3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="24" y1="19" x2="36" y2="19" stroke="url(#n3)" stroke-width="2" stroke-linecap="round"/><rect x="14" y="26" width="6" height="6" rx="1.5" stroke="url(#n3)" stroke-width="1.8" fill="none"/><line x1="24" y1="29" x2="36" y2="29" stroke="url(#n3)" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="19" r="2.5" fill="url(#n3)"/></svg></span> QCM
           </div>
           <div class="nav-item" data-view="examens" onclick="navTo('examens',this)">
-            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="ge" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="11" y="6" width="24" height="30" rx="3" fill="url(#ge)" opacity=".12"/><rect x="11" y="6" width="24" height="30" rx="3" stroke="url(#ge)" stroke-width="2.2" fill="none"/><line x1="16" y1="14" x2="30" y2="14" stroke="url(#ge)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="20" x2="30" y2="20" stroke="url(#ge)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="26" x2="24" y2="26" stroke="url(#ge)" stroke-width="2" stroke-linecap="round"/><path d="M30 34l8-8 4 4-8 8-4-4z" stroke="url(#ge)" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M30 34l-2 6 6-2" stroke="url(#ge)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span> Examens passés
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n4" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="11" y="6" width="24" height="30" rx="3" fill="url(#n4)" opacity=".12"/><rect x="11" y="6" width="24" height="30" rx="3" stroke="url(#n4)" stroke-width="2.2" fill="none"/><line x1="16" y1="14" x2="30" y2="14" stroke="url(#n4)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="20" x2="30" y2="20" stroke="url(#n4)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="26" x2="24" y2="26" stroke="url(#n4)" stroke-width="2" stroke-linecap="round"/><path d="M30 34l8-8 4 4-8 8-4-4z" stroke="url(#n4)" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M30 34l-2 6 6-2" stroke="url(#n4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="34" y1="28" x2="38" y2="32" stroke="url(#n4)" stroke-width="1.5" stroke-linecap="round"/></svg></span> Examens passés
           </div>
           <div class="nav-item" data-view="drive" onclick="navTo('drive',this)">
-            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gd" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" fill="url(#gd)" opacity=".12"/><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" stroke="url(#gd)" stroke-width="2.2" fill="none"/><line x1="26" y1="39" x2="26" y2="25" stroke="url(#gd)" stroke-width="2.2" stroke-linecap="round"/><path d="M21 30l5-5 5 5" stroke="url(#gd)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="20" y1="39" x2="32" y2="39" stroke="url(#gd)" stroke-width="2.2" stroke-linecap="round"/></svg></span> Drive Promo
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n5" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" fill="url(#n5)" opacity=".12"/><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" stroke="url(#n5)" stroke-width="2.2" fill="none"/><line x1="26" y1="39" x2="26" y2="25" stroke="url(#n5)" stroke-width="2.2" stroke-linecap="round"/><path d="M21 30l5-5 5 5" stroke="url(#n5)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="20" y1="39" x2="32" y2="39" stroke="url(#n5)" stroke-width="2.2" stroke-linecap="round"/></svg></span> Drive Promo
           </div>
           <div class="nav-item" data-view="rooms" onclick="navTo('rooms',this)">
-            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gm" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#gm)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#gm)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#gm)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#gm)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#gm)" stroke-width="2.2" stroke-linecap="round"/><path d="M10 24a18 18 0 000 8" stroke="url(#gm)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/><path d="M42 24a18 18 0 010 8" stroke="url(#gm)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/></svg></span> Salles d'étude
+            <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n6" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#n6)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#n6)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#n6)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#n6)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#n6)" stroke-width="2.2" stroke-linecap="round"/><path d="M10 24a18 18 0 000 8" stroke="url(#n6)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/><path d="M42 24a18 18 0 010 8" stroke="url(#n6)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/></svg></span> Salles d'étude
           </div>
         </div>
 
         <div class="nav-section" style="margin-top:.5rem">Communauté</div>
         <div class="nav-item" data-view="classement" onclick="navTo('classement',this)">
-          <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gt" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#fcd34d"/></linearGradient></defs><path d="M16 8h20v16a10 10 0 01-20 0V8z" fill="url(#gt)" opacity=".18"/><path d="M16 8h20v16a10 10 0 01-20 0V8z" stroke="url(#gt)" stroke-width="2.2" fill="none"/><path d="M16 12H10a4 4 0 004 4h2" stroke="url(#gt)" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M36 12h6a4 4 0 01-4 4h-2" stroke="url(#gt)" stroke-width="2" stroke-linecap="round" fill="none"/><line x1="26" y1="34" x2="26" y2="40" stroke="url(#gt)" stroke-width="2.2" stroke-linecap="round"/><rect x="18" y="40" width="16" height="4" rx="2" fill="url(#gt)" opacity=".4"/><rect x="18" y="40" width="16" height="4" rx="2" stroke="url(#gt)" stroke-width="2" fill="none"/><path d="M26 14l1.5 4h4l-3.2 2.4 1.2 4L26 22l-3.5 2.4 1.2-4L20.5 18h4z" fill="url(#gt)"/></svg></span> Classement
+          <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n7" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#fcd34d"/></linearGradient></defs><path d="M16 8h20v16a10 10 0 01-20 0V8z" fill="url(#n7)" opacity=".18"/><path d="M16 8h20v16a10 10 0 01-20 0V8z" stroke="url(#n7)" stroke-width="2.2" fill="none"/><path d="M16 12H10a4 4 0 004 4h2" stroke="url(#n7)" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M36 12h6a4 4 0 01-4 4h-2" stroke="url(#n7)" stroke-width="2" stroke-linecap="round" fill="none"/><line x1="26" y1="34" x2="26" y2="40" stroke="url(#n7)" stroke-width="2.2" stroke-linecap="round"/><rect x="18" y="40" width="16" height="4" rx="2" fill="url(#n7)" opacity=".4"/><rect x="18" y="40" width="16" height="4" rx="2" stroke="url(#n7)" stroke-width="2" fill="none"/><path d="M26 14l1.5 4h4l-3.2 2.4 1.2 4L26 22l-3.5 2.4 1.2-4L20.5 18h4z" fill="url(#n7)"/></svg></span> Classement
         </div>
         <div class="nav-item" data-view="avis" onclick="navTo('avis',this)">
-          <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none" width="18" height="18"><defs><linearGradient id="gav" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" fill="url(#gav)" opacity=".12"/><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" stroke="url(#gav)" stroke-width="2.2" fill="none" stroke-linejoin="round"/><path d="M17 24l1 3h3l-2.5 2 1 3L17 30l-2.5 2 1-3L13 27h3z" fill="url(#gav)"/><path d="M26 24l1 3h3l-2.5 2 1 3L26 30l-2.5 2 1-3L22 27h3z" fill="url(#gav)"/><path d="M35 24l1 3h3l-2.5 2 1 3L35 30l-2.5 2 1-3L31 27h3z" fill="url(#gav)" opacity=".4"/></svg></span> Avis
+          <span class="nav-item-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n8" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" fill="url(#n8)" opacity=".12"/><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" stroke="url(#n8)" stroke-width="2.2" fill="none" stroke-linejoin="round"/><path d="M17 24l1 3h3l-2.5 2 1 3L17 30l-2.5 2 1-3L13 27h3z" fill="url(#n8)"/><path d="M26 24l1 3h3l-2.5 2 1 3L26 30l-2.5 2 1-3L22 27h3z" fill="url(#n8)"/><path d="M35 24l1 3h3l-2.5 2 1 3L35 30l-2.5 2 1-3L31 27h3z" fill="url(#n8)" opacity=".4"/></svg></span> Avis
         </div>
       </div>
     </div>
 
-    <!-- MAIN CONTENT -->
     <div class="main-content">
       <div class="content-area">
 
-        <!-- HOME VIEW -->
         <div class="view active" id="view-home">
           <div class="home-stats afu">
             <div class="stat-card">
-              <div class="home-stats afu">
-  <div class="stat-card">
-    <div class="stat-icon" style="background:var(--green-dim)"><svg viewBox="0 0 52 52" fill="none" width="22" height="22"><defs><linearGradient id="s4a" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="6" y="6" width="18" height="18" rx="4" fill="url(#s4a)" opacity=".2"/><rect x="6" y="6" width="18" height="18" rx="4" stroke="url(#s4a)" stroke-width="2" fill="none"/><rect x="28" y="6" width="18" height="18" rx="4" fill="url(#s4a)" opacity=".15"/><rect x="28" y="6" width="18" height="18" rx="4" stroke="url(#s4a)" stroke-width="2" fill="none"/><rect x="6" y="28" width="18" height="18" rx="4" fill="url(#s4a)" opacity=".1"/><rect x="6" y="28" width="18" height="18" rx="4" stroke="url(#s4a)" stroke-width="2" fill="none"/><rect x="28" y="28" width="18" height="18" rx="4" fill="url(#s4a)" opacity=".08"/><rect x="28" y="28" width="18" height="18" rx="4" stroke="url(#s4a)" stroke-width="2" fill="none"/></svg></div>
-    <div><div class="stat-val" style="color:var(--green)">6</div><div class="stat-lbl">Années</div></div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-icon" style="background:var(--blue-dim)"><svg viewBox="0 0 52 52" fill="none" width="22" height="22"><defs><linearGradient id="s2a" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="6" y="10" width="14" height="32" rx="3" fill="url(#s2a)" opacity=".2"/><rect x="6" y="10" width="14" height="32" rx="3" stroke="url(#s2a)" stroke-width="2" fill="none"/><rect x="22" y="18" width="14" height="24" rx="3" fill="url(#s2a)" opacity=".15"/><rect x="22" y="18" width="14" height="24" rx="3" stroke="url(#s2a)" stroke-width="2" fill="none"/><rect x="38" y="26" width="8" height="16" rx="2" fill="url(#s2a)" opacity=".1"/><rect x="38" y="26" width="8" height="16" rx="2" stroke="url(#s2a)" stroke-width="2" fill="none"/></svg></div>
-    <div><div class="stat-val" style="color:var(--blue)" id="statLessons">0</div><div class="stat-lbl">Cours</div></div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-icon" style="background:var(--gold-dim)"><svg viewBox="0 0 52 52" fill="none" width="22" height="22"><defs><linearGradient id="s3n" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#fcd34d"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="7" fill="url(#s3n)" opacity=".12"/><rect x="8" y="8" width="36" height="36" rx="7" stroke="url(#s3n)" stroke-width="2.2" fill="none"/><rect x="14" y="15" width="7" height="7" rx="2" stroke="url(#s3n)" stroke-width="2" fill="none"/><path d="M15.5 18.5l2 2 3-3.5" stroke="url(#s3n)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="25" y1="19" x2="38" y2="19" stroke="url(#s3n)" stroke-width="2" stroke-linecap="round"/><rect x="14" y="27" width="7" height="7" rx="2" stroke="url(#s3n)" stroke-width="2" fill="none"/><path d="M15.5 30.5l2 2 3-3.5" stroke="url(#s3n)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="25" y1="31" x2="38" y2="31" stroke="url(#s3n)" stroke-width="2" stroke-linecap="round"/></svg></div>
-    <div><div class="stat-val" style="color:var(--gold)" id="statQCM">0</div><div class="stat-lbl">QCM</div></div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-icon" style="background:var(--accent-dim)"><svg viewBox="0 0 52 52" fill="none" width="22" height="22"><defs><linearGradient id="s1a" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><circle cx="26" cy="18" r="8" fill="url(#s1a)" opacity=".15"/><circle cx="26" cy="18" r="8" stroke="url(#s1a)" stroke-width="2.2" fill="none"/><path d="M10 44c0-8.8 7.2-16 16-16s16 7.2 16 16" stroke="url(#s1a)" stroke-width="2.2" stroke-linecap="round" fill="none"/><path d="M20 12l6 2 6-2" stroke="url(#s1a)" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg></div>
-    <div><div class="stat-val" style="color:var(--accent)" id="statStudents">0</div><div class="stat-lbl">Étudiants</div></div>
-  </div>
-</div>
-              <div><div class="stat-val" style="color:var(--blue)">6</div><div class="stat-lbl">Années</div></div>
+              <div class="stat-icon" style="background:var(--blue-dim)">
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="s2a" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="6" y="10" width="14" height="32" rx="3" fill="url(#s2a)" opacity=".2"/><rect x="6" y="10" width="14" height="32" rx="3" stroke="url(#s2a)" stroke-width="2" fill="none"/><rect x="22" y="18" width="14" height="24" rx="3" fill="url(#s2a)" opacity=".15"/><rect x="22" y="18" width="14" height="24" rx="3" stroke="url(#s2a)" stroke-width="2" fill="none"/><rect x="38" y="26" width="8" height="16" rx="2" fill="url(#s2a)" opacity=".1"/><rect x="38" y="26" width="8" height="16" rx="2" stroke="url(#s2a)" stroke-width="2" fill="none"/></svg>
+              </div>
+              <div><div class="stat-val" style="color:var(--blue)" id="statLessons">0</div><div class="stat-lbl">Cours</div></div>
             </div>
             <div class="stat-card">
-              <div class="stat-icon" style="background:var(--accent-dim)">📖</div>
-              <div><div class="stat-val" style="color:var(--accent)" id="statLessons">0</div><div class="stat-lbl">Cours</div></div>
+              <div class="stat-icon" style="background:var(--gold-dim)">
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="s3n" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#fcd34d"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="7" fill="url(#s3n)" opacity=".12"/><rect x="8" y="8" width="36" height="36" rx="7" stroke="url(#s3n)" stroke-width="2.2" fill="none"/><rect x="14" y="15" width="7" height="7" rx="2" stroke="url(#s3n)" stroke-width="2" fill="none"/><path d="M15.5 18.5l2 2 3-3.5" stroke="url(#s3n)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="25" y1="19" x2="38" y2="19" stroke="url(#s3n)" stroke-width="2" stroke-linecap="round"/><rect x="14" y="27" width="7" height="7" rx="2" stroke="url(#s3n)" stroke-width="2" fill="none"/><path d="M15.5 30.5l2 2 3-3.5" stroke="url(#s3n)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="25" y1="31" x2="38" y2="31" stroke="url(#s3n)" stroke-width="2" stroke-linecap="round"/><circle cx="17.5" cy="18.5" r="3" fill="url(#s3n)" opacity=".4"/><circle cx="17.5" cy="30.5" r="3" fill="url(#s3n)" opacity=".4"/></svg>
+              </div>
+              <div><div class="stat-val" style="color:var(--gold)" id="statQCM">0</div><div class="stat-lbl">QCM</div></div>
             </div>
             <div class="stat-card">
-              <div class="stat-icon" style="background:var(--red-dim)">🧩</div>
-              <div><div class="stat-val" style="color:var(--red)" id="statQCM">0</div><div class="stat-lbl">QCM</div></div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon" style="background:var(--green-dim)">👥</div>
+              <div class="stat-icon" style="background:var(--green-dim)">
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="s1b" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><circle cx="26" cy="18" r="8" fill="url(#s1b)" opacity=".15"/><circle cx="26" cy="18" r="8" stroke="url(#s1b)" stroke-width="2.2" fill="none"/><path d="M10 44c0-8.8 7.2-16 16-16s16 7.2 16 16" stroke="url(#s1b)" stroke-width="2.2" stroke-linecap="round" fill="none"/><path d="M20 12l6 2 6-2" stroke="url(#s1b)" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg>
+              </div>
               <div><div class="stat-val" style="color:var(--green)" id="statStudents">0</div><div class="stat-lbl">Étudiants</div></div>
             </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:var(--accent-dim)">
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="s4b" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="6" y="6" width="18" height="18" rx="4" fill="url(#s4b)" opacity=".16"/><rect x="6" y="6" width="18" height="18" rx="4" stroke="url(#s4b)" stroke-width="2" fill="none"/><rect x="28" y="6" width="18" height="18" rx="4" fill="url(#s4b)" opacity=".11"/><rect x="28" y="6" width="18" height="18" rx="4" stroke="url(#s4b)" stroke-width="2" fill="none"/><rect x="6" y="28" width="18" height="18" rx="4" fill="url(#s4b)" opacity=".08"/><rect x="6" y="28" width="18" height="18" rx="4" stroke="url(#s4b)" stroke-width="2" fill="none"/><rect x="28" y="28" width="18" height="18" rx="4" fill="url(#s4b)" opacity=".06"/><rect x="28" y="28" width="18" height="18" rx="4" stroke="url(#s4b)" stroke-width="2" fill="none"/></svg>
+              </div>
+              <div><div class="stat-val" style="color:var(--accent)">6</div><div class="stat-lbl">Années</div></div>
+            </div>
           </div>
+
           <div class="home-profile afu d2">
             <div class="profile-card">
-              <div class="profile-card-title">Mon Profil</div>
-              <div class="profile-top">
-                <div class="profile-avatar" id="profileAvatar" onclick="document.getElementById('avatarInput').click()" title="Changer la photo">
-                  <span id="profileAvatarInitial">?</span>
-                  <div class="avatar-overlay">📷<br>Changer</div>
+              <div class="profile-card-title">Continuer un cours</div>
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem">
+                <div style="flex:1">
+                  <div style="font-family:var(--ff);font-size:1rem;font-weight:800;margin-bottom:.25rem">Reprendre là où vous étiez</div>
+                  <div style="font-size:.8rem;color:var(--muted);line-height:1.5">Accédez directement à vos cours de l’année sélectionnée.</div>
                 </div>
-                <div>
-                  <div class="profile-name-row">
-                    <div class="profile-name" id="profileName">...</div>
-                    <button class="btn-edit-name" onclick="openEditName()">✏️</button>
-                  </div>
-                  <div class="profile-year-lbl" id="profileYear">...</div>
-                </div>
-              </div>
-              <div class="profile-xp-row">
-                <div><div class="xp-total" id="profileXP">0</div><div class="xp-label">XP Total</div></div>
-                <div style="text-align:right"><div class="level-label" id="profileLevel">Niveau 1</div><div class="level-sub">Niveau actuel</div></div>
-              </div>
-              <div class="level-bar-wrap">
-                <div class="level-info"><span id="levelMin">Niv. 1</span><span id="levelMax">Niv. 2</span></div>
-                <div class="level-bar"><div class="level-fill" id="levelFill" style="width:0%"></div></div>
-                <div class="level-progress-text" id="levelProgress"></div>
+                <button class="btn-auth" style="margin-top:0;width:auto;padding:8px 14px" onclick="navTo('cours', document.querySelector('.nav-item[data-view=&quot;cours&quot;]'))">Ouvrir</button>
               </div>
             </div>
+
+            <div class="profile-card">
+              <div class="profile-card-title">QCM recommandé</div>
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem">
+                <div style="flex:1">
+                  <div style="font-family:var(--ff);font-size:1rem;font-weight:800;margin-bottom:.25rem">Une session rapide (10–15 min)</div>
+                  <div style="font-size:.8rem;color:var(--muted);line-height:1.5">Idéal pour maintenir votre rythme و gagner des XP.</div>
+                </div>
+                <button class="btn-auth" style="margin-top:0;width:auto;padding:8px 14px" onclick="navTo('qcm', document.querySelector('.nav-item[data-view=&quot;qcm&quot;]'))">Lancer</button>
+              </div>
+            </div>
+
+            <div class="profile-card">
+              <div class="profile-card-title">Activité récente</div>
+              <div style="display:flex;flex-direction:column;gap:.5rem">
+                <div class="xp-action-item" style="justify-content:flex-start;gap:.55rem">
+                  <span style="opacity:.9"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="nq3" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="8" fill="url(#nq3)" opacity=".12"/><rect x="8" y="8" width="36" height="36" rx="8" stroke="url(#nq3)" stroke-width="2.2" fill="none"/><rect x="14" y="16" width="6" height="6" rx="1.5" stroke="url(#nq3)" stroke-width="1.8" fill="none"/><path d="M15.5 19l1.5 1.5 2.5-3" stroke="url(#nq3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="24" y1="19" x2="36" y2="19" stroke="url(#nq3)" stroke-width="2" stroke-linecap="round"/><rect x="14" y="26" width="6" height="6" rx="1.5" stroke="url(#nq3)" stroke-width="1.8" fill="none"/><line x1="24" y1="29" x2="36" y2="29" stroke="url(#nq3)" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="19" r="2.5" fill="url(#nq3)"/></svg></span>
+                  <span style="flex:1">Dernier QCM — statistiques à venir</span><span style="color:var(--muted);font-size:.7rem">—</span>
+                </div>
+                <div class="xp-action-item" style="justify-content:flex-start;gap:.55rem">
+                  <span style="opacity:.9"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="nc2" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#nc2)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#nc2)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#nc2)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#nc2)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#nc2)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="23" x2="33" y2="23" stroke="url(#nc2)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="29" x2="27" y2="29" stroke="url(#nc2)" stroke-width="2" stroke-linecap="round"/></svg></span>
+                  <span style="flex:1">Dernier cours ouvert — à venir</span><span style="color:var(--muted);font-size:.7rem">—</span>
+                </div>
+                <div class="xp-action-item" style="justify-content:flex-start;gap:.55rem">
+                  <span style="opacity:.9"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="nx2" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M26 6l3.6 7.2 7.9 1.2-5.7 5.6 1.4 7.9L26 24l-7.2 3.9 1.4-7.9-5.7-5.6 7.9-1.2z" fill="url(#nx2)" opacity=".2"/><path d="M26 6l3.6 7.2 7.9 1.2-5.7 5.6 1.4 7.9L26 24l-7.2 3.9 1.4-7.9-5.7-5.6 7.9-1.2z" stroke="url(#nx2)" stroke-width="2" stroke-linejoin="round" fill="none"/></svg></span>
+                  <span style="flex:1">Progression XP — à jour</span><span style="color:var(--muted);font-size:.7rem" id="navXPInline">—</span>
+                </div>
+              </div>
+            </div>
+
             <div class="profile-card">
               <div class="profile-card-title">Comment gagner des XP</div>
               <div class="xp-actions">
-                <div class="xp-actions">
-  <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none" width="16" height="16" style="vertical-align:middle;margin-right:3px"><defs><linearGradient id="xa1" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#xa1)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#xa1)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#xa1)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#xa1)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#xa1)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="23" x2="33" y2="23" stroke="url(#xa1)" stroke-width="2" stroke-linecap="round"/></svg> Ouvrir un cours</span><span class="xp-pill">+5 XP</span></div>
-  <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none" width="16" height="16" style="vertical-align:middle;margin-right:3px"><defs><linearGradient id="xa2" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#fcd34d"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="7" fill="url(#xa2)" opacity=".12"/><rect x="8" y="8" width="36" height="36" rx="7" stroke="url(#xa2)" stroke-width="2.2" fill="none"/><rect x="14" y="15" width="7" height="7" rx="2" stroke="url(#xa2)" stroke-width="2" fill="none"/><path d="M15.5 18.5l2 2 3-3.5" stroke="url(#xa2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="25" y1="19" x2="38" y2="19" stroke="url(#xa2)" stroke-width="2" stroke-linecap="round"/><rect x="14" y="27" width="7" height="7" rx="2" stroke="url(#xa2)" stroke-width="2" fill="none"/><path d="M15.5 30.5l2 2 3-3.5" stroke="url(#xa2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="25" y1="31" x2="38" y2="31" stroke="url(#xa2)" stroke-width="2" stroke-linecap="round"/></svg> Compléter un QCM</span><span class="xp-pill">+30 XP</span></div>
-  <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none" width="16" height="16" style="vertical-align:middle;margin-right:3px"><defs><linearGradient id="xa3" x1="0" y1="52" x2="52" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs><path d="M26 8c0 0-14 12-14 24a14 14 0 0028 0c0-6-4-10-4-10s-1 6-6 8c-2-4 2-14-4-22z" fill="url(#xa3)" opacity=".25"/><path d="M26 8c0 0-14 12-14 24a14 14 0 0028 0c0-6-4-10-4-10s-1 6-6 8c-2-4 2-14-4-22z" stroke="url(#xa3)" stroke-width="2" stroke-linejoin="round" fill="none"/><circle cx="26" cy="36" r="4" fill="url(#xa3)"/></svg> Connexion quotidienne</span><span class="xp-pill">+10 XP</span></div>
-  <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none" width="16" height="16" style="vertical-align:middle;margin-right:3px"><defs><linearGradient id="xa4" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="11" y="6" width="24" height="30" rx="3" fill="url(#xa4)" opacity=".12"/><rect x="11" y="6" width="24" height="30" rx="3" stroke="url(#xa4)" stroke-width="2.2" fill="none"/><line x1="16" y1="14" x2="30" y2="14" stroke="url(#xa4)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="20" x2="30" y2="20" stroke="url(#xa4)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="26" x2="24" y2="26" stroke="url(#xa4)" stroke-width="2" stroke-linecap="round"/><path d="M30 34l8-8 4 4-8 8-4-4z" stroke="url(#xa4)" stroke-width="2" stroke-linejoin="round" fill="none"/></svg> Télécharger un examen</span><span class="xp-pill">+15 XP</span></div>
-</div>
+                <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n2a" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#n2a)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#n2a)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#n2a)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#n2a)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#n2a)" stroke-width="2" stroke-linecap="round"/></svg> Ouvrir un cours</span><span class="xp-pill">+5 XP</span></div>
+                <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="q1x" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#34d399"/></linearGradient></defs><circle cx="26" cy="26" r="20" fill="url(#q1x)" opacity=".15"/><circle cx="26" cy="26" r="20" stroke="url(#q1x)" stroke-width="2.5" fill="none"/><path d="M16 26l7 7 14-14" stroke="url(#q1x)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Compléter un QCM</span><span class="xp-pill">+30 XP</span></div>
+                <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="x6x" x1="0" y1="52" x2="52" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs><path d="M26 8c0 0-14 12-14 24a14 14 0 0028 0c0-6-4-10-4-10s-1 6-6 8c-2-4 2-14-4-22z" fill="url(#x6x)" opacity=".25"/><path d="M26 8c0 0-14 12-14 24a14 14 0 0028 0c0-6-4-10-4-10s-1 6-6 8c-2-4 2-14-4-22z" stroke="url(#x6x)" stroke-width="2" stroke-linejoin="round" fill="none"/><circle cx="26" cy="36" r="4" fill="url(#x6x)"/></svg> Connexion quotidienne</span><span class="xp-pill">+10 XP</span></div>
+                <div class="xp-action-item"><span><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="c2x" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="8" fill="url(#c2x)" opacity=".1"/><rect x="8" y="8" width="36" height="36" rx="8" stroke="url(#c2x)" stroke-width="2" fill="none"/><line x1="26" y1="14" x2="26" y2="30" stroke="url(#c2x)" stroke-width="2.5" stroke-linecap="round"/><path d="M18 24l8 8 8-8" stroke="url(#c2x)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="16" y1="38" x2="36" y2="38" stroke="url(#c2x)" stroke-width="2.5" stroke-linecap="round"/></svg> Télécharger un examen</span><span class="xp-pill">+15 XP</span></div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- COURS VIEW -->
         <div class="view" id="view-cours">
           <div class="view-header">
-            <div class="view-title" id="coursTitle">📖 Cours</div>
+            <div class="view-title" id="coursTitle">
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="tc" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="10" y="7" width="27" height="36" rx="3" fill="url(#tc)" opacity=".12"/><rect x="10" y="7" width="27" height="36" rx="3" stroke="url(#tc)" stroke-width="2.2" fill="none"/><path d="M10 7C10 7 14 9 14 43" stroke="url(#tc)" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="9" width="4" height="32" rx="2" fill="url(#tc)" opacity=".4"/><line x1="18" y1="17" x2="33" y2="17" stroke="url(#tc)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="23" x2="33" y2="23" stroke="url(#tc)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="29" x2="27" y2="29" stroke="url(#tc)" stroke-width="2" stroke-linecap="round"/></svg>
+                Cours
+            </div>
           </div>
           <div id="coursContainer"></div>
           <div class="panel hidden" id="lessonsPanel">
@@ -839,54 +822,64 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
           </div>
         </div>
 
-        <!-- QCM VIEW -->
         <div class="view" id="view-qcm">
           <div class="view-header">
-            <div class="view-title" id="qcmTitle">🧩 QCM</div>
+            <div class="view-title" id="qcmTitle">
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="tq" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="8" y="8" width="36" height="36" rx="8" fill="url(#tq)" opacity=".12"/><rect x="8" y="8" width="36" height="36" rx="8" stroke="url(#tq)" stroke-width="2.2" fill="none"/><rect x="14" y="16" width="6" height="6" rx="1.5" stroke="url(#tq)" stroke-width="1.8" fill="none"/><path d="M15.5 19l1.5 1.5 2.5-3" stroke="url(#tq)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="24" y1="19" x2="36" y2="19" stroke="url(#tq)" stroke-width="2" stroke-linecap="round"/><rect x="14" y="26" width="6" height="6" rx="1.5" stroke="url(#tq)" stroke-width="1.8" fill="none"/><line x1="24" y1="29" x2="36" y2="29" stroke="url(#tq)" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="19" r="2.5" fill="url(#tq)"/></svg>
+                QCM
+            </div>
           </div>
           <div id="qcmContainer"></div>
         </div>
 
-        <!-- EXAMENS VIEW -->
         <div class="view" id="view-examens">
           <div class="view-header">
-            <div class="view-title" id="examensTitle">📄 Examens Passés</div>
+            <div class="view-title" id="examensTitle">
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="te" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="11" y="6" width="24" height="30" rx="3" fill="url(#te)" opacity=".12"/><rect x="11" y="6" width="24" height="30" rx="3" stroke="url(#te)" stroke-width="2.2" fill="none"/><line x1="16" y1="14" x2="30" y2="14" stroke="url(#te)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="20" x2="30" y2="20" stroke="url(#te)" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="26" x2="24" y2="26" stroke="url(#te)" stroke-width="2" stroke-linecap="round"/><path d="M30 34l8-8 4 4-8 8-4-4z" stroke="url(#te)" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M30 34l-2 6 6-2" stroke="url(#te)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="34" y1="28" x2="38" y2="32" stroke="url(#te)" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Examens Passés
+            </div>
           </div>
           <div id="examsContainer"></div>
         </div>
 
-        <!-- DRIVE VIEW -->
         <div class="view" id="view-drive">
           <div class="view-header">
-            <div class="view-title">☁️ Drive Promo</div>
+            <div class="view-title">
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="td" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" fill="url(#td)" opacity=".12"/><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" stroke="url(#td)" stroke-width="2.2" fill="none"/><line x1="26" y1="39" x2="26" y2="25" stroke="url(#td)" stroke-width="2.2" stroke-linecap="round"/><path d="M21 30l5-5 5 5" stroke="url(#td)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="20" y1="39" x2="32" y2="39" stroke="url(#td)" stroke-width="2.2" stroke-linecap="round"/></svg>
+                Drive Promo
+            </div>
           </div>
           <div id="driveGrid"></div>
         </div>
 
-        <!-- ROOMS VIEW (new: permanent rooms per year + general chat) -->
         <div class="view" id="view-rooms" style="padding:0;margin:-1.5rem">
           <div class="discord-layout" style="height:calc(100vh - var(--topbar))">
-            <!-- Channels sidebar -->
             <div class="discord-sidebar">
               <div class="discord-server-header">
-                <div class="discord-server-name">🎙️ Salles MEDX</div>
+                <div class="discord-server-name">
+                    <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="tr" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#tr)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#tr)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round"/><path d="M10 24a18 18 0 000 8" stroke="url(#tr)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/><path d="M42 24a18 18 0 010 8" stroke="url(#tr)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/></svg>
+                    Salles MEDX
+                </div>
               </div>
               <div class="discord-channels" id="discordChannels"></div>
             </div>
-            <!-- Main area -->
             <div class="discord-main" id="discordContent">
               <div class="dc-empty">
-                <div class="dc-empty-icon">🎙️</div>
+                <div class="dc-empty-icon">
+                    <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="e3m" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#e3m)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#e3m)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#e3m)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#e3m)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#e3m)" stroke-width="2.2" stroke-linecap="round"/></svg>
+                </div>
                 <div class="dc-empty-text">Sélectionne une salle</div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- CLASSEMENT VIEW -->
         <div class="view" id="view-classement">
           <div class="view-header">
-            <div class="view-title">🏆 Classement MEDX</div>
+            <div class="view-title">
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="tk" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#fcd34d"/></linearGradient></defs><path d="M16 8h20v16a10 10 0 01-20 0V8z" fill="url(#tk)" opacity=".18"/><path d="M16 8h20v16a10 10 0 01-20 0V8z" stroke="url(#tk)" stroke-width="2.2" fill="none"/><path d="M16 12H10a4 4 0 004 4h2" stroke="url(#tk)" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M36 12h6a4 4 0 01-4 4h-2" stroke="url(#tk)" stroke-width="2" stroke-linecap="round" fill="none"/><line x1="26" y1="34" x2="26" y2="40" stroke="url(#tk)" stroke-width="2.2" stroke-linecap="round"/><rect x="18" y="40" width="16" height="4" rx="2" fill="url(#tk)" opacity=".4"/><rect x="18" y="40" width="16" height="4" rx="2" stroke="url(#tk)" stroke-width="2" fill="none"/><path d="M26 14l1.5 4h4l-3.2 2.4 1.2 4L26 22l-3.5 2.4 1.2-4L20.5 18h4z" fill="url(#tk)"/></svg>
+                Classement MEDX
+            </div>
           </div>
           <div class="lb-tabs">
             <div class="lb-tab active" onclick="switchLB('global',this)">🌍 Global</div>
@@ -895,13 +888,15 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
           <div class="lb-list" id="lbList"><div class="lb-loading">Chargement...</div></div>
         </div>
 
-        <!-- AVIS VIEW -->
         <div class="view" id="view-avis">
           <div class="view-header">
-            <div class="view-title">💬 Avis des Étudiants</div>
+            <div class="view-title">
+                <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="ta" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" fill="url(#ta)" opacity=".12"/><path d="M8 10h36a4 4 0 014 4v18a4 4 0 01-4 4H28l-6 6v-6H8a4 4 0 01-4-4V14a4 4 0 014-4z" stroke="url(#ta)" stroke-width="2.2" fill="none" stroke-linejoin="round"/><path d="M17 24l1 3h3l-2.5 2 1 3L17 30l-2.5 2 1-3L13 27h3z" fill="url(#ta)"/><path d="M26 24l1 3h3l-2.5 2 1 3L26 30l-2.5 2 1-3L22 27h3z" fill="url(#ta)"/><path d="M35 24l1 3h3l-2.5 2 1 3L35 30l-2.5 2 1-3L31 27h3z" fill="url(#ta)" opacity=".4"/></svg>
+                Avis des Étudiants
+            </div>
           </div>
           <div class="avis-add-box">
-            <div class="avis-add-title">✍️ Partager ton avis</div>
+            <div class="avis-add-title"><svg viewBox="0 0 52 52" fill="none"><path d="M6 26L46 8 32 46 26 30z" fill="url(#ta)" opacity=".15"/><path d="M6 26L46 8 32 46 26 30z" stroke="url(#ta)" stroke-width="2.2" stroke-linejoin="round" fill="none"/><line x1="26" y1="30" x2="46" y2="8" stroke="url(#ta)" stroke-width="2" stroke-linecap="round"/></svg> Partager ton avis</div>
             <div class="avis-stars-row" id="starsRow">
               <button class="star-btn active" data-v="1" onclick="setStars(1)">★</button>
               <button class="star-btn active" data-v="2" onclick="setStars(2)">★</button>
@@ -922,22 +917,6 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
   </div>
 </div>
 
-<!-- EDIT NAME MODAL -->
-<div id="editNameModal" class="modal-overlay hidden">
-  <div class="modal-box">
-    <div class="modal-title">✏️ Modifier le nom</div>
-    <div class="modal-form">
-      <input class="form-input" type="text" id="newNameInput" placeholder="Nouveau nom...">
-      <div class="modal-actions">
-        <button class="btn-auth" style="margin-top:0;width:auto;padding:8px 16px" onclick="saveName()">💾 Sauvegarder</button>
-        <button class="btn-ghost" onclick="document.getElementById('editNameModal').classList.add('hidden')">Annuler</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
 <div id="toast"></div>
 <div class="xp-popup" id="xpPopup"></div>
 
@@ -945,13 +924,21 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.20.0.js"></script>
+
 <script data-cfasync="false">
+// ── ICONS SVGs FOR JS DYNAMIC ELEMENTS ──
+const SVG_ICONS = {
+  module: `<svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="c3z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="6" y="6" width="18" height="18" rx="4" fill="url(#c3z)" opacity=".2"/><rect x="6" y="6" width="18" height="18" rx="4" stroke="url(#c3z)" stroke-width="2" fill="none"/><rect x="28" y="6" width="18" height="18" rx="4" fill="url(#c3z)" opacity=".1"/><rect x="28" y="6" width="18" height="18" rx="4" stroke="url(#c3z)" stroke-width="2" fill="none"/><rect x="6" y="28" width="18" height="18" rx="4" fill="url(#c3z)" opacity=".1"/><rect x="6" y="28" width="18" height="18" rx="4" stroke="url(#c3z)" stroke-width="2" fill="none"/><rect x="28" y="28" width="18" height="18" rx="4" fill="url(#c3z)" opacity=".05"/><rect x="28" y="28" width="18" height="18" rx="4" stroke="url(#c3z)" stroke-width="2" stroke-dasharray="3 2" fill="none"/><line x1="37" y1="32" x2="37" y2="42" stroke="url(#c3z)" stroke-width="2" stroke-linecap="round"/><line x1="32" y1="37" x2="42" y2="37" stroke="url(#c3z)" stroke-width="2" stroke-linecap="round"/></svg>`,
+  semestre: `<svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="c4z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="6" y="10" width="40" height="36" rx="5" fill="url(#c4z)" opacity=".1"/><rect x="6" y="10" width="40" height="36" rx="5" stroke="url(#c4z)" stroke-width="2" fill="none"/><line x1="6" y1="20" x2="46" y2="20" stroke="url(#c4z)" stroke-width="2"/><line x1="16" y1="6" x2="16" y2="16" stroke="url(#c4z)" stroke-width="2.5" stroke-linecap="round"/><line x1="36" y1="6" x2="36" y2="16" stroke="url(#c4z)" stroke-width="2.5" stroke-linecap="round"/><rect x="12" y="26" width="8" height="6" rx="1.5" fill="url(#c4z)" opacity=".4"/><rect x="22" y="26" width="8" height="6" rx="1.5" fill="url(#c4z)" opacity=".6"/><rect x="32" y="26" width="8" height="6" rx="1.5" fill="url(#c4z)"/></svg>`,
+  chatMsg: `<svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="m1z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M6 10h40a4 4 0 014 4v20a4 4 0 01-4 4H28l-8 8v-8H6a4 4 0 01-4-4V14a4 4 0 014-4z" fill="url(#m1z)" opacity=".1"/><path d="M6 10h40a4 4 0 014 4v20a4 4 0 01-4 4H28l-8 8v-8H6a4 4 0 01-4-4V14a4 4 0 014-4z" stroke="url(#m1z)" stroke-width="2" fill="none" stroke-linejoin="round"/><line x1="12" y1="22" x2="32" y2="22" stroke="url(#m1z)" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="28" x2="26" y2="28" stroke="url(#m1z)" stroke-width="2" stroke-linecap="round"/></svg>`,
+  micOn: `<svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="m3z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#m3z)" opacity=".2"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#m3z)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#m3z)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#m3z)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#m3z)" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+};
+
 // ── FIREBASE ──
 const app=firebase.initializeApp({apiKey:"AIzaSyB7p3phF_ex1EY5bj3Wu3R9-CtOJnqHieA",authDomain:"medx-d67fb.firebaseapp.com",projectId:"medx-d67fb",storageBucket:"medx-d67fb.firebasestorage.app",messagingSenderId:"698164411256",appId:"1:698164411256:web:091edcae6c58749688a68d"});
 const auth=firebase.auth(),db=firebase.firestore();
 const FV=firebase.firestore.FieldValue;
 
-// ── AUTH ACTIONS (déclarées tôt pour onclick HTML) ──
 function setErr(m){const el=document.getElementById('authErr');if(el)el.textContent=m;}
 function frErr(c){return({'auth/user-not-found':'Email introuvable','auth/wrong-password':'Mot de passe incorrect','auth/email-already-in-use':'Email déjà utilisé','auth/weak-password':'Mot de passe trop court','auth/invalid-email':'Email invalide','auth/invalid-credential':'Email ou mot de passe incorrect'})[c]||'Erreur: '+c;}
 async function doLogin(){
@@ -961,7 +948,7 @@ async function doLogin(){
 async function doRegister(){
   const name=document.getElementById('regName').value.trim(),email=document.getElementById('regEmail').value.trim();
   const year=parseInt(document.getElementById('regYear').value),pass=document.getElementById('regPass').value;
-  setErr('');if(!name||!email||!pass){setErr('Remplis tous les champs');return;}
+  setErr('');if(!name||!email||!pass){setErr('Remplis tous champs');return;}
   try{
     const cred=await auth.createUserWithEmailAndPassword(email,pass);
     await db.collection('users').doc(cred.user.uid).set({name,email,year,xp:0,lastLogin:'',createdAt:new Date().toISOString()});
@@ -975,24 +962,19 @@ function switchAuthTab(tab){
   setErr('');
 }
 
-// ── CONSTANTS ──
 const LEVELS=[0,100,250,500,900,1500,2500,4000,6000,10000];
 const YL={1:"1ère Année",2:"2ème Année",3:"3ème Année",4:"4ème Année",5:"5ème Année",6:"6ème Année"};
-
-// ── STATE ──
 let CU=null,UD=null,isAdmin=false,CY=null;
 let allLessons=[],allQCM=[],allExams=[];
 const driveLinks={1:"#",2:"#",3:"https://drive.google.com/drive/folders/1coBMUiI0stbz0BlmmZ3wwxlU33MrQzX5?usp=drive_link",4:"#",5:"#",6:"#"};
 let selectedStars=5;
 
-// ── HELPERS ──
 function getLevel(xp){let l=1;LEVELS.forEach((v,i)=>{if(xp>=v)l=i+1});return Math.min(l,10)}
 function getLevelProg(xp){const l=getLevel(xp)-1,cur=LEVELS[l]||0,next=LEVELS[l+1]||(LEVELS[l]+1000);return{cur,next,pct:Math.min(100,Math.round((xp-cur)/(next-cur)*100))}}
 function extractDriveId(url){const m=(url||'').match(/\/d\/([a-zA-Z0-9_-]+)/);return m?m[1]:null}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2800);}
 function showXPPopup(msg){const p=document.getElementById('xpPopup');p.textContent=msg;p.classList.add('show');clearTimeout(p._t);p._t=setTimeout(()=>p.classList.remove('show'),3000);}
 
-// ── AUTH ──
 auth.onAuthStateChanged(async user=>{
   if(user){
     CU=user;
@@ -1018,45 +1000,33 @@ auth.onAuthStateChanged(async user=>{
   }
 });
 
-// ── UPDATE UI ──
 function updateUI(){
   if(!UD)return;
   const xp=UD.xp||0,name=UD.name||'Étudiant',init=name.charAt(0).toUpperCase(),y=parseInt(UD.year)||1,lvl=getLevel(xp),prog=getLevelProg(xp);
-  // topbar avatar
-  const navAv=document.getElementById('navAvatar');
-  navAv.innerHTML='';
+  const byId = (id) => document.getElementById(id);
+  const setText = (id, value) => { const el = byId(id); if(el) el.textContent = value; };
+  
+  const navAv=byId('navAvatar'); navAv.innerHTML='';
   if(UD.photoURL){const img=document.createElement('img');img.src=UD.photoURL;img.style.cssText='width:28px;height:28px;object-fit:cover;display:block;border-radius:50%';navAv.appendChild(img);}
   else navAv.textContent=init;
-  document.getElementById('navName').textContent=name.split(' ')[0];
-  document.getElementById('navXP').textContent='⚡ '+xp+' XP';
-  // sidebar
-  const sbAv=document.getElementById('sidebarAvatar');
-  sbAv.innerHTML='';
+  
+  setText('navName', name.split(' ')[0]);
+  setText('navXP', '⚡ '+xp+' XP');
+  setText('navXPInline', '⚡ '+xp+' XP');
+  
+  const sbAv=byId('sidebarAvatar'); sbAv.innerHTML='';
   if(UD.photoURL){const img=document.createElement('img');img.src=UD.photoURL;img.style.cssText='width:36px;height:36px;object-fit:cover;border-radius:50%';sbAv.appendChild(img);}
   else sbAv.textContent=init;
-  document.getElementById('sidebarName').textContent=name;
-  document.getElementById('sidebarYear').textContent=YL[y]||'';
-  document.getElementById('sidebarLvlLabel').textContent='Niv. '+lvl+' → Niv. '+(lvl+1);
-  document.getElementById('sidebarXpVal').textContent=xp+' XP';
-  const sbFill=document.getElementById('sidebarBarFill');
-  sbFill.style.transition='none';sbFill.style.width='0%';
-  setTimeout(()=>{sbFill.style.transition='width .8s cubic-bezier(.4,0,.2,1)';sbFill.style.width=prog.pct+'%';},150);
-  // profile
-  const profInit=document.getElementById('profileAvatarInitial');
-  if(UD.photoURL)profInit.innerHTML=`<img src="${UD.photoURL}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0">`;
-  else profInit.textContent=init;
-  document.getElementById('profileName').textContent=name;
-  document.getElementById('profileYear').textContent=YL[y]||'';
-  document.getElementById('profileXP').textContent=xp;
-  document.getElementById('profileLevel').textContent='Niveau '+lvl;
-  document.getElementById('levelMin').textContent='Niv. '+lvl;
-  document.getElementById('levelMax').textContent='Niv. '+(lvl+1);
-  const progEl=document.getElementById('levelProgress');
-  if(progEl)progEl.textContent=xp+' / '+prog.next+' XP';
-  const fill=document.getElementById('levelFill');
-  const cw=parseFloat(fill.style.width)||0;
-  if(cw===0){fill.style.transition='none';fill.style.width='0%';setTimeout(()=>{fill.style.transition='width .8s cubic-bezier(.4,0,.2,1)';fill.style.width=prog.pct+'%';},150);}
-  else{fill.style.transition='width .8s cubic-bezier(.4,0,.2,1)';fill.style.width=prog.pct+'%';}
+  
+  setText('sidebarName', name);
+  setText('sidebarYear', YL[y]||'');
+  setText('sidebarLvlLabel', 'Niv. '+lvl+' → Niv. '+(lvl+1));
+  setText('sidebarXpVal', xp+' XP');
+  const sbFill=byId('sidebarBarFill');
+  if(sbFill){
+    sbFill.style.transition='none';sbFill.style.width='0%';
+    setTimeout(()=>{sbFill.style.transition='width .8s cubic-bezier(.4,0,.2,1)';sbFill.style.width=prog.pct+'%';},150);
+  }
 }
 
 async function addXP(amount,reason){
@@ -1065,29 +1035,21 @@ async function addXP(amount,reason){
   UD.xp=(UD.xp||0)+amount;updateUI();showXPPopup('+'+amount+' XP — '+reason);
 }
 
-// ── NAVIGATION ──
 function navTo(view,el){
   const current=document.querySelector('.view.active');
   const next=document.getElementById('view-'+view);
   if(!next||current===next)return;
-
-  // Fade out current
   if(current){
     current.classList.add('leaving');
     setTimeout(()=>{current.classList.remove('active','leaving');},180);
   }
-
-  // Fade in next (slight delay)
   setTimeout(()=>{
     document.querySelectorAll('.view').forEach(v=>{if(v!==next)v.classList.remove('active');});
     next.classList.add('active');
   },current?160:0);
-
-  // Nav items
   document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
   if(el)el.classList.add('active');
-
-  // Topbar title
+  
   const titles={home:'Accueil',cours:'Cours',qcm:'QCM',examens:'Examens Passés',drive:'Drive Promo',rooms:'Salles d\'étude',classement:'Classement',avis:'Avis des Étudiants'};
   const titleEl=document.getElementById('topbarTitle');
   titleEl.style.opacity='0';
@@ -1097,7 +1059,6 @@ function navTo(view,el){
   if(window.innerWidth<=768)closeSidebar();
 }
 
-// ── SIDEBAR TOGGLE ──
 window.toggleSidebar=()=>{
   const sb=document.getElementById('sidebar');
   const ov=document.getElementById('sidebarOverlay');
@@ -1109,33 +1070,14 @@ window.closeSidebar=()=>{
   document.getElementById('sidebarOverlay').classList.add('hidden');
 };
 
-// ── YEAR SELECTOR ──
-function buildYearSelector(){
-  const g=document.getElementById('yearSelector');g.innerHTML='';
-  for(let y=1;y<=6;y++){
-    const cnt=allLessons.filter(l=>parseInt(l.year)===y).length;
-    const btn=document.createElement('button');btn.className='year-btn'+(CY===y?' active':'');
-    btn.innerHTML=`<div class="year-btn-num">${y}</div>${YL[y]}<span class="year-btn-count">${cnt}</span>`;
-    btn.onclick=()=>selectYear(y);
-    g.appendChild(btn);
-  }
-}
-
 function selectYear(y, silent=false){
   CY=y;
   const lbl=document.getElementById('sidebarYearLabel');
   if(lbl)lbl.textContent='📅 '+YL[y];
-  document.getElementById('coursTitle').textContent='📖 Cours — '+YL[y];
-  document.getElementById('qcmTitle').textContent='🧩 QCM — '+YL[y];
-  document.getElementById('examensTitle').textContent='📄 Examens — '+YL[y];
   renderCours(y);renderQCM(y);renderExams(y);renderDrive(y);buildDiscordChannels();
-  if(!silent){
-    navTo('cours',document.querySelector('.nav-item[data-view="cours"]'));
-    toast(YL[y]+' ✓');
-  }
+  if(!silent){navTo('cours',document.querySelector('.nav-item[data-view="cours"]')); toast(YL[y]+' ✓');}
 }
 
-// ── LISTENERS ──
 let _firstLoad=true;
 function startListeners(){
   db.collection('lessons').onSnapshot(snap=>{
@@ -1143,10 +1085,7 @@ function startListeners(){
     document.getElementById('statLessons').textContent=allLessons.length;
     if(CY)renderCours(CY);
     if(isAdmin)renderAdminLessons();
-    if(_firstLoad&&UD&&UD.year){
-      _firstLoad=false;
-      selectYear(parseInt(UD.year),true);
-    }
+    if(_firstLoad&&UD&&UD.year){ _firstLoad=false; selectYear(parseInt(UD.year),true); }
   });
   db.collection('qcm').onSnapshot(snap=>{
     allQCM=snap.docs.map(d=>({id:d.id,...d.data()}));
@@ -1162,7 +1101,6 @@ function startListeners(){
 async function loadStudentCount(){try{const s=await db.collection('users').get();document.getElementById('statStudents').textContent=s.size;}catch(e){}}
 async function loadDriveLinks(){try{const s=await db.collection('config').doc('driveLinks').get();if(s.exists)Object.assign(driveLinks,s.data());}catch(e){}}
 
-// ── COURS ──
 function renderCours(y){
   const yLessons=allLessons.filter(l=>parseInt(l.year)===y);
   const container=document.getElementById('coursContainer');
@@ -1173,13 +1111,13 @@ function renderCours(y){
   Object.entries(groups).forEach(([su,modules])=>{
     const block=document.createElement('div');block.className='sem-block';
     if(su.startsWith('Semestre')){
-      block.innerHTML=`<div class="sem-title">📅 ${su}</div>`;
+      block.innerHTML=`<div class="sem-title">${SVG_ICONS.semestre} ${su}</div>`;
       const mg=document.createElement('div');mg.className='modules-grid';
       Object.entries(modules).forEach(([mod,lessons])=>mg.appendChild(makeModuleCard(mod,lessons)));
       block.appendChild(mg);
     } else if(su.startsWith('Unité')){
       const ub=document.createElement('div');ub.className='unite-block';
-      ub.innerHTML=`<div class="unite-title">🔷 ${su}</div>`;
+      ub.innerHTML=`<div class="unite-title">${SVG_ICONS.module} ${su}</div>`;
       const mg=document.createElement('div');mg.className='modules-grid';
       Object.entries(modules).forEach(([mod,lessons])=>mg.appendChild(makeModuleCard(mod,lessons)));
       ub.appendChild(mg);block.appendChild(ub);
@@ -1191,13 +1129,15 @@ function renderCours(y){
     container.appendChild(block);
   });
 }
+
 function makeModuleCard(mod,lessons){
   const c=document.createElement('div');c.className='module-card';
-  c.innerHTML=`<div class="module-emoji">📚</div><div class="module-info"><h3>${mod}</h3><span>${lessons.length} cours</span></div>`;
+  c.innerHTML=`<div class="module-emoji">${SVG_ICONS.module}</div><div class="module-info"><h3>${mod}</h3><span>${lessons.length} cours</span></div>`;
   c.onclick=()=>openLessons(mod,lessons);return c;
 }
+
 function openLessons(mod,lessons){
-  document.getElementById('lessonsPanelTitle').textContent='📚 '+mod;
+  document.getElementById('lessonsPanelTitle').innerHTML=`${SVG_ICONS.module} ${mod}`;
   const ll=document.getElementById('lessonsList');ll.innerHTML='';
   lessons.forEach((l,i)=>{
     const d=document.createElement('div');d.className='lesson-item';
@@ -1211,7 +1151,6 @@ function openLessons(mod,lessons){
 }
 window.closePanel=()=>document.getElementById('lessonsPanel').classList.add('hidden');
 
-// ── QCM ──
 function renderQCM(y){
   const container=document.getElementById('qcmContainer');
   const yQCM=allQCM.filter(q=>parseInt(q.year)===y);
@@ -1221,6 +1160,7 @@ function renderQCM(y){
   renderQCMList(yQCM);
   window.filterQCM=(mod,btn)=>{document.querySelectorAll('.qcm-filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderQCMList(mod==='all'?yQCM:yQCM.filter(q=>q.module===mod));};
 }
+
 function renderQCMList(qcms){
   const list=document.getElementById('qcmList');if(!list)return;
   const total=qcms.length;
@@ -1269,7 +1209,6 @@ window.submitQCM=(qid,correct,total)=>{
   const res=document.getElementById('res-'+qid);res.classList.remove('hidden');
   if(ok){res.className='qcm-result ok';res.textContent='✅ Bonne réponse !';addXP(30,'QCM réussi 🧩');}
   else{res.className='qcm-result ko';res.textContent='❌ Incorrecte — Réponse(s): '+correct.join(', ');}
-  // Update progress bar
   window._qcmAnswered=(window._qcmAnswered||0)+1;
   const t=total||window._qcmTotal||1;
   const pct=Math.round((window._qcmAnswered/t)*100);
@@ -1282,7 +1221,6 @@ window.submitQCM=(qid,correct,total)=>{
   if(window._qcmAnswered===t)setTimeout(()=>toast('🎉 QCM terminé ! '+pct+'% complété'),400);
 };
 
-// ── EXAMS ──
 function renderExams(y){
   const container=document.getElementById('examsContainer');
   const yExams=allExams.filter(e=>parseInt(e.year)===y);
@@ -1292,7 +1230,7 @@ function renderExams(y){
   container.innerHTML='';
   Object.entries(promos).sort((a,b)=>b[0].localeCompare(a[0])).forEach(([promo,unites])=>{
     const pb=document.createElement('div');pb.className='promo-block';
-    pb.innerHTML=`<div class="promo-title">🎓 ${promo}</div>`;
+    pb.innerHTML=`<div class="promo-title"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="prg" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M26 10L6 20l20 10 20-10z" fill="url(#prg)" opacity=".15"/><path d="M26 10L6 20l20 10 20-10z" stroke="url(#prg)" stroke-width="2.2" stroke-linejoin="round" fill="none"/><path d="M14 25v10c0 4 5.4 7 12 7s12-3 12-7V25" stroke="url(#prg)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="46" y1="20" x2="46" y2="32" stroke="url(#prg)" stroke-width="2.2" stroke-linecap="round"/><circle cx="46" cy="33" r="2.5" fill="url(#prg)"/></svg> ${promo}</div>`;
     Object.entries(unites).forEach(([unite,exams])=>{
       const ub=document.createElement('div');ub.className='unite-exam-block';
       if(unite!=='__none__')ub.innerHTML=`<div class="unite-exam-title">🔷 ${unite}</div>`;
@@ -1301,7 +1239,7 @@ function renderExams(y){
         const fileId=extractDriveId(e.link||'');
         const dlUrl=fileId?`https://drive.google.com/uc?export=download&id=${fileId}`:e.link;
         const item=document.createElement('div');item.className='exam-item';
-        item.innerHTML=`<div class="exam-module-name">📄 ${e.module}</div>${hasLink?`<a class="exam-dl" href="${dlUrl}" target="_blank" onclick="addXP(15,'Examen téléchargé 📄')">⬇ Télécharger</a><button class="exam-dl" style="margin-left:.3rem" onclick="openPDF('${e.module}','${e.link}')">👁 Voir</button>`:'<span class="exam-dl disabled">Bientôt</span>'}`;
+        item.innerHTML=`<div class="exam-module-name">${SVG_ICONS.module} ${e.module}</div>${hasLink?`<a class="exam-dl" href="${dlUrl}" target="_blank" onclick="addXP(15,'Examen téléchargé 📄')">⬇ Télécharger</a><button class="exam-dl" style="margin-left:.3rem" onclick="openPDF('${e.module}','${e.link}')">👁 Voir</button>`:'<span class="exam-dl disabled">Bientôt</span>'}`;
         ub.appendChild(item);
       });
       pb.appendChild(ub);
@@ -1310,13 +1248,11 @@ function renderExams(y){
   });
 }
 
-// ── DRIVE ──
 function renderDrive(y){
   const link=driveLinks[y]||'#',has=link&&link!=='#';
-  document.getElementById('driveGrid').innerHTML=`<div class="drive-box"><div class="drive-big-icon">☁️</div><h3>Drive — ${YL[y]}</h3><p>Tous les fichiers partagés : cours PDF, fiches, vidéos, examens corrigés.</p>${has?`<a class="drive-btn" href="${link}" target="_blank">📂 Ouvrir le Drive</a>`:`<div class="drive-btn disabled">🔒 Bientôt disponible</div><div class="drive-coming">Le lien sera ajouté prochainement</div>`}</div>`;
+  document.getElementById('driveGrid').innerHTML=`<div class="drive-box"><div class="drive-big-icon"><svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="n5z" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" fill="url(#n5z)" opacity=".12"/><path d="M36 32H16a8 8 0 010-16 7.97 7.97 0 017.4 4.98A7 7 0 1136 32z" stroke="url(#n5z)" stroke-width="2.2" fill="none"/><line x1="26" y1="39" x2="26" y2="25" stroke="url(#n5z)" stroke-width="2.2" stroke-linecap="round"/><path d="M21 30l5-5 5 5" stroke="url(#n5z)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="20" y1="39" x2="32" y2="39" stroke="url(#n5z)" stroke-width="2.2" stroke-linecap="round"/></svg></div><h3>Drive — ${YL[y]}</h3><p>Tous les fichiers partagés : cours PDF, fiches, vidéos, examens corrigés.</p>${has?`<a class="drive-btn" href="${link}" target="_blank">📂 Ouvrir le Drive</a>`:`<div class="drive-btn disabled">🔒 Bientôt disponible</div><div class="drive-coming">Le lien sera ajouté prochainement</div>`}</div>`;
 }
 
-// ── PDF ──
 function openPDF(name,link){
   const fileId=extractDriveId(link);
   document.getElementById('pdfTitle').textContent=name;
@@ -1327,7 +1263,6 @@ function openPDF(name,link){
 window.openPDF=openPDF;
 window.closePDF=()=>{document.getElementById('pdfOverlay').classList.add('hidden');document.getElementById('pdfFrame').src='';};
 
-// ── LEADERBOARD ──
 async function loadLB(mode){
   const list=document.getElementById('lbList');
   list.innerHTML='<div class="lb-loading">Chargement...</div>';
@@ -1353,8 +1288,7 @@ async function loadLB(mode){
 }
 window.switchLB=(mode,btn)=>{document.querySelectorAll('.lb-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');loadLB(mode);};
 
-// ── ROOMS (Permanent per year + General chat) ──
-// Permanent room IDs: "year-1" through "year-6", general: "general"
+// ── DISCORD / ROOMS ──
 let currentRoomId=null,currentChatChannel=null;
 let chatListener=null,membersListener=null,roomsListener=null;
 let agoraClient=null,localAudioTrack=null,micOn=true;
@@ -1364,15 +1298,13 @@ function buildDiscordChannels(){
   const channels=document.getElementById('discordChannels');
   if(!channels)return;channels.innerHTML='';
 
-  // General chat
   const genCat=makeDCCat('💬 Chat Général');channels.appendChild(genCat);
-  const genCh=makeDCChannel('#','général',false,()=>openRoomChat('general','💬 Chat Général',null));
+  const genCh=makeDCChannel(SVG_ICONS.chatMsg,'général',false,()=>openRoomChat('general','💬 Chat Général',null));
   channels.appendChild(genCh);
 
-  // Per year permanent voice rooms
   const voiceCat=makeDCCat('🎙️ Salles Vocales');channels.appendChild(voiceCat);
   for(let y=1;y<=6;y++){
-    const ch=makeDCChannel('🔊','Salle '+YL[y],false,()=>joinPermanentRoom(y));
+    const ch=makeDCChannel(SVG_ICONS.micOn,'Salle '+YL[y],false,()=>joinPermanentRoom(y));
     ch.id='dc-room-'+y;channels.appendChild(ch);
   }
 }
@@ -1383,9 +1315,7 @@ function makeDCChannel(icon,name,active,fn){
   d.onclick=fn;return d;
 }
 
-// ── OPEN CHAT ──
 function openRoomChat(channelId,title,year){
-  // Mark active
   document.querySelectorAll('.dc-channel').forEach(c=>c.classList.remove('active'));
   const content=document.getElementById('discordContent');
   content.style.cssText='flex:1;display:flex;flex-direction:column;overflow:hidden';
@@ -1417,6 +1347,7 @@ function openRoomChat(channelId,title,year){
       box.scrollTop=box.scrollHeight;
     });
 }
+
 function sendChat(){
   const input=document.getElementById('chatInput');if(!input)return;
   const text=input.value.trim();if(!text)return;input.value='';
@@ -1424,15 +1355,12 @@ function sendChat(){
 }
 window.sendChat=sendChat;
 
-// ── PERMANENT VOICE ROOMS ──
 async function joinPermanentRoom(year){
-  if(currentRoomId===`year-${year}`)return; // already in
+  if(currentRoomId===`year-${year}`)return; 
   if(currentRoomId)await leaveRoom(true);
   const roomId=`year-${year}`;currentRoomId=roomId;micOn=true;
-  // Set active channel visual
   document.querySelectorAll('.dc-channel').forEach(c=>c.classList.remove('active'));
   const chEl=document.getElementById('dc-room-'+year);if(chEl)chEl.classList.add('active');
-  // Join Agora
   try{
     agoraClient=AgoraRTC.createClient({mode:'rtc',codec:'vp8'});
     await agoraClient.join(AGORA_APP_ID,roomId,null,CU.uid);
@@ -1440,10 +1368,8 @@ async function joinPermanentRoom(year){
     await agoraClient.publish([localAudioTrack]);
     agoraClient.on('user-published',async(u,mt)=>{if(mt==='audio'){await agoraClient.subscribe(u,mt);u.audioTrack.play();}});
   }catch(e){toast('Micro: '+e.message);}
-  // Add to members in Firestore
   await db.collection('rooms').doc(roomId).set({year,name:YL[year],active:true},{merge:true});
   await db.collection('rooms').doc(roomId).update({[`members.${CU.uid}`]:{name:UD.name||'Anonyme',photoURL:UD.photoURL||null,uid:CU.uid,joinedAt:Date.now()}});
-  // Open the voice room view + chat
   renderVoiceRoomView(roomId,year);
   toast('🎙️ Connecté — '+YL[year]);
 }
@@ -1474,7 +1400,6 @@ function renderVoiceRoomView(roomId,year){
       </div>
     </div>`;
   currentChatChannel=roomId;
-  // Members listener
   if(membersListener){membersListener();membersListener=null;}
   membersListener=db.collection('rooms').doc(roomId).onSnapshot(snap=>{
     if(!snap.exists)return;
@@ -1482,7 +1407,6 @@ function renderVoiceRoomView(roomId,year){
     const ml=document.getElementById('voiceMembers');if(!ml)return;
     const cnt=Object.keys(members).length;
     ml.innerHTML='';
-    // Update sidebar count
     const cntEl=document.getElementById('dc-room-'+year)?.querySelector('.dc-channel-count');
     if(cntEl)cntEl.textContent=cnt>0?cnt:'';
     Object.entries(members).forEach(([uid,m])=>{
@@ -1494,7 +1418,6 @@ function renderVoiceRoomView(roomId,year){
       ml.appendChild(d);
     });
   });
-  // Chat listener
   if(chatListener){chatListener();chatListener=null;}
   chatListener=db.collection('channels').doc(roomId).collection('messages')
     .orderBy('ts','asc').limitToLast(60).onSnapshot(snap=>{
@@ -1522,7 +1445,7 @@ window.leaveRoom=async(silent=false)=>{
   localAudioTrack=null;agoraClient=null;
   document.querySelectorAll('.dc-channel').forEach(c=>c.classList.remove('active'));
   const content=document.getElementById('discordContent');
-  if(content&&!silent)content.innerHTML=`<div class="dc-empty"><div class="dc-empty-icon">🎙️</div><div class="dc-empty-text">Salle quittée</div></div>`;
+  if(content&&!silent)content.innerHTML=`<div class="dc-empty"><div class="dc-empty-icon"><svg viewBox="0 0 52 52" fill="none"><rect x="19" y="7" width="14" height="22" rx="7" stroke="var(--muted)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="var(--muted)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="var(--muted)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="var(--muted)" stroke-width="2.2" stroke-linecap="round"/></svg></div><div class="dc-empty-text">Salle quittée</div></div>`;
   if(!silent)toast('Salle quittée');
 };
 
@@ -1533,7 +1456,6 @@ window.toggleMic=async()=>{
   if(btn){btn.className='btn-mic '+(micOn?'on':'off');btn.textContent=micOn?'🎙️ ON':'🔇 OFF';}
 };
 
-// ── ADMIN MODERATION ──
 let _modTarget=null;
 window.openModMenu=(uid,name)=>{
   _modTarget={uid,name};
@@ -1573,11 +1495,9 @@ window.deleteMsg=async(channelId,msgId)=>{
   toast('Message supprimé 🗑');
 };
 
-// ── HELPERS ──
 function fmtTime(ts){if(!ts)return'';const d=new Date(ts);return d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}
 function escHtml(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
-// ── PRESENCE ──
 function startPresence(){
   if(!CU)return;
   const ref=db.collection('users').doc(CU.uid);
@@ -1588,7 +1508,6 @@ function startPresence(){
   window.addEventListener('beforeunload',setOff);
 }
 
-// ── AVIS ──
 window.setStars=(n)=>{
   selectedStars=n;
   document.querySelectorAll('.star-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.v)<=n));
@@ -1620,15 +1539,6 @@ window.submitAvis=async()=>{
   }catch(e){toast('Erreur: '+e.message);}
 };
 
-// ── EDIT NAME ──
-window.openEditName=()=>{document.getElementById('newNameInput').value=UD.name||'';document.getElementById('editNameModal').classList.remove('hidden');setTimeout(()=>document.getElementById('newNameInput').focus(),100);};
-window.saveName=async()=>{
-  const name=document.getElementById('newNameInput').value.trim();if(!name){toast('Nom invalide');return;}
-  try{await db.collection('users').doc(CU.uid).update({name});UD.name=name;updateUI();document.getElementById('editNameModal').classList.add('hidden');toast('Nom mis à jour ✓');}
-  catch(e){toast('Erreur: '+e.message);}
-};
-
-// ── CLOUDINARY PDF UPLOAD ──
 async function uploadPDFToCloudinary(target='cours'){
   const inputId = target==='exam' ? 'pdfUploadInputExam' : 'pdfUploadInput';
   const btnId   = target==='exam' ? 'pdfUploadBtnExam'   : 'pdfUploadBtn';
@@ -1650,7 +1560,7 @@ async function uploadPDFToCloudinary(target='cours'){
   try {
     const fd = new FormData();
     fd.append('file', file);
-    fd.append('upload_preset', 'medx_avatars'); // même preset — Cloudinary accepte PDF aussi
+    fd.append('upload_preset', 'medx_avatars'); 
     fd.append('resource_type', 'raw');
     fd.append('folder', 'medx_pdfs');
 
@@ -1665,7 +1575,7 @@ async function uploadPDFToCloudinary(target='cours'){
       stat.style.color = 'var(--green)';
       stat.textContent = '✅ '+file.name+' uploadé !';
       btn.textContent = '✅ Uploadé';
-      toast('✅ PDF uploadé avec succès !');
+      toast('✅ PDF uploadé مع succès !');
     } else {
       throw new Error(data.error?.message || 'Erreur Cloudinary');
     }
@@ -1677,9 +1587,7 @@ async function uploadPDFToCloudinary(target='cours'){
   }
 }
 
-// ── CSV IMPORT ──
 let _csvParsed=[];
-
 function downloadQCMTemplate(){
   const header='year,unite,module,lesson,question,choiceA,choiceB,choiceC,choiceD,choiceE,correct';
   const example='2,Unité 1,Immunologie,Introduction,Quel est le rôle des lymphocytes T ?,Phagocytose,Immunité cellulaire,Production d\'anticorps,Activation du complément,Aucun rôle,B';
@@ -1689,7 +1597,6 @@ function downloadQCMTemplate(){
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download='template_qcm_medx.csv';a.click();
 }
-
 function parseCSVLine(line){
   const result=[];let cur='';let inQ=false;
   for(let i=0;i<line.length;i++){
@@ -1701,7 +1608,6 @@ function parseCSVLine(line){
   result.push(cur.trim());
   return result;
 }
-
 function importCSV(){
   const file=document.getElementById('csvFileInput').files[0];
   if(!file)return;
@@ -1750,13 +1656,11 @@ function importCSV(){
   };
   reader.readAsText(file,'UTF-8');
 }
-
 async function confirmCSVImport(){
   if(!_csvParsed.length)return;
   const btn=document.getElementById('csvConfirmBtn');
   btn.disabled=true;btn.textContent='⏳ Import en cours...';
   let ok=0,fail=0;
-  // Batch par 500 (limite Firestore)
   const batches=[];
   for(let i=0;i<_csvParsed.length;i+=400){batches.push(_csvParsed.slice(i,i+400));}
   for(const batch of batches){
@@ -1774,6 +1678,7 @@ async function confirmCSVImport(){
     _csvParsed=[];
   },2000);
 }
+
 window.openAdmin=()=>{if(!isAdmin)return;document.getElementById('adminOverlay').classList.remove('hidden');renderAdminLessons();renderAdminQCM();renderAdminExams();renderAdminDrive();};
 window.closeAdmin=()=>document.getElementById('adminOverlay').classList.add('hidden');
 window.setAdminTab=(tab,btn)=>{
@@ -1844,7 +1749,6 @@ window.saveDrive=async(y)=>{
   catch(e){toast('Erreur: '+e.message);}
 };
 
-// ── AVATAR ──
 const CLOUDINARY_CLOUD='dfbsprbwy',CLOUDINARY_PRESET='medx_avatars';
 window.uploadAvatar=async(input)=>{
   if(!input.files||!input.files[0])return;
