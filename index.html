@@ -2377,6 +2377,17 @@ window.uploadAvatar=async(input)=>{
   }catch(e){toast('Erreur: '+e.message);}
   finally{input.value='';}
 };
+/* Cookies banner */
+window.acceptCookies=function(){
+  try{localStorage.setItem('medx_cookies','1');}catch(e){}
+  document.getElementById('cookieBanner').style.display='none';
+};
+function checkCookieBanner(){
+  let accepted=false;
+  try{accepted=localStorage.getItem('medx_cookies')==='1';}catch(e){}
+  if(!accepted) document.getElementById('cookieBanner').style.display='flex';
+}
+setTimeout(checkCookieBanner,1500);
 </script>
 
 <!-- Legal Modals -->
@@ -2391,7 +2402,7 @@ window.uploadAvatar=async(input)=>{
 </div>
 
 <!-- Cookies Banner -->
-<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:600;background:var(--surface2);border-top:1px solid var(--border2);padding:.8rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:600;background:var(--surface2);border-top:1px solid var(--border2);padding:.8rem 1.2rem;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
   <div style="font-size:.78rem;color:var(--muted);flex:1">
     MEDX utilise Firebase (Google) pour l'authentification et le stockage des données. En continuant, vous acceptez notre 
     <button onclick="openLegal('pc')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:.78rem;text-decoration:underline">politique de confidentialité</button>.
