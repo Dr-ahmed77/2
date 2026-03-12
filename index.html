@@ -2166,9 +2166,13 @@ window.finalizeExam=async()=>{
 
 window.cancelExamBuild=async()=>{
   if(_examBuildId&&confirm("Supprimer cet examen ?")){
-    const items=await db.collection('exams').doc(_examBuildId).collection('items').get();
+    const examId=_examBuildId;
+    const items=await db.collection('exams').doc(examId).collection('items').get();
     for(const d of items.docs) await d.ref.delete();
-    await db.collection('exams').doc(_examBuildId).delete();
+    await db.collection('exams').doc(examId).delete();
+    allExams=allExams.filter(e=>e.id!==examId);
+    if(CY)renderExams(CY);
+    renderAdminExams();
     toast('Examen supprimé');
   }
   _examBuildId=null;_examBuildItems=[];
@@ -2347,6 +2351,9 @@ window.delExamFull=async(id)=>{
   const items=await db.collection('exams').doc(id).collection('items').get();
   for(const d of items.docs) await d.ref.delete();
   await db.collection('exams').doc(id).delete();
+  allExams=allExams.filter(e=>e.id!==id);
+  if(CY)renderExams(CY);
+  renderAdminExams();
   toast('Examen supprimé ✓');
 };
 function renderAdminDrive(){
@@ -2478,4 +2485,5 @@ setTimeout(checkCookieBanner,3000);
 </div>
 
 </body>
+</html>
 </html>
