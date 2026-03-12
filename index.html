@@ -2378,7 +2378,69 @@ window.uploadAvatar=async(input)=>{
   }catch(e){toast('Erreur: '+e.message);}
   finally{input.value='';}
 };
-/* Cookies banner */
+/* ---- Legal Modals ---- */
+const LEGAL_CONTENT={
+  ml:{title:'Mentions légales',body:`
+    <h3>Éditeur du site</h3>
+    <p>Le site MEDX est édité par <strong>Ahmed Khadar</strong>, étudiant en médecine.<br>Contact : <a href="mailto:khadar77ahmed@gmail.com">khadar77ahmed@gmail.com</a></p>
+    <h3>Hébergement</h3>
+    <p>Le site est hébergé par <strong>GitHub Pages</strong> (GitHub, Inc. — 88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis).</p>
+    <h3>Propriété intellectuelle</h3>
+    <p>Le code source et le design de MEDX sont la propriété d'Ahmed Khadar. Les contenus pédagogiques sont mis à disposition à titre éducatif pour les étudiants en médecine algériens. Tout usage commercial est interdit sans autorisation.</p>
+    <h3>Responsabilité</h3>
+    <p>MEDX est une plateforme éducative complémentaire. Elle ne remplace pas les cours officiels ni les avis médicaux.</p>`},
+  pc:{title:'Politique de confidentialité',body:`
+    <h3>Données collectées</h3>
+    <p>MEDX collecte : nom d'affichage, email, année d'études, photo de profil (optionnelle), XP, progression, scores QCM.</p>
+    <h3>Finalité</h3>
+    <p>Ces données sont utilisées uniquement pour faire fonctionner la plateforme. Elles ne sont ni vendues ni partagées avec des tiers.</p>
+    <h3>Hébergement des données</h3>
+    <p>Les données sont stockées sur <strong>Firebase (Google LLC)</strong>, conforme au RGPD.</p>
+    <h3>Vos droits</h3>
+    <p>Vous pouvez accéder, modifier ou supprimer vos données depuis le menu latéral.<br>Contact : <a href="mailto:khadar77ahmed@gmail.com">khadar77ahmed@gmail.com</a></p>
+    <h3>Cookies</h3>
+    <p>Firebase utilise des cookies techniques nécessaires à l'authentification. Aucun cookie publicitaire n'est utilisé.</p>`},
+  cgu:{title:"Conditions Générales d'Utilisation",body:`
+    <h3>Accès à la plateforme</h3>
+    <p>MEDX est destiné exclusivement aux étudiants en médecine algériens. L'accès est gratuit et réservé à un usage personnel et éducatif.</p>
+    <h3>Comportement dans le Chat et les Salles</h3>
+    <p>Il est interdit de publier des contenus offensants, de faire du spam ou de partager des informations personnelles d'autres utilisateurs. Tout manquement peut entraîner la suspension du compte.</p>
+    <h3>Contenu</h3>
+    <p>Les contenus pédagogiques sont fournis à titre éducatif. MEDX ne garantit pas leur exhaustivité ou leur exactitude.</p>
+    <h3>Contact</h3>
+    <p><a href="mailto:khadar77ahmed@gmail.com">khadar77ahmed@gmail.com</a></p>`}
+};
+
+window.openLegal=function(type){
+  const data=LEGAL_CONTENT[type];if(!data)return;
+  document.getElementById('legalTitle').textContent=data.title;
+  document.getElementById('legalBody').innerHTML=data.body;
+  document.getElementById('legalOverlay').classList.remove('hidden');
+};
+window.closeLegal=function(){
+  document.getElementById('legalOverlay').classList.add('hidden');
+};
+window.toggleDeleteConfirm=function(){
+  const box=document.getElementById('deleteConfirmBox');
+  box.classList.toggle('show');
+  if(box.classList.contains('show')){
+    document.getElementById('deleteConfirmInput').value='';
+    document.getElementById('deleteConfirmInput').focus();
+  }
+};
+window.confirmDeleteAccount=async function(){
+  const val=document.getElementById('deleteConfirmInput').value.trim();
+  if(val!=='SUPPRIMER'){toast('Tape exactement SUPPRIMER');return;}
+  if(!CU)return;
+  try{
+    await db.collection('users').doc(CU.uid).delete();
+    await CU.delete();
+    toast('Compte supprimé.');
+  }catch(e){
+    if(e.code==='auth/requires-recent-login'){toast('Reconnecte-toi puis réessaie.');auth.signOut();}
+    else toast('Erreur : '+e.message);
+  }
+};
 window.acceptCookies=function(){
   try{localStorage.setItem('medx_cookies','1');}catch(e){}
   const b=document.getElementById('cookieBanner');
