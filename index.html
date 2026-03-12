@@ -593,6 +593,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .admin-exam-q-num{color:var(--accent);font-weight:700;min-width:24px}
 .admin-img-preview{max-width:120px;max-height:80px;border-radius:6px;object-fit:cover;border:1px solid var(--border)}
 
+#cookieBanner{display:none}#cookieBanner.cookie-show{display:flex}
 </style>
 </head>
 <body>
@@ -2380,14 +2381,18 @@ window.uploadAvatar=async(input)=>{
 /* Cookies banner */
 window.acceptCookies=function(){
   try{localStorage.setItem('medx_cookies','1');}catch(e){}
-  document.getElementById('cookieBanner').style.display='none';
+  const b=document.getElementById('cookieBanner');
+  b.classList.remove('cookie-show');b.classList.add('cookie-hidden');
 };
 function checkCookieBanner(){
   let accepted=false;
   try{accepted=localStorage.getItem('medx_cookies')==='1';}catch(e){}
-  if(!accepted) document.getElementById('cookieBanner').style.display='flex';
+  if(!accepted){
+    const b=document.getElementById('cookieBanner');
+    b.classList.remove('cookie-hidden');b.classList.add('cookie-show');
+  }
 }
-setTimeout(checkCookieBanner,1500);
+setTimeout(checkCookieBanner,3000);
 </script>
 
 <!-- Legal Modals -->
@@ -2402,7 +2407,7 @@ setTimeout(checkCookieBanner,1500);
 </div>
 
 <!-- Cookies Banner -->
-<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:600;background:var(--surface2);border-top:1px solid var(--border2);padding:.8rem 1.2rem;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+<div id="cookieBanner" class="cookie-hidden" style="position:fixed;bottom:0;left:0;right:0;z-index:600;background:var(--surface2);border-top:1px solid var(--border2);padding:.8rem 1.2rem;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
   <div style="font-size:.78rem;color:var(--muted);flex:1">
     MEDX utilise Firebase (Google) pour l'authentification et le stockage des données. En continuant, vous acceptez notre 
     <button onclick="openLegal('pc')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:.78rem;text-decoration:underline">politique de confidentialité</button>.
