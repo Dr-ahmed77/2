@@ -594,13 +594,16 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .admin-exam-q-num{color:var(--accent);font-weight:700;min-width:24px}
 .admin-img-preview{max-width:120px;max-height:80px;border-radius:6px;object-fit:cover;border:1px solid var(--border)}
 
-/* ---- DNA Hero ---- */
-.dna-hero{position:relative;width:100%;height:200px;border-radius:var(--r);overflow:hidden;margin-bottom:1.5rem;background:linear-gradient(135deg,rgba(30,64,175,.15) 0%,rgba(99,102,241,.1) 50%,rgba(59,130,246,.05) 100%);border:1px solid rgba(99,102,241,.15)}
-#dnaCanvas{position:absolute;inset:0;width:100%;height:100%}
-.dna-hero-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;z-index:2}
-.dna-hero-title{font-family:var(--ff);font-size:1.3rem;font-weight:900;background:linear-gradient(135deg,#93c5fd,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem}
-.dna-hero-sub{font-size:.78rem;color:var(--muted);letter-spacing:.05em}
-@media(max-width:480px){.dna-hero{height:150px}.dna-hero-title{font-size:1rem}}
+/* ---- Heart Hero ---- */
+.dna-hero{position:relative;width:100%;height:180px;border-radius:var(--r);overflow:hidden;margin-bottom:1.5rem;background:linear-gradient(135deg,rgba(15,23,42,1) 0%,rgba(30,41,59,.95) 60%,rgba(15,23,42,1) 100%);border:1px solid rgba(99,102,241,.2);display:flex;align-items:center;padding:0 1.5rem;gap:1rem}
+.dna-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(239,68,68,.08) 0%,transparent 70%)}
+#dnaCanvas{position:absolute;right:0;top:0;width:50%;height:100%;pointer-events:none}
+.dna-hero-text{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;gap:.3rem}
+.dna-hero-greeting{font-size:.75rem;font-weight:600;color:rgba(239,68,68,.8);letter-spacing:.08em;text-transform:uppercase}
+.dna-hero-title{font-family:var(--ff);font-size:1.25rem;font-weight:900;background:linear-gradient(135deg,#f1f5f9,#93c5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2}
+.dna-hero-sub{font-size:.75rem;color:var(--muted)}
+.dna-hero-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.65rem;font-weight:600;color:rgba(99,102,241,.9);background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);border-radius:100px;padding:2px 10px;width:fit-content;margin-top:.2rem}
+@media(max-width:480px){.dna-hero{height:150px;padding:0 1rem}.dna-hero-title{font-size:1rem}#dnaCanvas{width:45%}}
 
 #cookieBanner{display:none}#cookieBanner.cookie-show{display:flex}
 </style>
@@ -933,13 +936,15 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
       <div class="content-area">
 
         <div class="view active" id="view-home">
-          <!-- DNA Hero -->
+          <!-- Heart Hero -->
           <div class="dna-hero">
-            <canvas id="dnaCanvas"></canvas>
             <div class="dna-hero-text">
+              <div class="dna-hero-greeting" id="heroGreeting">Bonjour 👋</div>
               <div class="dna-hero-title">Bienvenue sur MEDX</div>
               <div class="dna-hero-sub">Votre plateforme médicale algérienne</div>
+              <div class="dna-hero-badge">🇩🇿 Pour les étudiants algériens</div>
             </div>
+            <canvas id="dnaCanvas"></canvas>
           </div>
           <div class="home-stats afu">
             <div class="stat-card">
@@ -2449,103 +2454,96 @@ window.uploadAvatar=async(input)=>{
   }catch(e){toast('Erreur: '+e.message);}
   finally{input.value='';}
 };
-/* ---- DNA Helix Animation ---- */
+/* ---- Heart Animation ---- */
 (function(){
-  function initDNA(){
+  function initHeart(){
     const canvas=document.getElementById('dnaCanvas');
     if(!canvas)return;
     const ctx=canvas.getContext('2d');
-    let W,H,animId;
-
+    let W,H,animId,frame=0;
     function resize(){
       W=canvas.offsetWidth;H=canvas.offsetHeight;
-      canvas.width=W*devicePixelRatio;canvas.height=H*devicePixelRatio;
-      ctx.scale(devicePixelRatio,devicePixelRatio);
+      canvas.width=W*window.devicePixelRatio;canvas.height=H*window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio,window.devicePixelRatio);
     }
-    resize();
-    window.addEventListener('resize',resize);
-
-    const PAIRS=28,SPEED=0.012;
-    let t=0;
-
-    // Base pair colors — medical palette
-    const COLORS=[
-      ['#3b82f6','#6366f1'],['#818cf8','#38bdf8'],
-      ['#6366f1','#3b82f6'],['#38bdf8','#818cf8']
-    ];
-
+    resize();window.addEventListener('resize',resize);
+    function hx(t){return 16*Math.pow(Math.sin(t),3);}
+    function hy(t){return -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));}
+    function ecgVal(x){
+      if(x<0.3)return 0;if(x<0.35)return(x-0.3)/0.05*0.3;
+      if(x<0.42)return 0.3+(x-0.35)/0.07*(-0.2);
+      if(x<0.48)return 0.1+(x-0.42)/0.06*2.2;
+      if(x<0.52)return 2.3-(x-0.48)/0.04*2.8;
+      if(x<0.56)return-0.5+(x-0.52)/0.04*0.8;
+      if(x<0.62)return 0.3+(x-0.56)/0.06*0.4;
+      if(x<0.68)return 0.7-(x-0.62)/0.06*0.7;
+      return 0;
+    }
+    const parts=Array.from({length:18},()=>({a:Math.random()*Math.PI*2,r:0.55+Math.random()*0.5,sp:0.007+Math.random()*0.01,sz:1+Math.random()*2}));
     function draw(){
-      ctx.clearRect(0,0,W,H);
-      const cx=W/2,amp=W*0.28,yStep=H/(PAIRS-1);
-
-      // Draw backbones first (behind rungs)
-      ctx.lineWidth=2.5;
-      ctx.lineCap='round';
-
-      for(let side=0;side<2;side++){
+      ctx.clearRect(0,0,W,H);frame++;
+      const cx=W*0.5,cy=H*0.47;
+      const pulse=1+0.07*Math.max(0,Math.sin(frame*0.09));
+      const sc=Math.min(W,H)*0.027*pulse;
+      // Glow bg
+      const g=ctx.createRadialGradient(cx,cy,0,cx,cy,H*0.55);
+      g.addColorStop(0,'rgba(239,68,68,0.1)');g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+      // Heart shape helper
+      function drawHeart(){
         ctx.beginPath();
-        for(let i=0;i<PAIRS;i++){
-          const angle=t+i*(Math.PI*2/PAIRS)+(side===1?Math.PI:0);
-          const x=cx+Math.cos(angle)*amp;
-          const y=i*yStep;
-          if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-        }
-        const grad=ctx.createLinearGradient(cx-amp,0,cx+amp,H);
-        grad.addColorStop(0,'rgba(59,130,246,0.6)');
-        grad.addColorStop(0.5,'rgba(99,102,241,0.8)');
-        grad.addColorStop(1,'rgba(56,189,248,0.6)');
-        ctx.strokeStyle=grad;
-        ctx.stroke();
+        for(let i=0;i<=360;i++){const r=i*Math.PI/180;i===0?ctx.moveTo(hx(r),hy(r)):ctx.lineTo(hx(r),hy(r));}
+        ctx.closePath();
       }
-
-      // Draw rungs (base pairs)
-      for(let i=0;i<PAIRS;i++){
-        const angle=t+i*(Math.PI*2/PAIRS);
-        const x1=cx+Math.cos(angle)*amp;
-        const x2=cx+Math.cos(angle+Math.PI)*amp;
-        const y=i*yStep;
-        const depth=Math.sin(angle); // -1 to 1 for 3D feel
-        const alpha=0.3+Math.abs(depth)*0.6;
-        const col=COLORS[i%COLORS.length];
-
-        // Rung line
-        const rg=ctx.createLinearGradient(x1,y,x2,y);
-        rg.addColorStop(0,col[0]+'cc');
-        rg.addColorStop(0.5,'rgba(255,255,255,'+alpha*0.4+')');
-        rg.addColorStop(1,col[1]+'cc');
-        ctx.beginPath();ctx.moveTo(x1,y);ctx.lineTo(x2,y);
-        ctx.lineWidth=1.5+Math.abs(depth);
-        ctx.strokeStyle=rg;ctx.stroke();
-
-        // Node dots
-        const r=3+Math.abs(depth)*2;
-        [[x1,col[0]],[x2,col[1]]].forEach(([x,c])=>{
-          ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);
-          ctx.fillStyle=c;ctx.globalAlpha=0.5+Math.abs(depth)*0.5;
-          ctx.fill();ctx.globalAlpha=1;
-        });
+      // Shadow
+      ctx.save();ctx.translate(cx,cy+5);ctx.scale(sc,sc);drawHeart();
+      ctx.fillStyle='rgba(239,68,68,0.12)';ctx.fill();ctx.restore();
+      // Main heart
+      ctx.save();ctx.translate(cx,cy);ctx.scale(sc,sc);drawHeart();
+      const hg=ctx.createLinearGradient(0,-14,0,10);
+      hg.addColorStop(0,'rgba(252,165,165,0.95)');
+      hg.addColorStop(0.45,'rgba(239,68,68,0.97)');
+      hg.addColorStop(1,'rgba(185,28,28,0.92)');
+      ctx.fillStyle=hg;ctx.fill();
+      // Shine
+      ctx.beginPath();ctx.ellipse(-3,-6,4,2.5,Math.PI*0.3,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,255,255,0.22)';ctx.fill();
+      ctx.restore();
+      // Outer ring pulse
+      const ringAlpha=0.15+0.2*Math.abs(Math.sin(frame*0.09));
+      ctx.save();ctx.translate(cx,cy);ctx.scale(sc*1.12,sc*1.12);drawHeart();
+      ctx.strokeStyle=`rgba(252,165,165,${ringAlpha})`;ctx.lineWidth=0.5;ctx.stroke();ctx.restore();
+      // ECG
+      const ey=H*0.84,ew=W*0.82,ex0=W*0.09,LEN=100;
+      const off=(frame*1.8)%LEN;
+      ctx.beginPath();
+      for(let i=0;i<LEN;i++){
+        const idx=((i+Math.floor(off))%LEN)/LEN;
+        const v=ecgVal(idx);
+        const x=ex0+(i/LEN)*ew,y=ey-v*16;
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
       }
-
-      // Floating particles
-      ctx.globalAlpha=0.15;
-      for(let p=0;p<12;p++){
-        const px=cx+Math.cos(t*0.7+p*0.9)*amp*1.4;
-        const py=(((t*20+p*37)%H)+H)%H;
-        ctx.beginPath();ctx.arc(px,py,1.5,0,Math.PI*2);
-        ctx.fillStyle='#818cf8';ctx.fill();
-      }
-      ctx.globalAlpha=1;
-
-      t+=SPEED;
+      const eg=ctx.createLinearGradient(ex0,0,ex0+ew,0);
+      eg.addColorStop(0,'rgba(239,68,68,0)');eg.addColorStop(0.25,'rgba(239,68,68,0.6)');
+      eg.addColorStop(0.75,'rgba(239,68,68,0.9)');eg.addColorStop(1,'rgba(239,68,68,0)');
+      ctx.strokeStyle=eg;ctx.lineWidth=1.6;
+      ctx.shadowBlur=8;ctx.shadowColor='rgba(239,68,68,0.7)';ctx.stroke();ctx.shadowBlur=0;
+      // Particles
+      parts.forEach(p=>{
+        p.a+=p.sp;
+        const px=cx+hx(p.a)*sc*p.r,py=cy+hy(p.a)*sc*p.r;
+        ctx.beginPath();ctx.arc(px,py,p.sz,0,Math.PI*2);
+        ctx.fillStyle=`rgba(252,165,165,${0.3+0.2*Math.sin(frame*0.06+p.a)})`;ctx.fill();
+      });
       animId=requestAnimationFrame(draw);
     }
-
-      draw();
+    cancelAnimationFrame(animId);draw();
+    const h=new Date().getHours();
+    const gr=h<12?'Bonjour ☀️':h<18?'Bon après-midi 🌤':'Bonsoir 🌙';
+    const el=document.getElementById('heroGreeting');if(el)el.textContent=gr;
   }
-
-  // Init — wait for auth then start
-  window._dnaInit=initDNA;
-  setTimeout(initDNA,1500);
+  window._dnaInit=initHeart;
+  setTimeout(initHeart,800);
 })();
 
 /* ---- Legal Modals ---- */
