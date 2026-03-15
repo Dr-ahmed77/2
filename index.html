@@ -1910,16 +1910,55 @@ window.submitAvis=async()=>{
 async function uploadMultiplePDFs(input){
   const files=[...input.files];
   if(!files.length)return;
-  if(files.length===1){uploadPDFToCloudinary('cours');return;}
-  // Multiple files — upload and add each automatically
+
   const year=document.getElementById('aYear').value;
   const semUnite=document.getElementById('aSemUnite').value||'Module seul';
   const module=document.getElementById('aModule').value.trim();
-  if(!module){toast('Indique le module dabord');return;}
+
+  const btn=document.getElementById('pdfUploadBtn');
+  const stat=document.getElementById('pdfUploadStatus');
+
+  // Single file — fill form fields, don't auto-add
+  if(files.length===1){
+    const file=files[0];
+    if(file.size>50*1024*1024){toast('❌ Fichier trop grand (max 50MB)');return;}
+    btn.disabled=true;btn.textContent='⏳...';
+    stat.style.display='block';stat.style.color='var(--muted)';stat.textContent='⏳ Upload en cours...';
+    try{
+      const fd=new FormData();
+      fd.append('file',file);fd.append('upload_preset','medx_avatars');
+      fd.append('resource_type','raw');fd.append('folder','medx_pdfs');
+      const res=await fetch('https://api.cloudinary.com/v1_1/dfbsprbwy/raw/upload',{method:'POST',body:fd});
+      const data=await res.json();
+      if(data.secure_url){
+        document.getElementById('aLink').value=data.secure_url;
+        // Auto-fill name if empty
+        const nameField=document.getElementById('aLesson');
+        if(!nameField.value.trim()){
+          nameField.value=file.name.replace(/\.[^/.]+$/,'').replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+        }
+        stat.style.color='var(--green)';stat.textContent='✅ '+file.name+' uploadé !';
+        btn.textContent='✅ Uploadé';btn.disabled=false;
+        toast('✅ Prêt — clique Ajouter pour enregistrer');
+      } else {
+        throw new Error(data.error?.message||'Erreur Cloudinary');
+      }
+    }catch(e){
+      stat.style.color='var(--red)';stat.textContent='❌ '+e.message;
+      btn.textContent='☁️ Réessayer';btn.disabled=false;
+    }
+    input.value='';
+    return;
+  }
+
+  // Multiple files — need module
+  if(!module){toast('Indique le module dabord');input.value='';return;}
+  btn.disabled=true;btn.textContent='⏳...';
+  stat.style.display='block';stat.style.color='var(--muted)';
   let done=0;
-  toast('Upload de '+files.length+' fichiers...');
   for(const file of files){
-    if(file.size>50*1024*1024){toast('❌ '+file.name+' trop grand (max 50MB)');continue;}
+    stat.textContent=`⏳ Upload ${done+1}/${files.length} — ${file.name}`;
+    if(file.size>50*1024*1024){toast('❌ '+file.name+' trop grand');continue;}
     try{
       const fd=new FormData();
       fd.append('file',file);fd.append('upload_preset','medx_avatars');
@@ -1933,8 +1972,10 @@ async function uploadMultiplePDFs(input){
       }
     }catch(e){toast('❌ Erreur: '+file.name);}
   }
-  toast('✅ '+done+'/'+files.length+' cours ajoutés !');
+  stat.style.color='var(--green)';stat.textContent='✅ '+done+'/'+files.length+' cours ajoutés !';
+  btn.textContent='☁️ Uploader PDF/Word/PPT';btn.disabled=false;
   input.value='';
+  toast('✅ '+done+'/'+files.length+' cours ajoutés !');
 }
 
 async function uploadPDFToCloudinary(target='cours'){
