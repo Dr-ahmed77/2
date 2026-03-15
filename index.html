@@ -2628,7 +2628,7 @@ window.uploadAvatar=async(input)=>{
 })();
 
 /* ---- Dr. MEDX AI (Gemini) ---- */
-const GROQ_KEY='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';
+// GROQ_KEY is now server-side via /api/chat
 let _aiHistory=[];
 let _aiLoading=false;
 
@@ -2725,9 +2725,9 @@ window.sendAiMsg=async function(){
     }
     _aiHistory.push({role:'user',parts:[{text:text||'[fichier]'}]});
 
-    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+    const res=await fetch('/api/chat',{
       method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model,
         messages:[
