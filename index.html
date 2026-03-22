@@ -273,6 +273,10 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
   background:#1a1f2e;
   border-right:1px solid rgba(255,255,255,.06);
   display:flex;flex-direction:column;overflow:hidden;
+  transition:transform .25s cubic-bezier(.4,0,.2,1),width .25s;
+}
+.discord-sidebar.rooms-collapsed{
+  width:0;overflow:hidden;border-right:none;
 }
 .discord-server-header{
   padding:.85rem 1rem;
@@ -280,6 +284,30 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
   display:flex;align-items:center;gap:.5rem;
   background:#1a1f2e;
 }
+.rooms-sidebar-toggle{
+  width:28px;height:28px;border-radius:7px;
+  background:rgba(255,255,255,.07);border:none;
+  color:rgba(255,255,255,.5);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,color .15s;margin-left:auto;flex-shrink:0;
+}
+.rooms-sidebar-toggle:hover{background:rgba(255,255,255,.12);color:#fff}
+.rooms-sidebar-toggle svg{width:14px;height:14px}
+/* When sidebar is hidden, show floating toggle button */
+.rooms-open-btn{
+  display:none;position:absolute;top:.6rem;left:.6rem;z-index:5;
+  width:32px;height:32px;border-radius:9px;
+  background:rgba(30,39,56,.95);border:1px solid rgba(255,255,255,.1);
+  color:rgba(255,255,255,.6);cursor:pointer;
+  align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+  transition:all .15s;
+}
+.rooms-open-btn svg{width:14px;height:14px}
+.rooms-open-btn:hover{background:rgba(30,39,56,1);color:#fff}
+.discord-layout:has(.rooms-collapsed) .rooms-open-btn,
+.discord-layout.sidebar-hidden .rooms-open-btn{display:flex}
+.discord-layout.sidebar-hidden .discord-sidebar{width:0;overflow:hidden;border-right:none;}
 .discord-server-name{
   font-family:var(--ff);font-size:.85rem;font-weight:800;
   color:#fff;display:flex;align-items:center;gap:6px;
@@ -361,7 +389,8 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .discord-main{
   flex:1;display:flex;flex-direction:column;
   overflow:hidden;
-  background:#0d1117; /* Telegram dark bg */
+  background:#0d1117;
+  position:relative; /* for floating toggle btn */
 }
 
 /* Empty state */
@@ -735,69 +764,124 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 /* Keep old voice btn classes for compat */
 .btn-mic,.btn-mic.on,.btn-mic.off,.btn-voice-leave{display:none}
 
-/* ── MESSAGE CONTEXT MENU — Telegram style ── */
+/* ── MESSAGE CONTEXT MENU — Telegram exact ── */
 .msg-ctx-overlay{
-  position:fixed;inset:0;z-index:800;
-  background:rgba(0,0,0,.35);
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-  display:flex;align-items:flex-end;justify-content:center;
-  animation:ctx-bg-in .15s ease both;
+  position:fixed;inset:0;z-index:900;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  user-select:none;-webkit-user-select:none;
+  transition:opacity .15s;
 }
-@keyframes ctx-bg-in{from{opacity:0}to{opacity:1}}
-.msg-ctx-bubble{
+/* Message preview */
+.msg-ctx-bubble-preview{
   position:absolute;
-  max-width:75%;
+  padding:.5rem .85rem;
+  border-radius:17px 17px 3px 17px;
+  font-size:.82rem;line-height:1.55;
+  color:#fff;word-break:break-word;
+  box-shadow:0 6px 24px rgba(0,0,0,.5);
   pointer-events:none;
+  animation:ctx-bubble-in .16s cubic-bezier(.34,1.2,.64,1) both;
+  max-width:75vw;
+  background:#2b5278;
 }
-.msg-ctx-bubble .msn-bubble{
-  pointer-events:none;
-  transform:scale(1.04);
-  box-shadow:0 8px 32px rgba(0,0,0,.5);
-  transition:transform .2s cubic-bezier(.34,1.56,.64,1);
-}
-.msg-ctx-menu{
+.msg-ctx-bubble-preview.other-preview{
   background:#1e2738;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:14px;
-  padding:.35rem;
-  min-width:160px;
-  box-shadow:0 8px 32px rgba(0,0,0,.5);
+  border-radius:17px 17px 17px 3px;
+}
+@keyframes ctx-bubble-in{
+  from{opacity:0;transform:scale(.92)}
+  to{opacity:1;transform:scale(1)}
+}
+/* Menu panel */
+.msg-ctx-menu{
   position:absolute;
-  animation:ctx-menu-in .18s cubic-bezier(.34,1.56,.64,1) both;
+  background:#1e2a3a;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 12px 40px rgba(0,0,0,.6);
+  animation:ctx-menu-in .18s cubic-bezier(.34,1.15,.64,1) both;
+  min-width:180px;
 }
 @keyframes ctx-menu-in{
-  from{opacity:0;transform:scale(.85) translateY(6px)}
+  from{opacity:0;transform:scale(.88) translateY(8px)}
   to{opacity:1;transform:none}
 }
-.ctx-item{
-  display:flex;align-items:center;gap:.6rem;
-  padding:.52rem .8rem;
-  border-radius:9px;
-  cursor:pointer;
-  font-size:.82rem;color:#e8edf5;
-  transition:background .12s;
-  user-select:none;
-}
-.ctx-item:hover{background:rgba(255,255,255,.08)}
-.ctx-item:active{background:rgba(255,255,255,.12)}
-.ctx-item svg{width:16px;height:16px;flex-shrink:0;opacity:.75}
-.ctx-item.danger{color:#ff6b6b}
-.ctx-item.danger svg{opacity:.85}
-.ctx-divider{height:1px;background:rgba(255,255,255,.07);margin:.3rem .5rem}
-
-/* Emoji reactions row */
-.ctx-reactions{
-  display:flex;align-items:center;justify-content:space-around;
-  padding:.4rem .5rem .25rem;
+/* Reactions wrap */
+.ctx-react-wrap{
+  padding:.5rem .3rem .2rem;
   border-bottom:1px solid rgba(255,255,255,.06);
-  margin-bottom:.25rem;
+}
+.ctx-react-row{
+  display:flex;align-items:center;
+  justify-content:space-around;
+  padding:.1rem .2rem .3rem;
+  overflow:hidden;
+  touch-action:pan-x;
 }
 .ctx-emoji{
-  font-size:1.4rem;cursor:pointer;padding:.2rem .3rem;
-  border-radius:8px;transition:transform .15s cubic-bezier(.34,1.56,.64,1),background .12s;
+  font-size:1.5rem;
+  padding:.25rem .2rem;
+  border-radius:10px;
+  cursor:pointer;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1),background .12s;
+  user-select:none;-webkit-user-select:none;
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:36px;text-align:center;
+}
+.ctx-emoji:hover,.ctx-emoji:active{
+  transform:scale(1.45) translateY(-3px);
+  background:rgba(255,255,255,.08);
+}
+/* Page dots */
+.ctx-react-dots{
+  display:flex;align-items:center;justify-content:center;
+  gap:5px;padding-bottom:.35rem;
+}
+.ctx-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:rgba(255,255,255,.2);cursor:pointer;
+  transition:background .15s,transform .15s;
+}
+.ctx-dot.active{background:var(--blue);transform:scale(1.3)}
+
+/* Menu items */
+.msg-ctx-sep{height:1px;background:rgba(255,255,255,.06);margin:2px 0}
+.msg-ctx-item{
+  display:flex;align-items:center;gap:.65rem;
+  padding:.62rem .9rem;
+  font-size:.82rem;color:rgba(255,255,255,.85);
+  cursor:pointer;transition:background .1s;
+  font-weight:500;user-select:none;
+  -webkit-user-select:none;
+}
+.msg-ctx-item:hover,.msg-ctx-item:active{background:rgba(255,255,255,.07)}
+.msg-ctx-item svg{width:17px;height:17px;flex-shrink:0;opacity:.75}
+.msg-ctx-item.danger{color:#ff7070}
+.msg-ctx-item.danger svg{opacity:.9}
+
+/* Reaction display on messages */
+.msn-reactions{
+  display:flex;flex-wrap:wrap;gap:4px;
+  padding:3px 10px 0;
+}
+.msn-reaction-pill{
+  display:inline-flex;align-items:center;gap:3px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:100px;padding:2px 8px 2px 5px;
+  font-size:.75rem;cursor:pointer;
+  transition:background .12s,border-color .12s;
   user-select:none;
 }
-.ctx-emoji:hover{transform:scale(1.35);background:rgba(255,255,255,.08)}
+.msn-reaction-pill:hover{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.3)}
+.msn-reaction-pill.mine{background:rgba(59,130,246,.15);border-color:rgba(59,130,246,.4)}
+.msn-reaction-pill .react-emoji{font-size:.88rem}
+.msn-reaction-pill .react-count{font-size:.62rem;color:rgba(255,255,255,.6);font-weight:600}
+
+/* Prevent text selection during long press */
+.msn-bubble{-webkit-user-select:none;user-select:none;}
 
 /* ── LEADERBOARD VIEW ── */
 .lb-tabs{display:flex;gap:3px;background:var(--surface2);border-radius:var(--r);padding:3px;width:fit-content;margin-bottom:1rem}
@@ -1605,17 +1689,24 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
         </div>
 
         <div class="view" id="view-rooms" style="padding:0;margin:-1.5rem">
-          <div class="discord-layout" style="height:calc(100vh - var(--topbar))">
-            <div class="discord-sidebar">
+          <div class="discord-layout" id="discordLayout" style="height:calc(100vh - var(--topbar))">
+            <div class="discord-sidebar" id="discordSidebar">
               <div class="discord-server-header">
                 <div class="discord-server-name">
                     <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="tr" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#tr)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#tr)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round"/><path d="M10 24a18 18 0 000 8" stroke="url(#tr)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/><path d="M42 24a18 18 0 010 8" stroke="url(#tr)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/></svg>
                     <span data-i18n="rooms_server">Salles MEDX</span>
                 </div>
+                <button class="rooms-sidebar-toggle" onclick="toggleRoomsSidebar()" title="Hide sidebar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
               </div>
               <div class="discord-channels" id="discordChannels"></div>
             </div>
             <div class="discord-main" id="discordContent">
+              <!-- Floating open sidebar btn (visible when sidebar hidden) -->
+              <button class="rooms-open-btn" id="roomsOpenBtn" onclick="toggleRoomsSidebar()" title="Show channels">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+              </button>
               <div class="dc-empty">
                 <div class="dc-empty-icon">
                     <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="e3m" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#e3m)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#e3m)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#e3m)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#e3m)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#e3m)" stroke-width="2.2" stroke-linecap="round"/></svg>
@@ -2099,7 +2190,11 @@ function applyLang(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const key=el.getAttribute('data-i18n');
     const val=t(key);
-    if(val) el.innerHTML=val;
+    if(val!==undefined&&val!==null&&String(val)!==key){
+      // Use textContent for simple text, innerHTML for HTML content
+      if(String(val).includes('<')){el.innerHTML=val;}
+      else{el.textContent=val;}
+    }
   });
   // Delete confirm placeholder & text
   const dci=document.getElementById('deleteConfirmInput');
@@ -2373,7 +2468,7 @@ function navTo(view,el){
   titleEl.style.opacity='0';
   setTimeout(()=>{titleEl.textContent=t('title_'+view)||view;titleEl.style.opacity='1';},120);
 
-  if(view==='rooms')buildDiscordChannels();
+  if(view==='rooms'){buildDiscordChannels();setTimeout(initRoomsSidebar,50);}
   if(window.innerWidth<=768)closeSidebar();
 }
 
@@ -2800,14 +2895,28 @@ function appendMsnMessage(m,channelId,box,animate){
     showMsgCtx(e,{...m,id:m.id},channelId,bubble);
   };
   bubble.addEventListener('touchstart',(e)=>{
+    // Prevent text selection immediately
+    e.preventDefault();
     bubble.classList.add('msn-pressed');
-    pressTimer=setTimeout(()=>trigCtx(e.touches[0]),480);
+    pressTimer=setTimeout(()=>trigCtx(e.touches[0]),430);
+  },{passive:false});
+  bubble.addEventListener('touchend',(e)=>{
+    bubble.classList.remove('msn-pressed');
+    clearTimeout(pressTimer);
   },{passive:true});
-  bubble.addEventListener('touchend',()=>{bubble.classList.remove('msn-pressed');clearTimeout(pressTimer);});
   bubble.addEventListener('touchmove',()=>{bubble.classList.remove('msn-pressed');clearTimeout(pressTimer);},{passive:true});
-  bubble.addEventListener('contextmenu',(e)=>{e.preventDefault();trigCtx(e);});
+  bubble.addEventListener('contextmenu',(e)=>{e.preventDefault();e.stopPropagation();trigCtx(e);});
+  // Also prevent selectstart
+  bubble.addEventListener('selectstart',(e)=>{e.preventDefault();});
 
   wrap.appendChild(bubble);
+
+  // Reactions display row (will be populated by Firestore listener)
+  const reactionsRow=document.createElement('div');
+  reactionsRow.className='msn-reactions';
+  reactionsRow.id='reactions_'+m.id;
+  wrap.appendChild(reactionsRow);
+
   group.appendChild(wrap);
   _lastMsgUid=m.uid;_lastMsgTime=m.ts;
 }
@@ -2888,104 +2997,211 @@ function openRoomChat(channelId,title){
 }
 
 // ── MESSAGE CONTEXT MENU ──
-let _ctxTimer=null,_ctxOpen=false;
+// ── ROOMS SIDEBAR TOGGLE ──
+let _sidebarShown = true;
+window.toggleRoomsSidebar = function(){
+  const sb = document.getElementById('discordSidebar');
+  const layout = document.getElementById('discordLayout');
+  const btn = document.getElementById('roomsOpenBtn');
+  _sidebarShown = !_sidebarShown;
+  if(_sidebarShown){
+    sb.style.cssText = 'width:240px;overflow:hidden';
+    layout.classList.remove('sidebar-hidden');
+    if(btn) btn.style.display='none';
+  } else {
+    sb.style.cssText = 'width:0;overflow:hidden;border-right:none;flex-shrink:0';
+    layout.classList.add('sidebar-hidden');
+    if(btn) btn.style.display='flex';
+  }
+};
+// Auto-hide sidebar on mobile when entering rooms
+function initRoomsSidebar(){
+  if(window.innerWidth <= 600){
+    const sb = document.getElementById('discordSidebar');
+    const layout = document.getElementById('discordLayout');
+    const btn = document.getElementById('roomsOpenBtn');
+    _sidebarShown = false;
+    if(sb) sb.style.cssText = 'width:0;overflow:hidden;border-right:none;flex-shrink:0';
+    if(layout) layout.classList.add('sidebar-hidden');
+    if(btn) btn.style.display='flex';
+  } else {
+    _sidebarShown = true;
+  }
+}
 
-function showMsgCtx(e,msgData,channelId,bubbleEl){
-  e.preventDefault();e.stopPropagation();
-  if(_ctxOpen)return;_ctxOpen=true;
-  const isMe=msgData.uid===CU?.uid;
+// ── MESSAGE CONTEXT MENU — Telegram exact ──
+let _ctxTimer=null, _ctxOpen=false;
+let _ctxOverlay=null;
 
-  // Build overlay
-  const overlay=document.createElement('div');
-  overlay.className='msg-ctx-overlay';
-  overlay.onclick=(ev)=>{if(ev.target===overlay)closeMsgCtx(overlay);};
+// Full emoji set with categories for swipe
+const REACTION_PAGES = [
+  ['❤️','😂','👍','🔥','😮','🎉','😍','💪'],
+  ['😢','🤔','👏','🥳','😡','🙏','💯','⭐'],
+  ['🧠','💊','🩺','🔬','📚','✅','❌','💡'],
+];
+let _reactionPage = 0;
 
-  // Clone bubble for display
-  const bubbleClone=bubbleEl.cloneNode(true);
-  bubbleClone.style.cssText='';
-  const bubbleWrap=document.createElement('div');
-  bubbleWrap.className='msg-ctx-bubble';
+function showMsgCtx(e, msgData, channelId, bubbleEl){
+  if(e && e.preventDefault) e.preventDefault();
+  if(e && e.stopPropagation) e.stopPropagation();
+  if(_ctxOpen) return;
+  _ctxOpen = true;
+  _reactionPage = 0;
 
-  // Menu
-  const menu=document.createElement('div');
-  menu.className='msg-ctx-menu';
+  const isMe = msgData.uid === CU?.uid;
+  const overlay = document.createElement('div');
+  overlay.className = 'msg-ctx-overlay';
+  overlay.id = 'msgCtxOverlay';
+  _ctxOverlay = overlay;
 
-  // Emoji reactions
-  const reactions=document.createElement('div');
-  reactions.className='ctx-reactions';
-  ['❤️','😂','👍','🔥','😮','🎉'].forEach(emoji=>{
-    const btn=document.createElement('span');btn.className='ctx-emoji';
-    btn.textContent=emoji;
-    btn.onclick=()=>{closeMsgCtx(overlay);toast(emoji+' Reaction (bientôt)');};
-    reactions.appendChild(btn);
+  // Prevent text selection
+  overlay.style.userSelect = 'none';
+  overlay.style.webkitUserSelect = 'none';
+
+  // Build preview of the message
+  const preview = document.createElement('div');
+  preview.className = 'msg-ctx-bubble-preview ' + (isMe ? '' : 'other-preview');
+  preview.textContent = msgData.text.length > 120 ? msgData.text.substring(0,120)+'…' : msgData.text;
+  overlay.appendChild(preview);
+
+  // Menu container
+  const menu = document.createElement('div');
+  menu.className = 'msg-ctx-menu';
+
+  // ── EMOJI REACTIONS — swipeable ──
+  const reactWrap = document.createElement('div');
+  reactWrap.className = 'ctx-react-wrap';
+
+  const reactRow = document.createElement('div');
+  reactRow.className = 'ctx-react-row';
+
+  function renderReactions(page){
+    reactRow.innerHTML = '';
+    REACTION_PAGES[page].forEach(emoji => {
+      const btn = document.createElement('span');
+      btn.className = 'ctx-emoji';
+      btn.textContent = emoji;
+      btn.addEventListener('click', () => {
+        addReaction(msgData.id, channelId, emoji);
+        closeMsgCtx();
+      });
+      reactRow.appendChild(btn);
+    });
+  }
+  renderReactions(0);
+
+  // Page dots
+  const dots = document.createElement('div');
+  dots.className = 'ctx-react-dots';
+  REACTION_PAGES.forEach((_,i) => {
+    const d = document.createElement('span');
+    d.className = 'ctx-dot' + (i===0?' active':'');
+    d.onclick = () => {_reactionPage=i;renderReactions(i);updateDots(i);};
+    dots.appendChild(d);
   });
-  menu.appendChild(reactions);
+
+  function updateDots(p){
+    dots.querySelectorAll('.ctx-dot').forEach((d,i)=>d.classList.toggle('active',i===p));
+  }
+
+  // Swipe on reactions
+  let touchStartX = 0;
+  reactRow.addEventListener('touchstart', e2 => { touchStartX = e2.touches[0].clientX; }, {passive:true});
+  reactRow.addEventListener('touchend', e2 => {
+    const dx = e2.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 40){
+      _reactionPage = dx < 0
+        ? Math.min(_reactionPage+1, REACTION_PAGES.length-1)
+        : Math.max(_reactionPage-1, 0);
+      renderReactions(_reactionPage);
+      updateDots(_reactionPage);
+    }
+  }, {passive:true});
+
+  reactWrap.appendChild(reactRow);
+  reactWrap.appendChild(dots);
+  menu.appendChild(reactWrap);
+
+  // Separator
+  const sep0 = document.createElement('div');sep0.className='msg-ctx-sep';menu.appendChild(sep0);
 
   // Copy
-  const copyItem=makeCtxItem(
-    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>`,
-    t('msg_copy'),
-    ()=>{
-      navigator.clipboard?.writeText(msgData.text).catch(()=>{});
-      closeMsgCtx(overlay);toast(t('toast_copied'));
-    }
-  );
-  menu.appendChild(copyItem);
+  menu.appendChild(makeCtxMenuItem(
+    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>`,
+    t('msg_copy') || 'Copy',
+    () => { navigator.clipboard?.writeText(msgData.text).catch(()=>{}); closeMsgCtx(); toast(t('toast_copied')||'Copied!'); }
+  ));
 
   // Reply
-  const replyItem=makeCtxItem(
-    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 00-4-4H4"/></svg>`,
-    t('msg_reply'),
-    ()=>{closeMsgCtx(overlay);setReplyTo(msgData);}
-  );
-  menu.appendChild(replyItem);
+  menu.appendChild(makeCtxMenuItem(
+    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 00-4-4H4"/></svg>`,
+    t('msg_reply') || 'Reply',
+    () => { closeMsgCtx(); setReplyTo(msgData); }
+  ));
 
-  // Delete (own messages or admin)
-  if(isMe||isAdmin){
-    const div=document.createElement('div');div.className='ctx-divider';menu.appendChild(div);
-    const delItem=makeCtxItem(
-      `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>`,
-      t('msg_delete'),
-      ()=>{closeMsgCtx(overlay);deleteMsg(channelId,msgData.id);}
+  // Delete (own or admin)
+  if(isMe || isAdmin){
+    const sep = document.createElement('div');sep.className='msg-ctx-sep';menu.appendChild(sep);
+    const delItem = makeCtxMenuItem(
+      `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>`,
+      t('msg_delete') || 'Delete',
+      () => { closeMsgCtx(); deleteMsg(channelId, msgData.id); }
     );
     delItem.classList.add('danger');
     menu.appendChild(delItem);
   }
 
-  // Position menu relative to bubble
-  const rect=bubbleEl.getBoundingClientRect();
-  const menuW=180,menuH=isMe||isAdmin?200:160;
-  const viewW=window.innerWidth,viewH=window.innerHeight;
-
-  // Position bubble clone
-  bubbleWrap.style.cssText=`left:${Math.max(8,Math.min(rect.left,viewW-rect.width-8))}px;top:${Math.max(8,rect.top-8)}px;width:${rect.width}px`;
-  bubbleWrap.appendChild(bubbleClone);
-  overlay.appendChild(bubbleWrap);
-
-  // Position menu near bubble
-  let mx=isMe?rect.right-menuW:rect.left;
-  let my=rect.bottom+8;
-  if(mx<8)mx=8;if(mx+menuW>viewW-8)mx=viewW-menuW-8;
-  if(my+menuH>viewH-8)my=rect.top-menuH-8;
-  menu.style.cssText=`left:${mx}px;top:${Math.max(8,my)}px;width:${menuW}px`;
-
   overlay.appendChild(menu);
+
+  // Position: bubble preview top, menu below/above
+  const rect = bubbleEl.getBoundingClientRect();
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const menuH = 240;
+  const menuW = Math.min(220, vw - 32);
+
+  // Preview position
+  const prevTop = Math.max(8, rect.top - 4);
+  const prevLeft = isMe ? Math.max(8, rect.right - rect.width) : Math.max(8, rect.left);
+  preview.style.cssText = `left:${Math.min(prevLeft, vw-rect.width-8)}px;top:${prevTop}px;max-width:${Math.min(rect.width+16, vw*0.75)}px`;
+
+  // Menu position
+  let mx = isMe ? rect.right - menuW : rect.left;
+  mx = Math.max(8, Math.min(mx, vw - menuW - 8));
+  let my = rect.bottom + 8;
+  if(my + menuH > vh - 8) my = Math.max(8, rect.top - menuH - 8);
+  menu.style.cssText = `left:${mx}px;top:${my}px;width:${menuW}px`;
+
+  overlay.addEventListener('click', ev => { if(ev.target===overlay) closeMsgCtx(); });
   document.body.appendChild(overlay);
 
-  // Haptic if available
-  try{navigator.vibrate&&navigator.vibrate(30);}catch(e){}
+  try{ navigator.vibrate && navigator.vibrate(35); }catch(e2){}
 }
 
-function makeCtxItem(icon,label,fn){
-  const d=document.createElement('div');d.className='ctx-item';
-  d.innerHTML=icon+'<span>'+label+'</span>';
-  d.onclick=fn;return d;
+function addReaction(msgId, channelId, emoji){
+  if(!CU) return;
+  // Store reaction in Firestore subcollection
+  db.collection('channels').doc(channelId).collection('messages').doc(msgId)
+    .collection('reactions').doc(CU.uid+'_'+emoji).set({
+      uid:CU.uid, name:UD?.name||'?', emoji, ts:Date.now()
+    }).catch(()=>{});
+  toast(emoji);
 }
 
-function closeMsgCtx(overlay){
-  _ctxOpen=false;
-  overlay.style.animation='ctx-bg-in .12s ease reverse';
-  setTimeout(()=>overlay.remove(),120);
+function makeCtxMenuItem(icon, label, fn){
+  const d = document.createElement('div');
+  d.className = 'msg-ctx-item';
+  d.innerHTML = icon + '<span>' + label + '</span>';
+  d.addEventListener('click', fn);
+  return d;
+}
+
+function closeMsgCtx(){
+  if(!_ctxOverlay) return;
+  _ctxOpen = false;
+  const ov = _ctxOverlay; _ctxOverlay = null;
+  ov.style.opacity = '0';
+  ov.style.transition = 'opacity .15s';
+  setTimeout(() => ov.remove(), 150);
 }
 
 // Reply state
