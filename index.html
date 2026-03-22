@@ -992,6 +992,10 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
   .msn-msg-group.other{padding-right:8%}
   .msn-bubble{font-size:.79rem;padding:.38rem .6rem}
   .msn-input-wrap{padding:.38rem .5rem;padding-bottom:max(.38rem,env(safe-area-inset-bottom))}
+  .msn-input-row{padding:.25rem .25rem .25rem .65rem;gap:.3rem}
+  .msn-send-btn{width:30px;height:30px;flex-shrink:0;min-width:30px}
+  .msn-send-btn svg{width:13px;height:13px}
+  .msn-input{font-size:.8rem;min-width:0}
 }
 
 /* --- Legal & Account --- */
@@ -1606,7 +1610,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
               <div class="discord-server-header">
                 <div class="discord-server-name">
                     <svg viewBox="0 0 52 52" fill="none"><defs><linearGradient id="tr" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="19" y="7" width="14" height="22" rx="7" fill="url(#tr)" opacity=".15"/><rect x="19" y="7" width="14" height="22" rx="7" stroke="url(#tr)" stroke-width="2.2" fill="none"/><path d="M14 28a12 12 0 0024 0" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round" fill="none"/><line x1="26" y1="40" x2="26" y2="46" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round"/><line x1="20" y1="46" x2="32" y2="46" stroke="url(#tr)" stroke-width="2.2" stroke-linecap="round"/><path d="M10 24a18 18 0 000 8" stroke="url(#tr)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/><path d="M42 24a18 18 0 010 8" stroke="url(#tr)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/></svg>
-                    Salles MEDX
+                    <span data-i18n="rooms_server">Salles MEDX</span>
                 </div>
               </div>
               <div class="discord-channels" id="discordChannels"></div>
@@ -4100,6 +4104,21 @@ window.sendAiMsg=async function(){
       })
     });
     const data=await res.json();
+    if(!res.ok){
+      console.error('API error status:',res.status,data);
+      // Check specific errors
+      if(data.error==='API key not configured'){
+        const keyMsg=LANG==='en'
+          ?'⚠️ GROQ_KEY not configured in Vercel. Go to Vercel Dashboard → Settings → Environment Variables → add GROQ_KEY.'
+          :'⚠️ GROQ_KEY non configurée dans Vercel. Allez dans Vercel Dashboard → Settings → Environment Variables → ajoutez GROQ_KEY.';
+        if(typing)typing.remove();
+        aiAddMsg('bot',keyMsg);
+        _aiLoading=false;
+        document.getElementById('aiSendBtn').disabled=false;
+        return;
+      }
+      throw new Error('API '+res.status);
+    }
     if(typing)typing.remove();
     if(data.choices?.[0]?.message?.content){
       const reply=data.choices[0].message.content;
@@ -4113,11 +4132,18 @@ window.sendAiMsg=async function(){
       if(_aiHistory.length>20)_aiHistory=_aiHistory.slice(-20);
     } else {
       console.error('Groq error:',JSON.stringify(data));
-      aiAddMsg('bot','Désolé, une erreur est survenue. Réessayez.');
+      const errMsg=LANG==='en'
+        ?'⚠️ Dr. MEDX is temporarily unavailable. Check that the Vercel function is deployed with GROQ_KEY.'
+        :'⚠️ Dr. MEDX est temporairement indisponible. Vérifiez que la fonction Vercel est déployée avec GROQ_KEY.';
+      aiAddMsg('bot',errMsg);
     }
   }catch(e){
     if(typing)typing.remove();
-    aiAddMsg('bot','Erreur de connexion. Vérifiez votre connexion internet.');
+    console.error('AI fetch error:',e);
+    const netMsg=LANG==='en'
+      ?'⚠️ Connection error. Make sure you are on the deployed Vercel URL (not localhost).'
+      :'⚠️ Erreur de connexion. Assurez-vous d\'être sur l\'URL Vercel déployée (pas localhost).';
+    aiAddMsg('bot',netMsg);
   }
   _aiLoading=false;
   document.getElementById('aiSendBtn').disabled=false;
