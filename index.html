@@ -1231,8 +1231,6 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
 .ai-input:focus{border-color:var(--accent)}
 .ai-send-btn{background:var(--accent);color:#fff;border:none;border-radius:var(--rs);padding:9px 14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity var(--t);flex-shrink:0}
 .ai-send-btn:hover{opacity:.85}
-.ai-attach-btn{background:var(--surface2);color:var(--muted);border:1px solid var(--border);border-radius:var(--rs);padding:9px 10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--t);flex-shrink:0}
-.ai-attach-btn:hover{color:var(--accent);border-color:var(--accent)}
 .ai-send-btn:disabled{opacity:.4;cursor:not-allowed}
 .ai-disclaimer{font-size:.62rem;color:var(--muted);text-align:center;padding:.4rem 0 0;opacity:.6}
 #cookieBanner{display:none}#cookieBanner.cookie-show{display:flex}
@@ -1780,15 +1778,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none;color:in
               </div>
             </div>
             <div class="ai-input-row">
-              <input type="file" id="aiFileInput" accept="image/*,.pdf" style="display:none" onchange="handleAiFile(this)">
-              <button class="ai-attach-btn" onclick="document.getElementById('aiFileInput').click()" title="Joindre image ou PDF">
-                <svg viewBox="0 0 24 24" fill="none" width="17" height="17"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
               <div style="flex:1;display:flex;flex-direction:column;gap:.3rem">
-                <div id="aiFilePreview" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-size:.72rem;color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:.5rem">
-                  <span id="aiFilePreviewName">—</span>
-                  <button onclick="clearAiFile()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:.8rem">✕</button>
-                </div>
                 <input class="ai-input" id="aiInput" type="text" data-i18n-placeholder="ai_placeholder" placeholder="Posez votre question médicale..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAiMsg();}">
               </div>
               <button class="ai-send-btn" onclick="sendAiMsg()" id="aiSendBtn">
@@ -4293,12 +4283,7 @@ window.uploadAvatar=async(input)=>{
   window._dnaInit=initHeart;
 })();
 
-/* ---- Dr. MEDX AI (OpenRouter) ---- */
-// ══════════════════════════════════════════
-// Dr. MEDX — Groq API
-// ضع مفتاحك هنا 👇
-const OPENROUTER_KEY = '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';
-// ══════════════════════════════════════════
+/* ---- Dr. MEDX AI (Groq via /api/chat) ---- */
 let _aiHistory=[];
 let _aiLoading=false;
 
@@ -4332,111 +4317,48 @@ function aiShowTyping(){
 }
 
 /* ---- AI File Handling ---- */
-let _aiFile=null;
 
-window.handleAiFile=async function(input){
-  const file=input.files[0];if(!file)return;
-  if(file.size>10*1024*1024){toast('Fichier trop grand (max 10MB)');return;}
-  const isImage=file.type.startsWith('image/');
-  const isPDF=file.type==='application/pdf';
-  if(!isImage&&!isPDF){toast('Seulement images et PDF');return;}
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const b64=e.target.result.split(',')[1];
-    _aiFile={type:isImage?'image':'pdf',base64:b64,mimeType:file.type,name:file.name,dataUrl:e.target.result};
-    document.getElementById('aiFilePreviewName').textContent=(isImage?'🖼 ':'📄 ')+file.name;
-    document.getElementById('aiFilePreview').style.display='flex';
-    toast('Fichier prêt ✓');
-  };
-  reader.readAsDataURL(file);
-  input.value='';
-};
 
-window.clearAiFile=function(){
-  _aiFile=null;
-  document.getElementById('aiFilePreview').style.display='none';
-};
 
 window.sendAiMsg=async function(){
   if(_aiLoading)return;
   const input=document.getElementById('aiInput');
   const text=input.value.trim();
-  if(!text&&!_aiFile)return;
+  if(!text)return;
   input.value='';
   _aiLoading=true;
   document.getElementById('aiSendBtn').disabled=true;
 
-  // Display user message
-  let displayHtml=text?text.replace(/\n/g,'<br>'):'';
-  if(_aiFile&&_aiFile.type==='image'){
-    displayHtml+=`${displayHtml?'<br>':''}<img src="${_aiFile.dataUrl}" style="max-width:200px;max-height:150px;border-radius:8px;margin-top:.3rem;object-fit:contain;display:block">`;
-  } else if(_aiFile){
-    displayHtml+=`${displayHtml?'<br>':''}<span style="font-size:.72rem;color:var(--accent)">📄 ${_aiFile.name}</span>`;
-  }
-  aiAddMsg('user',displayHtml,true);
+  aiAddMsg('user',text.replace(/\n/g,'<br>'),true);
+  _aiHistory.push({role:'user',content:text});
+  if(_aiHistory.length>20)_aiHistory=_aiHistory.slice(-20);
 
-  const currentFile=_aiFile;
-  clearAiFile();
   const typing=aiShowTyping();
-
   try{
-    const isVision=currentFile&&currentFile.type==='image';
-    const model=isVision?'google/gemini-2.0-flash-exp:free':'google/gemini-2.0-flash-exp:free';
-    let userContent;
-    if(isVision){
-      userContent=[
-        {type:'image_url',image_url:{url:currentFile.dataUrl}},
-        {type:'text',text:text||"Analyse cette image médicale en détail."}
-      ];
-    } else if(currentFile&&currentFile.type==='pdf'){
-      userContent=`[PDF: ${currentFile.name}]\n${text||"Analyse ce document."}`;
-    } else {
-      userContent=text;
-    }
-    _aiHistory.push({role:'user',parts:[{text:text||'[fichier]'}]});
-
-    const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
+    const res=await fetch('/api/chat',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'Authorization':'Bearer '+OPENROUTER_KEY,
-        'X-Title':'MEDX'
-      },
-      body:JSON.stringify({
-        model:model,
-        messages:[
-          {role:'system',content:'Tu es Dr. MEDX, un assistant médical pour étudiants en médecine algériens. Réponds dans la langue de la question (français, arabe dialectal, ou anglais). Sois pédagogique et précis.'},
-          ..._aiHistory.slice(0,-1).map(m=>({role:m.role==='model'?'assistant':m.role,content:m.parts[0].text})),
-          {role:'user',content:userContent}
-        ],
-        max_tokens:1024,
-        temperature:0.7
-      })
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:_aiHistory})
     });
     const data=await res.json();
-    if(!res.ok){
-      console.error('Groq error:',res.status,data);
-      throw new Error('API '+res.status);
-    }
+    if(!res.ok)throw new Error('API '+res.status);
     if(typing)typing.remove();
-    if(data.choices?.[0]?.message?.content){
-      const reply=data.choices[0].message.content;
+    const reply=data.reply||'';
+    if(reply){
       const formatted=reply
         .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
         .replace(/\*(.*?)\*/g,'<em>$1</em>')
         .replace(/\n\n/g,'</p><p>')
         .replace(/\n/g,'<br>');
       aiAddMsg('bot','<p>'+formatted+'</p>',true);
-      _aiHistory.push({role:'model',parts:[{text:reply}]});
-      if(_aiHistory.length>20)_aiHistory=_aiHistory.slice(-20);
-    } else {
-      console.error('Groq error:',JSON.stringify(data));
-      aiAddMsg('bot',LANG==='en'?'⚠️ Dr. MEDX is currently unavailable.':'⚠️ Dr. MEDX est actuellement indisponible.');
+      _aiHistory.push({role:'assistant',content:reply});
+    }else{
+      aiAddMsg('bot','⚠️ Dr. MEDX est actuellement indisponible.');
     }
   }catch(e){
     if(typing)typing.remove();
-    console.error('AI fetch error:',e);
-    aiAddMsg('bot',LANG==='en'?'⚠️ Dr. MEDX is currently unavailable.':'⚠️ Dr. MEDX est actuellement indisponible.');
+    console.error('AI error:',e);
+    aiAddMsg('bot','⚠️ Dr. MEDX est actuellement indisponible.');
   }
   _aiLoading=false;
   document.getElementById('aiSendBtn').disabled=false;
