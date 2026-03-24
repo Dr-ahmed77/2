@@ -4395,13 +4395,18 @@ window.sendAiMsg=async function(){
     }
     _aiHistory.push({role:'user',parts:[{text:text||'[fichier]'}]});
 
-    const res=await fetch('/api/chat',{
+    const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+GROQ_API_KEY,
+        'HTTP-Referer':'https://med-x-7.vercel.app',
+        'X-Title':'MEDX'
+      },
       body:JSON.stringify({
-        model,
+        model:'meta-llama/llama-3.3-70b-instruct:free',
         messages:[
-          {role:'system',content:'Tu es Dr. MEDX, un assistant médical pour étudiants en médecine algériens. Réponds dans la langue de la question (français, arabe dialectal, ou anglais). Si une image médicale est fournie, analyse-la en détail. Sois pédagogique et précis.'},
+          {role:'system',content:'Tu es Dr. MEDX, un assistant médical pour étudiants en médecine algériens. Réponds dans la langue de la question (français, arabe dialectal, ou anglais). Sois pédagogique et précis.'},
           ..._aiHistory.slice(0,-1).map(m=>({role:m.role==='model'?'assistant':m.role,content:m.parts[0].text})),
           {role:'user',content:userContent}
         ],
